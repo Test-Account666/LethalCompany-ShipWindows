@@ -9,7 +9,6 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using ShipWindows.Compatibility;
 using ShipWindows.Components;
-using ShipWindows.Dependencies;
 using ShipWindows.Networking;
 using ShipWindows.Utilities;
 using Unity.Netcode;
@@ -21,7 +20,7 @@ namespace ShipWindows;
 [CompatibleDependency("CelestialTint", "1.0.1", typeof(CelestialTint))]
 [CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
 [CompatibleDependency("com.github.lethalmods.lethalexpansioncore", typeof(LethalExpansion))]
-[BepInDependency("BMX.LobbyCompatibility", BepInDependency.DependencyFlags.SoftDependency)]
+[CompatibleDependency("BMX.LobbyCompatibility", typeof(Compatibility.LobbyCompatibility))]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
     public static AssetBundle mainAssetBundle = null!;
@@ -42,18 +41,13 @@ public class ShipWindows : BaseUnityPlugin {
     private static Coroutine? _windowCoroutine;
     public static ShipWindows Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
-    internal static Harmony? Harmony { get; set; }
+    internal static Harmony? Harmony { get; private set; }
 
     private void Awake() {
         Logger = base.Logger;
         Instance = this;
 
         Harmony ??= new(MyPluginInfo.PLUGIN_GUID);
-
-        if (DependencyChecker.IsLobbyCompatibilityInstalled()) {
-            Logger.LogInfo("Found LobbyCompatibility Mod, initializing support :)");
-            LobbyCompatibilitySupport.Initialize();
-        }
 
         WindowConfig.InitializeConfig(Config);
 
