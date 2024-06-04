@@ -1,0 +1,456 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using BepInEx;
+using BepInEx.Logging;
+using GameNetcodeStuff;
+using HarmonyLib;
+using ShipWindows.Compatibility;
+using ShipWindows.Components;
+using ShipWindows.Dependencies;
+using ShipWindows.Networking;
+using ShipWindows.Utilities;
+using Unity.Netcode;
+using UnityEngine;
+using Debug = System.Diagnostics.Debug;
+
+namespace ShipWindows;
+
+[CompatibleDependency("CelestialTint", "1.0.1", typeof(CelestialTint))]
+[CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
+[CompatibleDependency("com.github.lethalmods.lethalexpansioncore", typeof(LethalExpansion))]
+[BepInDependency("BMX.LobbyCompatibility", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+public class ShipWindows : BaseUnityPlugin {
+    public static AssetBundle mainAssetBundle = null!;
+
+    // Prefabs
+    public static GameObject? windowSwitchPrefab;
+
+    public static readonly Dictionary<int, ShipWindowDef> WindowRegistry = [
+    ];
+
+    // Vanilla object references
+    public static GameObject? spaceProps = null!;
+
+    // Spawned objects
+    public static GameObject? outsideSkybox;
+
+    // Various
+    private static Coroutine? _windowCoroutine;
+    public static ShipWindows Instance { get; private set; } = null!;
+    internal new static ManualLogSource Logger { get; private set; } = null!;
+    internal static Harmony? Harmony { get; set; }
+
+    private void Awake() {
+        Logger = base.Logger;
+        Instance = this;
+
+        Harmony ??= new(MyPluginInfo.PLUGIN_GUID);
+
+        if (DependencyChecker.IsLobbyCompatibilityInstalled()) {
+            Logger.LogInfo("Found LobbyCompatibility Mod, initializing support :)");
+            LobbyCompatibilitySupport.Initialize();
+        }
+
+        WindowConfig.InitializeConfig(Config);
+
+        if (WindowConfig.enableWindow1.Value is false && WindowConfig.enableWindow2.Value is false
+                                                      && WindowConfig.enableWindow3.Value is false) {
+            Logger.LogWarning("All windows are disabled. Please enable any window in your settings for this mod to have any effect.");
+            return;
+        }
+
+        Logger.LogInfo($"\nCurrent settings:\n"
+                     + $"    Vanilla Mode:       {WindowConfig.vanillaMode.Value}\n"
+                     + $"    Shutters:           {WindowConfig.enableShutter.Value}\n"
+                     + $"    Hide Space Props:   {WindowConfig.hideSpaceProps.Value}\n"
+                     + $"    Space Sky:          {WindowConfig.spaceOutsideSetting.Value}\n"
+                     + $"    Bottom Lights:      {WindowConfig.disableUnderLights.Value}\n"
+                     + $"    Posters:            {WindowConfig.dontMovePosters.Value}\n"
+                     + $"    Sky Rotation:       {WindowConfig.rotateSkybox.Value}\n"
+                     + $"    Sky Resolution:     {WindowConfig.skyboxResolution.Value}\n"
+                     + $"    Windows Unlockable: {WindowConfig.windowsUnlockable.Value}\n"
+                     + $"    Window 1 Enabled:   {WindowConfig.enableWindow1.Value}\n"
+                     + $"    Window 2 Enabled:   {WindowConfig.enableWindow2.Value}\n"
+                     + $"    Window 3 Enabled:   {WindowConfig.enableWindow3.Value}\n");
+
+
+        if (!LoadAssetBundle()) {
+            Logger.LogError("Failed to load asset bundle! Abort mission!");
+            return;
+        }
+
+        try {
+            NetcodePatcher();
+        } catch (Exception e) {
+            Logger.LogError("Something went wrong with the netcode patcher!");
+            Logger.LogError(e);
+            return;
+        }
+
+        // I hate this, veri, why???
+        _ = new WindowState();
+
+        Harmony.PatchAll(typeof(ShipWindows));
+        Harmony.PatchAll(typeof(Unlockables));
+
+        CompatibleDependencyAttribute.Init(this);
+
+        ShipWindow4K.TryToLoad();
+
+        Logger.LogInfo("Loaded successfully!");
+    }
+
+    private static bool LoadAssetBundle() {
+        Logger.LogInfo("Loading ShipWindow AssetBundle...");
+        var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        Debug.Assert(assemblyLocation is not null, nameof(assemblyLocation) + " != null");
+        mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(assemblyLocation, "ship_window"));
+
+        return mainAssetBundle is not null;
+    }
+
+    private static GameObject FindOrThrow(string name) {
+        var gameObject = GameObject.Find(name);
+        if (!gameObject) throw new($"Could not find {name}! Wrong scene?");
+
+        return gameObject;
+    }
+
+    private static int GetWindowBaseCost(int id) {
+        return id switch {
+            1 => WindowConfig.window1Cost.Value,
+            2 => WindowConfig.window2Cost.Value,
+            3 => WindowConfig.window3Cost.Value,
+            var _ => 60, // Shouldn't happen, but just in case.
+        };
+    }
+
+    public static bool IsWindowEnabled(int id) {
+        return id switch {
+            1 => WindowConfig.enableWindow1.Value,
+            2 => WindowConfig.enableWindow2.Value,
+            3 => WindowConfig.enableWindow3.Value,
+            var _ => false,
+        };
+    }
+
+    public static bool IsWindowDefaultUnlocked(int id) {
+        return id switch {
+            1 => WindowConfig.defaultWindow1.Value,
+            2 => WindowConfig.defaultWindow2.Value,
+            3 => WindowConfig.defaultWindow3.Value,
+            var _ => false,
+        };
+    }
+
+    private static void RegisterWindows() {
+        for (var id = 1; id <= 3; id++) {
+            if (!IsWindowEnabled(id)) continue;
+
+            var def = ShipWindowDef.Register(id, GetWindowBaseCost(id));
+            WindowRegistry.Add(id, def);
+        }
+    }
+
+    private static void AddStars() {
+        if (CelestialTint.Enabled) return;
+
+        var renderingObject = GameObject.Find("Systems/Rendering");
+        var vanillaStarSphere = GameObject.Find("Systems/Rendering/StarsSphere");
+
+        switch (WindowConfig.spaceOutsideSetting.Value) {
+            // do nothing
+            case 0:
+                break;
+
+            // spawn Volume sphere
+            case 1:
+                if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
+
+                var universePrefab =
+                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/UniverseVolume.prefab");
+
+                outsideSkybox = Instantiate(universePrefab, renderingObject.transform);
+                vanillaStarSphere.GetComponent<MeshRenderer>().enabled = false;
+
+                outsideSkybox.AddComponent<SpaceSkybox>();
+
+                // Load texture
+                if (ShipWindow4K.Skybox4K is not null) // 4K
+                    outsideSkybox.GetComponent<SpaceSkybox>()?.SetSkyboxTexture(ShipWindow4K.Skybox4K);
+
+                break;
+
+            // spawn large star sphere
+            case 2:
+                if (vanillaStarSphere is null) throw new("Could not find vanilla Stars Sphere. Wrong scene?");
+                if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
+
+                var starSpherePrefab =
+                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/StarsSphereLarge.prefab");
+                if (starSpherePrefab is null) throw new("Could not load star sphere large prefab!");
+
+                outsideSkybox = Instantiate(starSpherePrefab, renderingObject.transform);
+                vanillaStarSphere.GetComponent<MeshRenderer>().enabled = false;
+
+                outsideSkybox.AddComponent<SpaceSkybox>();
+
+                break;
+        }
+    }
+
+    private static void HideSpaceProps() {
+        if (CelestialTint.Enabled) return;
+
+        if (!WindowConfig.hideSpaceProps.Value)
+            return;
+
+        var props = GameObject.Find("Environment/SpaceProps");
+        props?.SetActive(false);
+    }
+
+    private static void HideMiscMeshes() {
+        /*
+         * Thanks to sf Desat for finding these.
+         */
+        var notSpawnedPlatform1 = GameObject.Find("notSpawnedPlatform");
+        var notSpawnedPlatform2 = GameObject.Find("notSpawnedPlatform (1)");
+
+        var renderer1 = notSpawnedPlatform1?.GetComponent<MeshRenderer>();
+        var renderer2 = notSpawnedPlatform2?.GetComponent<MeshRenderer>();
+        if (renderer1 is not null)
+            renderer1.enabled = false;
+        if (renderer2 is not null)
+            renderer2.enabled = false;
+    }
+
+    public static void OpenWindowDelayed(float delay) {
+        if (_windowCoroutine is not null)
+            StartOfRound.Instance.StopCoroutine(_windowCoroutine);
+        _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowCoroutine(delay));
+    }
+
+    private static IEnumerator OpenWindowCoroutine(float delay) {
+        Logger.LogInfo("Opening window in " + delay + " seconds...");
+        yield return new WaitForSeconds(delay);
+        WindowState.Instance.SetWindowState(false, false);
+        _windowCoroutine = null;
+    }
+
+    private static void HandleWindowSync() =>
+        WindowState.Instance.ReceiveSync();
+
+    //TODO: Move patches
+
+    // ==============================================================================
+    // Patches
+    // ==============================================================================
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.Start))]
+    private static void Patch_NetworkStart() {
+        if (WindowConfig.vanillaMode.Value) return;
+
+        var shutterSwitchAsset =
+            mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
+        shutterSwitchAsset.AddComponent<ShipWindowShutterSwitch>();
+        NetworkManager.Singleton.AddNetworkPrefab(shutterSwitchAsset);
+
+        windowSwitchPrefab = shutterSwitchAsset;
+
+        RegisterWindows();
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(Terminal), nameof(Terminal.Awake))]
+    // ReSharper disable once InconsistentNaming
+    private static void Patch_TerminalAwake(Terminal __instance) {
+        try {
+            if (WindowConfig.windowsUnlockable.Value is false || WindowConfig.vanillaMode.Value) return;
+
+            foreach (var entry in WindowRegistry) {
+                var id = Unlockables.AddWindowToUnlockables(__instance, entry.Value);
+                entry.Value.unlockableID = id;
+            }
+        } catch (Exception e) {
+            Logger.LogError($"Error occurred registering window unlockables...\n{e}");
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Awake))]
+    private static void Patch_RoundAwake() {
+        try {
+            if (WindowConfig.vanillaMode.Value is false) {
+                // The switch will be removed by a later function if it is not needed
+                // Spawning here will let the (potential) saved position be restored.
+                Unlockables.AddSwitchToUnlockables();
+                ShipReplacer.SpawnSwitch();
+            }
+
+
+            // The debounce coroutine is cancelled when quitting the game because StartOfRound is destroyed.
+            // This means the flag doesn't get reset. So, we have to manually reset it at the start.
+            ShipReplacer.debounceReplace = false;
+        } catch (Exception e) {
+            Logger.LogError(e);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Start))]
+    private static void Patch_RoundStart() {
+        try {
+            if (WindowConfig.windowsUnlockable.Value == false || WindowConfig.vanillaMode.Value)
+                ShipReplacer.ReplaceShip();
+
+            AddStars();
+            HideSpaceProps();
+            HideMiscMeshes();
+        } catch (Exception e) {
+            Logger.LogError(e);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.ConnectClientToPlayerObject))]
+    private static void Patch_InitializeLocalPlayer() {
+        NetworkHandler.RegisterMessages();
+        NetworkHandler.WindowSyncReceivedEvent += HandleWindowSync;
+
+        if (NetworkHandler.IsHost)
+            return;
+
+        NetworkHandler.RequestWindowSync();
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartDisconnect))]
+    private static void Patch_PlayerLeave() {
+        NetworkHandler.UnregisterMessages();
+        NetworkHandler.WindowSyncReceivedEvent -= HandleWindowSync;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.LateUpdate))]
+    private static void Patch_RoundLateUpdate() {
+        if (CelestialTint.Enabled) return;
+        // Make the stars follow the player when they get sucked out of the ship.
+        if (outsideSkybox is null)
+            return;
+
+        if (StartOfRound.Instance.suckingPlayersOutOfShip)
+            outsideSkybox.transform.position = GameNetworkManager.Instance.localPlayerController.transform.position;
+        else
+            outsideSkybox.transform.localPosition = Vector3.zero;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Start))]
+    // ReSharper disable once InconsistentNaming
+    private static void Patch_AIStart(EnemyAI __instance) {
+        if (GameNetworkManager.Instance.localPlayerController is null)
+            return;
+
+        __instance.EnableEnemyMesh(true);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.Start))]
+    // ReSharper disable once InconsistentNaming
+    private static void Patch_MaskStart(MaskedPlayerEnemy __instance) {
+        if (GameNetworkManager.Instance.localPlayerController is null)
+            return;
+
+        __instance.EnableEnemyMesh(true);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SetPlayerSafeInShip))]
+    private static void Patch_SafeInShip() {
+        var array = FindObjectsOfType<EnemyAI>();
+        foreach (var enemyAI in array)
+            enemyAI.EnableEnemyMesh(true);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartMatchLever), nameof(StartMatchLever.PullLeverAnim))]
+    private static void Patch_StartGame(bool leverPulled) {
+        //Logger.LogInfo($"StartMatchLever.StartGame -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
+        if (!leverPulled)
+            return;
+
+        WindowState.Instance.SetWindowState(true, true);
+    }
+
+    // TODO: This does not need to be networked anymore.
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.FinishGeneratingNewLevelClientRpc))]
+    private static void Patch_OpenDoorSequence() {
+        //Logger.LogInfo($"RoundManager.FinishGeneratingNewLevelClientRpc -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
+        OpenWindowDelayed(2f);
+        WindowState.Instance.SetVolumeState(false);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ShipHasLeft))]
+    private static void Patch_ShipHasLeft() {
+        //Logger.LogInfo($"StartOfRound.ShipHasLeft -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
+        WindowState.Instance.SetWindowState(true, true);
+        OpenWindowDelayed(5f);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ResetShip))]
+    private static void Patch_ResetShip() {
+        StartOfRound.Instance.StartCoroutine(ShipReplacer.CheckForKeptSpawners());
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.DespawnPropsAtEndOfRound))]
+    private static void Patch_DespawnProps() {
+        //Logger.LogInfo($"RoundManager.DespawnPropsAtEndOfRound -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
+
+        if (CelestialTint.Enabled) return;
+
+        try {
+            switch (WindowConfig.spaceOutsideSetting.Value) {
+                case 0: break;
+
+                case 1:
+                case 2:
+                    // If for whatever reason this code errors, the game breaks.
+                    var daysSpent = StartOfRound.Instance.gameStats?.daysSpent;
+                    var rotation = (daysSpent ?? 1) * 80f;
+                    WindowState.Instance.SetVolumeRotation(rotation);
+                    WindowState.Instance.SetVolumeState(true);
+                    break;
+            }
+
+            var props = GameObject.Find("Environment/SpaceProps");
+            if (props is null || !WindowConfig.hideSpaceProps.Value)
+                return;
+
+            props.SetActive(false);
+        } catch (Exception e) {
+            Logger.LogError(e);
+        }
+    }
+
+    private static void NetcodePatcher() {
+        var types = Assembly.GetExecutingAssembly().GetTypes();
+        foreach (var type in types) {
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (var method in methods) {
+                var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
+                if (attributes.Length <= 0)
+                    continue;
+                method.Invoke(null, null);
+            }
+        }
+    }
+}

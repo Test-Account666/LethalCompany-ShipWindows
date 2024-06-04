@@ -1,217 +1,191 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using ShipWindows.Components;
 using Unity.Netcode;
 using UnityEngine;
-using ShipWindows.Components;
+using Object = UnityEngine.Object;
 
-namespace ShipWindows.Utilities
-{
-    internal class ShipReplacer
-    {
+namespace ShipWindows.Utilities;
 
-        public static bool debounceReplace = false;
+internal static class ShipReplacer {
+    public static bool debounceReplace;
 
-        public static GameObject vanillaShipInside;
-        public static GameObject newShipInside;
+    public static GameObject? vanillaShipInside;
+    public static GameObject? newShipInside;
 
-        // Only set on the server
-        public static GameObject switchInstance;
+    // Only set on the server
+    public static GameObject? switchInstance;
 
-        static GameObject FindOrThrow(string name)
-        {
-            GameObject gameObject = GameObject.Find(name);
-            if (!gameObject) throw new Exception($"Could not find {name}! Wrong scene?");
+    private static GameObject? FindOrThrow(string name) {
+        var gameObject = GameObject.Find(name);
+        if (!gameObject) throw new($"Could not find {name}! Wrong scene?");
 
-            return gameObject;
+        return gameObject;
+    }
+
+    private static string GetShipAssetName() {
+        if (WindowConfig.windowsUnlockable.Value && WindowConfig.vanillaMode.Value is false) {
+            var spawners = Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
+
+            var windowSpawner1 = spawners.FirstOrDefault(spawner => spawner.id is 1) is not null;
+            var windowSpawner2 = spawners.FirstOrDefault(spawner => spawner.id is 2) is not null;
+            var windowSpawner3 = spawners.FirstOrDefault(spawner => spawner.id is 3) is not null;
+            return $"ShipInsideWithWindow{(windowSpawner1? 1 : 0)}{(windowSpawner2? 1 : 0)}{(windowSpawner3? 1 : 0)}";
         }
 
-        static string GetShipAssetName()
-        {
-            if (WindowConfig.windowsUnlockable.Value == true && WindowConfig.vanillaMode.Value == false)
-            {
-                ShipWindowSpawner[] spawners = UnityEngine.Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
+        var window1Enabled = WindowConfig.enableWindow1.Value;
+        var window2Enabled = WindowConfig.enableWindow2.Value;
+        var window3Enabled = WindowConfig.enableWindow3.Value;
+        return $"ShipInsideWithWindow{(window1Enabled? 1 : 0)}{(window2Enabled? 1 : 0)}{(window3Enabled? 1 : 0)}";
+    }
 
-                bool w1 = spawners.FirstOrDefault(spawner => spawner.ID == 1) != null;
-                bool w2 = spawners.FirstOrDefault(spawner => spawner.ID == 2) != null;
-                bool w3 = spawners.FirstOrDefault(spawner => spawner.ID == 3) != null;
-                return $"ShipInsideWithWindow{(w1 ? 1 : 0)}{(w2 ? 1 : 0)}{(w3 ? 1 : 0)}";
-            } else
-            {
-                bool w1 = WindowConfig.enableWindow1.Value;
-                bool w2 = WindowConfig.enableWindow2.Value;
-                bool w3 = WindowConfig.enableWindow3.Value;
-                return $"ShipInsideWithWindow{(w1 ? 1 : 0)}{(w2 ? 1 : 0)}{(w3 ? 1 : 0)}";
-            }
+    private static void AddWindowScripts(GameObject ship) {
+        var container = ship.transform.Find("WindowContainer");
+        if (container is null) return;
+
+        foreach (Transform window in container) {
+            if (window.gameObject.GetComponent<ShipWindow>() is not null) continue;
+
+            if (int.TryParse(window.gameObject.name[^1].ToString(), out var id))
+                window.gameObject.AddComponent<ShipWindow>().id = id;
         }
-        static void AddWindowScripts(GameObject ship)
-        {
-            Transform container = ship.transform.Find("WindowContainer");
-            if (container == null) return;
+    }
 
-            foreach (Transform window in container)
-            {
-                if (window.gameObject.GetComponent<ShipWindow>() != null) continue;
+    public static void ReplaceDebounced(bool replace) {
+        //ShipWindows.Logger.LogInfo($"Debounce replace call. Replace? {replace} Is multiple call: {debounceReplace}");
+        if (WindowConfig.windowsUnlockable.Value is false || WindowConfig.vanillaMode.Value) return;
+        if (debounceReplace) return;
 
-                int id;
-                if (int.TryParse(window.gameObject.name[window.name.Length - 1].ToString(), out id))
-                {
-                    window.gameObject.AddComponent<ShipWindow>().ID = id;
-                }
-            }
-        }
+        debounceReplace = true;
+        StartOfRound.Instance.StartCoroutine(ReplacementCoroutine(replace));
+    }
 
-        public static void ReplaceDebounced(bool replace)
-        {
-            //ShipWindowPlugin.Log.LogInfo($"Debounce replace call. Replace? {replace} Is multiple call: {debounceReplace}");
-            if (WindowConfig.windowsUnlockable.Value == false || WindowConfig.vanillaMode.Value == true) return;
-            if (debounceReplace) return;
+    private static IEnumerator ReplacementCoroutine(bool replace) {
+        yield return null; // Wait 1 frame.
 
-            debounceReplace = true;
-            StartOfRound.Instance.StartCoroutine(ReplacementCoroutine(replace));
-        }
+        //ShipWindows.Logger.LogInfo("Performing ship replacement/restore.");
+        debounceReplace = false;
 
-        private static IEnumerator ReplacementCoroutine(bool replace)
-        {
-            yield return null; // Wait 1 frame.
+        if (replace)
+            ReplaceShip();
+        else
+            RestoreShip();
+    }
 
-            //ShipWindowPlugin.Log.LogInfo("Performing ship replacement/restore.");
-            debounceReplace = false;
+    private static void ReplaceGlassMaterial(GameObject shipPrefab) {
+        if (WindowConfig.glassRefraction.Value) return;
 
-            if (replace)
-            {
-                ReplaceShip();
-            } else
-            {
-                RestoreShip();
-            }
-        }
+        ShipWindows.Logger.LogInfo("Glass refraction is OFF! Replacing material...");
 
-        static void ReplaceGlassMaterial(GameObject shipPrefab)
-        {
-            if (WindowConfig.glassRefraction.Value == true) return;
+        var glassNoRefraction =
+            ShipWindows.mainAssetBundle.LoadAsset<Material>("Assets/LethalCompany/Mods/ShipWindow/Materials/GlassNoRefraction.mat");
 
-            ShipWindowPlugin.Log.LogInfo("Glass refraction is OFF! Replacing material...");
+        if (glassNoRefraction is null) return;
 
-            Material glassNoRefraction = ShipWindowPlugin.mainAssetBundle.LoadAsset<Material>
-                    ($"Assets/LethalCompany/Mods/ShipWindow/Materials/GlassNoRefraction.mat");
+        // This is bad so, so bad. Don't mind me :)
+        var window1 = shipPrefab.transform.Find("WindowContainer/Window1/Glass")?.GetComponent<MeshRenderer>();
+        var window2 = shipPrefab.transform.Find("WindowContainer/Window2/Glass")?.GetComponent<MeshRenderer>();
+        var window3 = shipPrefab.transform.Find("WindowContainer/Window3")?.GetComponent<MeshRenderer>();
 
-            if (glassNoRefraction == null) return;
+        if (window1 is not null) window1.material = glassNoRefraction;
+        if (window2 is not null) window2.material = glassNoRefraction;
+        if (window3 is not null) window3.material = glassNoRefraction;
+    }
 
-            // This is bad so, so bad. Don't mind me :)
-            MeshRenderer w1 = shipPrefab.transform.Find("WindowContainer/Window1/Glass")?.GetComponent<MeshRenderer>();
-            MeshRenderer w2 = shipPrefab.transform.Find("WindowContainer/Window2/Glass")?.GetComponent<MeshRenderer>();
-            MeshRenderer w3 = shipPrefab.transform.Find("WindowContainer/Window3")?.GetComponent<MeshRenderer>();
+    public static void ReplaceShip() {
+        try {
+            if (newShipInside is not null && vanillaShipInside is not null)
+                //ShipWindows.Logger.LogInfo($"Calling ReplaceShip when ship was already replaced! Restoring original...");
+                ObjectReplacer.Restore(vanillaShipInside);
 
-            if (w1) w1.material = glassNoRefraction;
-            if (w2) w2.material = glassNoRefraction;
-            if (w3) w3.material = glassNoRefraction;
-        }
+            vanillaShipInside = FindOrThrow("Environment/HangarShip/ShipInside");
+            var shipName = GetShipAssetName();
 
-        public static void ReplaceShip()
-        {
-            try
-            {
+            //ShipWindows.Logger.LogInfo($"Replacing ship with {shipName}");
 
-                if (newShipInside != null && vanillaShipInside != null)
-                {
-                    //ShipWindowPlugin.Log.LogInfo($"Calling ReplaceShip when ship was already replaced! Restoring original...");
-                    ObjectReplacer.Restore(vanillaShipInside);
-                }
+            var newShipPrefab =
+                ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/Ships/{shipName}.prefab");
 
-                vanillaShipInside = FindOrThrow("Environment/HangarShip/ShipInside");
-                string shipName = GetShipAssetName();
+            if (newShipPrefab is null)
+                throw new($"Could not load requested ship replacement! {shipName}");
 
-                //ShipWindowPlugin.Log.LogInfo($"Replacing ship with {shipName}");
+            AddWindowScripts(newShipPrefab);
+            ReplaceGlassMaterial(newShipPrefab);
 
-                GameObject newShipPrefab = ShipWindowPlugin.mainAssetBundle.LoadAsset<GameObject>
-                    ($"Assets/LethalCompany/Mods/ShipWindow/Ships/{shipName}.prefab");
+            newShipInside = ObjectReplacer.Replace(vanillaShipInside, newShipPrefab);
 
-                if (newShipPrefab == null) throw new Exception($"Could not load requested ship replacement! {shipName}");
-                AddWindowScripts(newShipPrefab);
-                ReplaceGlassMaterial(newShipPrefab);
-
-                newShipInside = ObjectReplacer.Replace(vanillaShipInside, newShipPrefab);
-
-                StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());
-
-            } catch (Exception e)
-            {
-                ShipWindowPlugin.Log.LogError($"Failed to replace ShipInside! \n{e}");
-            }
-        }
-
-        public static void SpawnSwitch()
-        {
-            var windowSwitch = UnityEngine.Object.FindFirstObjectByType<ShipWindowShutterSwitch>();
-            if (windowSwitch != null)
-            {
-                switchInstance = windowSwitch.gameObject;
-                return;
-            }
-
-            ShipWindowPlugin.Log.LogInfo("Spawning shutter switch...");
-            if (ShipWindowPlugin.windowSwitchPrefab != null)
-            {
-                if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-                {
-                    switchInstance = UnityEngine.GameObject.Instantiate(ShipWindowPlugin.windowSwitchPrefab);
-                    switchInstance.GetComponent<NetworkObject>().Spawn();
-                }   
-            }
-        }
-
-        public static void CheckShutterSwitch()
-        {
-            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-            {
-                //ShipWindowPlugin.Log.LogInfo("Checking window switch redundancy...");
-                ShipWindow[] windows = UnityEngine.Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
-
-                if (windows.Length > 0)
-                {
-                    if (switchInstance == null)
-                    {
-                        SpawnSwitch();
-                    } else
-                    {
-                        switchInstance.SetActive(true);
-                    }
-                } else
-                {
-                    if (switchInstance != null)
-                    {
-                        UnityEngine.GameObject.Destroy(switchInstance);
-                        switchInstance = null;
-                    }
-                        
-                }
-            }
-        }
-
-        public static IEnumerator WaitAndCheckSwitch()
-        {
-            yield return null;
-
-            CheckShutterSwitch();
-        }
-
-        public static void RestoreShip()
-        {
-            if (newShipInside == null) return;
-
-            ObjectReplacer.Restore(vanillaShipInside);
             StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());
-            newShipInside = null;
+        } catch (Exception e) {
+            ShipWindows.Logger.LogError($"Failed to replace ShipInside! \n{e}");
+        }
+    }
+
+    public static void SpawnSwitch() {
+        var windowSwitch = Object.FindFirstObjectByType<ShipWindowShutterSwitch>();
+        if (windowSwitch is not null) {
+            switchInstance = windowSwitch.gameObject;
+            return;
         }
 
-        // If any of the window spawners still exist without windows, spawn those windows.
-        public static IEnumerator CheckForKeptSpawners()
-        {
-            yield return new WaitForSeconds(2f);
+        ShipWindows.Logger.LogInfo("Spawning shutter switch...");
+        if (ShipWindows.windowSwitchPrefab is null)
+            return;
 
-            ShipWindowSpawner[] windows = UnityEngine.Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
-            if (windows.Length > 0) ReplaceDebounced(true);
+        if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
+            return;
+
+        switchInstance = Object.Instantiate(ShipWindows.windowSwitchPrefab);
+        switchInstance.GetComponent<NetworkObject>().Spawn();
+    }
+
+    public static void CheckShutterSwitch() {
+        if (NetworkManager.Singleton is {
+                IsHost: false, IsServer: false,
+            }) return;
+
+        //ShipWindows.Logger.LogInfo("Checking window switch redundancy...");
+        var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
+
+        if (windows.Length > 0) {
+            if (switchInstance is null)
+                SpawnSwitch();
+            else
+                switchInstance.SetActive(true);
+        } else {
+            if (switchInstance is null)
+                return;
+
+            Object.Destroy(switchInstance);
+            switchInstance = null;
         }
+    }
+
+    public static IEnumerator WaitAndCheckSwitch() {
+        yield return null;
+
+        CheckShutterSwitch();
+    }
+
+    public static void RestoreShip() {
+        if (newShipInside is null) return;
+
+        if (vanillaShipInside is null)
+            throw new NullReferenceException(nameof(vanillaShipInside) + " is null?!");
+
+        ObjectReplacer.Restore(vanillaShipInside);
+        StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());
+        newShipInside = null;
+    }
+
+    // If any of the window spawners still exist without windows, spawn those windows.
+    public static IEnumerator CheckForKeptSpawners() {
+        yield return new WaitForSeconds(2f);
+
+        var windows = Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
+        if (windows.Length <= 0)
+            yield break;
+
+        ReplaceDebounced(true);
     }
 }
