@@ -1,104 +1,86 @@
 ﻿using ShipWindows.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace ShipWindows.Components
-{
-    public class ShipWindow : MonoBehaviour
-    {
-        public int ID;
+namespace ShipWindows.Components;
 
-        // Misc variables held by the windows. This is kind of nasty.
+public class ShipWindow : MonoBehaviour {
+    // Window 3
+    public static string[] window3DisabledList = [
+        "UnderbellyMachineParts", "NurbsPath.001",
+    ];
 
-        // Window 2
-        GameObject oldPostersObject;
+    [FormerlySerializedAs("ID")]
+    public int id;
 
-        // Window 3
-        public static string[] window3DisabledList = [
-            "UnderbellyMachineParts",
-            "NurbsPath.001"
-        ];
+    // Misc variables held by the windows. This is kind of nasty.
 
-        public void SetClosed(bool closed)
-        {
-            GetComponent<Animator>()?.SetBool("Closed", closed);
+    // Window 2
+    private GameObject? _oldPostersObject;
+    private static readonly int _ClosedId = Animator.StringToHash("Closed");
+
+    public void Start() =>
+        OnStart();
+
+    public void OnDestroy() {
+        switch (id) {
+            case 1:
+                break;
+
+            case 2:
+                ObjectReplacer.Restore(_oldPostersObject!);
+                break;
+
+            case 3:
+                foreach (var go in window3DisabledList) {
+                    var obj = GameObject.Find($"Environment/HangarShip/{go}");
+
+                    obj?.gameObject.SetActive(true);
+                }
+
+                break;
         }
+    }
 
-        public void OnStart()
-        {
-            switch (ID)
-            {
-                case 1:
-                    break;
+    public void SetClosed(bool closed) =>
+        GetComponent<Animator>()?.SetBool(_ClosedId, closed);
 
-                case 2:
-                    if (WindowConfig.dontMovePosters.Value == false)
-                    {
-                        GameObject movedPostersPrefab = ShipWindowPlugin.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/ShipPosters.prefab");
-                        if (movedPostersPrefab != null)
-                        {
-                            Transform oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");
-                            if (oldPosters != null)
-                            {
-                                oldPostersObject = oldPosters.gameObject;
-                                GameObject newPosters = ObjectReplacer.Replace(oldPostersObject, movedPostersPrefab);
+    public void OnStart() {
+        switch (id) {
+            case 1:
+                break;
 
-                                // Support for custom posters.
-                                ObjectReplacer.ReplaceMaterial(oldPostersObject, newPosters);
-                            }
+            case 2:
+                if (WindowConfig.dontMovePosters.Value is false) {
+                    var movedPostersPrefab =
+                        ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/ShipPosters.prefab");
+                    if (movedPostersPrefab is not null) {
+                        var oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");
+                        if (oldPosters is not null) {
+                            _oldPostersObject = oldPosters.gameObject;
+                            var newPosters = ObjectReplacer.Replace(_oldPostersObject, movedPostersPrefab);
+
+                            // Support for custom posters.
+                            ObjectReplacer.ReplaceMaterial(_oldPostersObject, newPosters);
                         }
                     }
-                    break;
+                }
 
-                case 3:
-                    foreach (string go in window3DisabledList)
-                    {
-                        var obj = GameObject.Find($"Environment/HangarShip/{go}");
-                        if (obj == null)
-                            continue;
+                break;
 
-                        obj.gameObject.SetActive(false);
-                    }
+            case 3:
+                foreach (var go in window3DisabledList) {
+                    var obj = GameObject.Find($"Environment/HangarShip/{go}");
 
-                    if (WindowConfig.disableUnderLights.Value == true)
-                    {
-                        Transform floodLights = ShipReplacer.newShipInside?.transform.Find("WindowContainer/Window3/Lights");
-                        if (floodLights != null) floodLights.gameObject.SetActive(false);
-                    }
-                    break;
+                    obj?.gameObject.SetActive(false);
+                }
 
-                default: break;
-            }
-        }
+                if (WindowConfig.disableUnderLights.Value) {
+                    var floodLights = ShipReplacer.newShipInside?.transform.Find("WindowContainer/Window3/Lights");
+                    floodLights?.gameObject.SetActive(false);
+                }
 
-        public void Start()
-        {
-            OnStart();
-        }
-
-        public void OnDestroy()
-        {
-            switch (ID)
-            {
-                case 1:
-                    break;
-
-                case 2:
-                    ObjectReplacer.Restore(oldPostersObject);
-                    break;
-
-                case 3:
-                    foreach (string go in window3DisabledList)
-                    {
-                        var obj = GameObject.Find($"Environment/HangarShip/{go}");
-                        if (obj == null)
-                            continue;
-
-                        obj.gameObject.SetActive(true);
-                    }
-                    break;
-
-                default: break;
-            }
+                break;
         }
     }
 }

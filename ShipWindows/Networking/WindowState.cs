@@ -1,62 +1,62 @@
-﻿using ShipWindows.Components;
-using System;
+﻿using System;
+using ShipWindows.Components;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
-namespace ShipWindows.Networking
-{
-    [Serializable]
-    internal class WindowState
-    {
-        public static WindowState Instance { get; set; }
+namespace ShipWindows.Networking;
 
-        public bool WindowsClosed = false;
-        public bool WindowsLocked = false;
-        public bool VolumeActive = true;
-        public float VolumeRotation = 0f;
+[Serializable]
+internal class WindowState {
+    [FormerlySerializedAs("WindowsClosed")]
+    public bool windowsClosed;
 
-        public WindowState()
-        {
-            Instance = this;
-        }
+    [FormerlySerializedAs("WindowsLocked")]
+    public bool windowsLocked;
 
-        public void SetWindowState(bool closed, bool locked)
-        {
-            if (WindowConfig.enableShutter.Value == true)
-            {
-                ShipWindow[] windows = UnityEngine.Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
+    [FormerlySerializedAs("VolumeActive")]
+    public bool volumeActive = true;
 
-                foreach (ShipWindow w in windows)
-                    w.SetClosed(closed);
+    [FormerlySerializedAs("VolumeRotation")]
+    public float volumeRotation;
 
-                WindowsClosed = closed;
-                WindowsLocked = locked;
-            }
-        }
+    public WindowState() => Instance = this;
 
-        public void SetVolumeState(bool active)
-        {
-            var outsideSkybox = ShipWindowPlugin.outsideSkybox;
-            outsideSkybox?.SetActive(active);
+    public static WindowState Instance { get; set; } = null!;
 
-            VolumeActive = active;
-        }
+    public void SetWindowState(bool closed, bool locked) {
+        if (!WindowConfig.enableShutter.Value)
+            return;
 
-        public void SetVolumeRotation(float rotation)
-        {
-            SpaceSkybox.Instance?.SetRotation(rotation);
-            VolumeRotation = rotation;
-        }
+        var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
 
-        public void ReceiveSync()
-        {
-            // By this point the Instance has already been replaced, so we can just update the actual objects
-            // with what the values should be.
+        foreach (var w in windows)
+            w.SetClosed(closed);
 
-            ShipWindowPlugin.Log.LogInfo("Receiving window sync message...");
+        windowsClosed = closed;
+        windowsLocked = locked;
+    }
 
-            SetWindowState(WindowsClosed, WindowsLocked);
-            SetVolumeState(VolumeActive);
-            SetVolumeRotation(VolumeRotation);
-        }
+    public void SetVolumeState(bool active) {
+        var outsideSkybox = ShipWindows.outsideSkybox;
+        outsideSkybox?.SetActive(active);
+
+        volumeActive = active;
+    }
+
+    public void SetVolumeRotation(float rotation) {
+        SpaceSkybox.Instance?.SetRotation(rotation);
+        volumeRotation = rotation;
+    }
+
+    public void ReceiveSync() {
+        // By this point the Instance has already been replaced, so we can just update the actual objects
+        // with what the values should be.
+
+        ShipWindows.Logger.LogInfo("Receiving window sync message...");
+
+        SetWindowState(windowsClosed, windowsLocked);
+        SetVolumeState(volumeActive);
+        SetVolumeRotation(volumeRotation);
     }
 }

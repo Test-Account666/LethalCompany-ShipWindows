@@ -1,35 +1,32 @@
-﻿using Unity.Netcode;
+﻿using ShipWindows.Components;
+using Unity.Netcode;
 using UnityEngine;
-using ShipWindows.Components;
 
-namespace ShipWindows
-{
-    public class ShipWindowDef
-    {
-        public int ID;
-        public int UnlockableID;
-        public GameObject Prefab;
-        public int BaseCost;
+namespace ShipWindows;
 
-        private ShipWindowDef(int id, GameObject prefab, int baseCost)
-        {
-            ID = id;
-            Prefab = prefab;
-            BaseCost = baseCost;
-        }
+public class ShipWindowDef {
+    public int baseCost;
+    public int id;
+    public GameObject prefab;
+    public int unlockableID;
 
-        public static ShipWindowDef Register(int id, int baseCost)
-        {
-            ShipWindowPlugin.Log.LogInfo($"Registering window prefab: Window {id}");
-            GameObject windowSpawner = ShipWindowPlugin.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/SpawnWindow{id}.prefab");
-            windowSpawner.AddComponent<ShipWindowSpawner>().ID = id;
+    private ShipWindowDef(int id, GameObject prefab, int baseCost) {
+        this.id = id;
+        this.prefab = prefab;
+        this.baseCost = baseCost;
+    }
 
-            NetworkManager.Singleton.AddNetworkPrefab(windowSpawner);
+    public static ShipWindowDef Register(int id, int baseCost) {
+        ShipWindows.Logger.LogInfo($"Registering window prefab: Window {id}");
+        var windowSpawner =
+            ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/SpawnWindow{id}.prefab");
+        windowSpawner.AddComponent<ShipWindowSpawner>().id = id;
 
-            ShipWindowDef def = new(id, windowSpawner, baseCost);
-            //def.UnlockableID = Unlockables.AddWindowToUnlockables(def);
+        NetworkManager.Singleton.AddNetworkPrefab(windowSpawner);
 
-            return def;
-        }
+        ShipWindowDef def = new(id, windowSpawner, baseCost);
+        //def.UnlockableID = Unlockables.AddWindowToUnlockables(def);
+
+        return def;
     }
 }
