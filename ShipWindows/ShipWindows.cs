@@ -78,7 +78,7 @@ public class ShipWindows : BaseUnityPlugin {
         }
 
         try {
-            NetcodePatcher();
+            InitializeNetcode();
         } catch (Exception e) {
             Logger.LogError("Something went wrong with the netcode patcher!");
             Logger.LogError(e);
@@ -246,7 +246,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.Start))]
-    private static void Patch_NetworkStart() {
+    private static void AddPrefabsToNetwork() {
         if (WindowConfig.vanillaMode.Value) return;
 
         var shutterSwitchAsset =
@@ -262,7 +262,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Terminal), nameof(Terminal.Awake))]
     // ReSharper disable once InconsistentNaming
-    private static void Patch_TerminalAwake(Terminal __instance) {
+    private static void AddWindowsToUnlockables(Terminal __instance) {
         try {
             if (WindowConfig.windowsUnlockable.Value is false || WindowConfig.vanillaMode.Value) return;
 
@@ -277,7 +277,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Awake))]
-    private static void Patch_RoundAwake() {
+    private static void SpawnShutterSwitch() {
         try {
             if (WindowConfig.vanillaMode.Value is false) {
                 // The switch will be removed by a later function if it is not needed
@@ -297,7 +297,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Start))]
-    private static void Patch_RoundStart() {
+    private static void InitializeWindows() {
         try {
             if (WindowConfig.windowsUnlockable.Value == false || WindowConfig.vanillaMode.Value)
                 ShipReplacer.ReplaceShip();
@@ -312,7 +312,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.ConnectClientToPlayerObject))]
-    private static void Patch_InitializeLocalPlayer() {
+    private static void OnPlayerConnect() {
         NetworkHandler.RegisterMessages();
         NetworkHandler.WindowSyncReceivedEvent += HandleWindowSync;
 
@@ -324,14 +324,14 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartDisconnect))]
-    private static void Patch_PlayerLeave() {
+    private static void OnPlayerDisconnect() {
         NetworkHandler.UnregisterMessages();
         NetworkHandler.WindowSyncReceivedEvent -= HandleWindowSync;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.LateUpdate))]
-    private static void Patch_RoundLateUpdate() {
+    private static void FollowPlayer() {
         if (CelestialTint.Enabled) return;
         // Make the stars follow the player when they get sucked out of the ship.
         if (outsideSkybox is null)
@@ -373,7 +373,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartMatchLever), nameof(StartMatchLever.PullLeverAnim))]
-    private static void Patch_StartGame(bool leverPulled) {
+    private static void CloseAndLockWindows(bool leverPulled) {
         //Logger.LogInfo($"StartMatchLever.StartGame -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
         if (!leverPulled)
             return;
@@ -384,15 +384,16 @@ public class ShipWindows : BaseUnityPlugin {
     // TODO: This does not need to be networked anymore.
     [HarmonyPostfix]
     [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.FinishGeneratingNewLevelClientRpc))]
-    private static void Patch_OpenDoorSequence() {
+    private static void OpenWindowAfterLevelGeneration() {
         //Logger.LogInfo($"RoundManager.FinishGeneratingNewLevelClientRpc -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
-        OpenWindowDelayed(2f);
+        // Increased the delay to 3 seconds, in hopes to combat windows being open before ship is ready to land
+        OpenWindowDelayed(3f);
         WindowState.Instance.SetVolumeState(false);
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ShipHasLeft))]
-    private static void Patch_ShipHasLeft() {
+    private static void OpenWindowAfterShipLeave() {
         //Logger.LogInfo($"StartOfRound.ShipHasLeft -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
         WindowState.Instance.SetWindowState(true, true);
         OpenWindowDelayed(5f);
@@ -400,9 +401,8 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ResetShip))]
-    private static void Patch_ResetShip() {
+    private static void CheckForKeptSpawners() =>
         StartOfRound.Instance.StartCoroutine(ShipReplacer.CheckForKeptSpawners());
-    }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.DespawnPropsAtEndOfRound))]
@@ -435,7 +435,7 @@ public class ShipWindows : BaseUnityPlugin {
         }
     }
 
-    private static void NetcodePatcher() {
+    private static void InitializeNetcode() {
         var types = Assembly.GetExecutingAssembly().GetTypes();
         foreach (var type in types) {
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
