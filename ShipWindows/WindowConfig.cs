@@ -29,6 +29,8 @@ public static class WindowConfig {
 
     public static ConfigEntry<bool> changeLightSwitchTip = null!;
 
+    public static ConfigEntry<bool> enableShutterVoiceLines = null!;
+
     //public static ConfigEntry<bool> celestialTintOverrideSpace;
 
     public static void InitializeConfig(ConfigFile configFile) {
@@ -77,6 +79,9 @@ public static class WindowConfig {
 
         changeLightSwitchTip = configFile.Bind("Misc", "Change light switch tool tip", true,
                                                "If set to true, will change the tool tip for the light switch to match the shutter's tool tip.");
+
+        enableShutterVoiceLines = configFile.Bind("Misc", "Enable Wesley shutter voice lines", true,
+                                                  "If set to true, will load and use Wesley's voice lines for opening/closing the window shutters.");
 
         //celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
         //    "If Celestial Tint is installed, replace the space skybox with the red sky from Ship Windows.");

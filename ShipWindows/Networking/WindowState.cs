@@ -1,5 +1,6 @@
 ﻿using System;
 using ShipWindows.Components;
+using ShipWindows.Utilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
@@ -28,6 +29,8 @@ internal class WindowState {
         if (!WindowConfig.enableShutter.Value)
             return;
 
+        PlayVoiceLine(closed? 1 : 0);
+
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
 
         foreach (var w in windows)
@@ -35,6 +38,19 @@ internal class WindowState {
 
         windowsClosed = closed;
         windowsLocked = locked;
+    }
+
+    public static void PlayVoiceLine(int clipIndex) {
+        ShipWindows.Logger.LogDebug("Playing clip: " + clipIndex);
+
+        var audioClip = SoundLoader.VoiceLines[clipIndex];
+
+        var speakerAudioSource = StartOfRound.Instance.speakerAudioSource;
+
+        speakerAudioSource.PlayOneShot(StartOfRound.Instance.disableSpeakerSFX);
+
+        speakerAudioSource.clip = audioClip;
+        speakerAudioSource.Play();
     }
 
     public void SetVolumeState(bool active) {
