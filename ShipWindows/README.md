@@ -37,6 +37,8 @@ There are some differences between these mods.
 - Option to change the light switch's tool tip to match the shutter switch's tool tip
 - Improved closing/opening on level transitions (For example, preventing the shutters from opening to early when
   landing)
+- Shutters are synced to the shutter switch state instead of being relative
+- Shutters cannot be toggled while they are locked
 
 ## Thanks to
 
