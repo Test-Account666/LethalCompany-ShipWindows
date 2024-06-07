@@ -72,9 +72,6 @@ crashlytics-build.properties
 # IDEA Directories
 .idea/
 
-# sh files
-*.sh
-
 # User added files
 BuildOutput/
 
