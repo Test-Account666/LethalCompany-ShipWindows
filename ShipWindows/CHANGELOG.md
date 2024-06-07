@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 1.0.2
+
+\+ Shutter switch is now non-interactable while the windows are locked<br>
+\+ Window state is now sync to the state switch, instead of being relative<br>
+\* Fix posters<br>
+
 ## 1.0.1
 
 \* Fix locked window state<br>
