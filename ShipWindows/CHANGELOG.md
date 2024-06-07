@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.1.2
+
+\* Fix stretched ship hull texture<br>
+
 ## 1.1.1
 
 \* Fix all window collisions (Hopefully...)<br>
