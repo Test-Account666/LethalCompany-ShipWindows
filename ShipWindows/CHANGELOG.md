@@ -1,4 +1,4 @@
-# ShipWindows
+# Ship Windows
 
 ## 1.0.0
 
