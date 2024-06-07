@@ -17,6 +17,9 @@ internal static class ObjectReplacer {
             if (!mesh1 || !mesh2) return;
 
             mesh2.material = mesh1.material;
+            mesh2.materials = mesh1.materials;
+            mesh2.sharedMaterial = mesh1.sharedMaterial;
+            mesh2.sharedMaterials = mesh1.sharedMaterials;
         } catch (Exception e) {
             ShipWindows.Logger.LogError($"Could not replace object material:\n{e}");
         }
