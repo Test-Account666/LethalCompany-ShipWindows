@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
@@ -233,9 +234,22 @@ public class ShipWindows : BaseUnityPlugin {
         _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowCoroutine(delay));
     }
 
+    public static void OpenWindowOnCondition(Func<bool> conditionPredicate) {
+        if (_windowCoroutine is not null)
+            StartOfRound.Instance.StopCoroutine(_windowCoroutine);
+        _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowOnConditionCoroutine(conditionPredicate));
+    }
+
     private static IEnumerator OpenWindowCoroutine(float delay) {
         Logger.LogInfo("Opening window in " + delay + " seconds...");
         yield return new WaitForSeconds(delay);
+        WindowState.Instance.SetWindowState(false, false);
+        _windowCoroutine = null;
+    }
+
+    private static IEnumerator OpenWindowOnConditionCoroutine(Func<bool> conditionPredicate) {
+        Logger.LogInfo("Opening window when " + conditionPredicate + " is true");
+        yield return new WaitUntil(conditionPredicate);
         WindowState.Instance.SetWindowState(false, false);
         _windowCoroutine = null;
     }
@@ -262,6 +276,22 @@ public class ShipWindows : BaseUnityPlugin {
         windowSwitchPrefab = shutterSwitchAsset;
 
         RegisterWindows();
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ChangeLevelServerRpc))]
+    private static void LockWindowsWhileRouting(int levelID) {
+        var moons = Resources.FindObjectsOfTypeAll<SelectableLevel>();
+
+        var selectedLevel =
+            moons.Where(level => level is not null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
+
+        if (selectedLevel is null)
+            return;
+
+        WindowState.Instance.SetWindowState(true, true);
+
+        OpenWindowDelayed(selectedLevel.timeToArrive + 1.5F);
     }
 
     [HarmonyPrefix]
@@ -392,8 +422,11 @@ public class ShipWindows : BaseUnityPlugin {
     private static void OpenWindowAfterLevelGeneration() {
         //Logger.LogInfo($"RoundManager.FinishGeneratingNewLevelClientRpc -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
         // Increased the delay to 3 seconds, in hopes to combat windows being open before ship is ready to land
-        OpenWindowDelayed(3f);
+        //OpenWindowDelayed(3f);
+
         WindowState.Instance.SetVolumeState(false);
+
+        OpenWindowOnCondition(() => StartOfRound.Instance.shipDoorsEnabled && !StartOfRound.Instance.inShipPhase);
     }
 
     [HarmonyPostfix]
@@ -401,7 +434,9 @@ public class ShipWindows : BaseUnityPlugin {
     private static void OpenWindowAfterShipLeave() {
         //Logger.LogInfo($"StartOfRound.ShipHasLeft -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
         WindowState.Instance.SetWindowState(true, true);
-        OpenWindowDelayed(5f);
+        //OpenWindowDelayed(5f);
+
+        OpenWindowOnCondition(() => StartOfRound.Instance.inShipPhase);
     }
 
     [HarmonyPostfix]
