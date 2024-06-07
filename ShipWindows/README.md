@@ -25,7 +25,7 @@ OR
 
 ## Differences to the original
 
-As you may have noticed, this is a fork
+As you may have noticed, this is a fork/continuation
 of [Veri's ShipWindows mod](https://thunderstore.io/c/lethal-company/p/veri/ShipWindows/).
 There are some differences between these mods.
 
