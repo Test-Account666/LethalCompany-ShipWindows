@@ -1,18 +1,18 @@
 ﻿using GameNetcodeStuff;
 using ShipWindows.Networking;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace ShipWindows.Components;
 
+[AddComponentMenu("TestAccount666/ShipWindows/ShipWindowShutterSwitch")]
 public class ShipWindowShutterSwitch : NetworkBehaviour {
+    public InteractTrigger interactTrigger;
+    
     public override void OnNetworkSpawn() {
         base.OnNetworkSpawn();
 
-        var trigger = transform.Find("WindowSwitch");
-
-        var interactable = trigger?.GetComponent<InteractTrigger>();
-
-        interactable?.onInteract.AddListener(PlayerUsedSwitch);
+        interactTrigger.onInteract.AddListener(PlayerUsedSwitch);
     }
 
     public void PlayerUsedSwitch(PlayerControllerB playerControllerB) =>

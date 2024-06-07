@@ -4,6 +4,7 @@ using UnityEngine.Serialization;
 
 namespace ShipWindows.Components;
 
+[AddComponentMenu("TestAccount666/ShipWindows/ShipWindow")]
 public class ShipWindow : MonoBehaviour {
     // Window 3
     public static string[] window3DisabledList = [
@@ -42,8 +43,19 @@ public class ShipWindow : MonoBehaviour {
         }
     }
 
-    public void SetClosed(bool closed) =>
-        GetComponent<Animator>()?.SetBool(_ClosedId, closed);
+    public void SetClosed(bool closed) {
+        var animator = GetComponent<Animator>();
+
+        if (animator is null)
+            return;
+        
+        animator.SetBool(_ClosedId, closed);
+
+        if (id is not 3)
+            return;
+
+        gameObject.tag = closed? "Aluminum" : "Wood";
+    }
 
     public void OnStart() {
         switch (id) {

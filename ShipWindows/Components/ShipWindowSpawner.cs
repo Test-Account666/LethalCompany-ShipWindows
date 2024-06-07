@@ -4,6 +4,7 @@ using UnityEngine.Serialization;
 
 namespace ShipWindows.Components;
 
+[AddComponentMenu("TestAccount666/ShipWindows/ShipWindowSpawner")]
 public class ShipWindowSpawner : MonoBehaviour {
     [FormerlySerializedAs("ID")]
     public int id;

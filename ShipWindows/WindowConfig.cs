@@ -27,6 +27,8 @@ public static class WindowConfig {
     public static ConfigEntry<bool> defaultWindow2 = null!;
     public static ConfigEntry<bool> defaultWindow3 = null!;
 
+    public static ConfigEntry<bool> changeLightSwitchTip = null!;
+
     //public static ConfigEntry<bool> celestialTintOverrideSpace;
 
     public static void InitializeConfig(ConfigFile configFile) {
@@ -72,6 +74,9 @@ public static class WindowConfig {
                                          "If set as unlockable, start the game with window across from the terminal unlocked already.");
         defaultWindow3 = configFile.Bind("General", "UnlockWindow3", false,
                                          "If set as unlockable, start the game with the floor window unlocked already.");
+
+        changeLightSwitchTip = configFile.Bind("Misc", "Change light switch tool tip", true,
+                                               "If set to true, will change the tool tip for the light switch to match the shutter's tool tip.");
 
         //celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
         //    "If Celestial Tint is installed, replace the space skybox with the red sky from Ship Windows.");

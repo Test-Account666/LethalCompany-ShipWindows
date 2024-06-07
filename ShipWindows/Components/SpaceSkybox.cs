@@ -5,6 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace ShipWindows.Components;
 
+[AddComponentMenu("TestAccount666/ShipWindows/SpaceSkybox")]
 public class SpaceSkybox : MonoBehaviour {
     private HDRISky? _sky;
 

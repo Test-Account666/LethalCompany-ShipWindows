@@ -9,6 +9,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using ShipWindows.Compatibility;
 using ShipWindows.Components;
+using ShipWindows.MiscPatches;
 using ShipWindows.Networking;
 using ShipWindows.Utilities;
 using Unity.Netcode;
@@ -17,6 +18,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace ShipWindows;
 
+[BepInIncompatibility("veri.lc.shipwindow")]
 [CompatibleDependency("CelestialTint", "1.0.1", typeof(CelestialTint))]
 [CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
 [CompatibleDependency("com.github.lethalmods.lethalexpansioncore", typeof(LethalExpansion))]
@@ -90,6 +92,9 @@ public class ShipWindows : BaseUnityPlugin {
 
         Harmony.PatchAll(typeof(ShipWindows));
         Harmony.PatchAll(typeof(Unlockables));
+
+        if (WindowConfig.changeLightSwitchTip.Value)
+            Harmony.PatchAll(typeof(LightSwitchPatch));
 
         CompatibleDependencyAttribute.Init(this);
 
