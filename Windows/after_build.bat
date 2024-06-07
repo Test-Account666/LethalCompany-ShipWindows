@@ -14,11 +14,16 @@ if exist "BuildOutput\" (rmdir /s /q "BuildOutput\")
 :: Create the BuildOutput directory
 mkdir BuildOutput
 
+:: Create the sounds directory
+mkdir "BuildOutput\sounds"
+
 :: Copy files to the BuildOutput directory
 copy "%CURRENT_PROJECT%\bin\Debug\netstandard2.1\TestAccount666.%CURRENT_PROJECT%.dll" "BuildOutput\%CURRENT_PROJECT%.dll"
 copy "%CURRENT_PROJECT%\README.md" "BuildOutput\"
 copy "%CURRENT_PROJECT%\CHANGELOG.md" "BuildOutput\"
 copy "%CURRENT_PROJECT%\icon.png" "BuildOutput\"
+copy "%CURRENT_PROJECT%\sounds\ShutterClose.wav" "BuildOutput\sounds\"
+copy "%CURRENT_PROJECT%\sounds\ShutterOpen.wav" "BuildOutput\sounds\"
 copy "LICENSE" "BuildOutput\"
 copy "ship_window" "BuildOutput\"
 
