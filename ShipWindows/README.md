@@ -35,6 +35,8 @@ There are some differences between these mods.
   cause him to be triggered)
 - Different sound from walking on the floor window
 - Option to change the light switch's tool tip to match the shutter switch's tool tip
+- Improved closing/opening on level transitions (For example, preventing the shutters from opening to early when
+  landing)
 
 ## Thanks to
 
