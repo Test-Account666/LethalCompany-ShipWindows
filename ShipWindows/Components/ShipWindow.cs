@@ -48,7 +48,7 @@ public class ShipWindow : MonoBehaviour {
 
         if (animator is null)
             return;
-        
+
         animator.SetBool(_ClosedId, closed);
 
         if (id is not 3)
@@ -63,20 +63,22 @@ public class ShipWindow : MonoBehaviour {
                 break;
 
             case 2:
-                if (WindowConfig.dontMovePosters.Value is false) {
-                    var movedPostersPrefab =
-                        ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/ShipPosters.prefab");
-                    if (movedPostersPrefab is not null) {
-                        var oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");
-                        if (oldPosters is not null) {
-                            _oldPostersObject = oldPosters.gameObject;
-                            var newPosters = ObjectReplacer.Replace(_oldPostersObject, movedPostersPrefab);
+                if (WindowConfig.dontMovePosters.Value)
+                    break;
 
-                            // Support for custom posters.
-                            ObjectReplacer.ReplaceMaterial(_oldPostersObject, newPosters);
-                        }
-                    }
-                }
+                var movedPostersPrefab =
+                    ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/ShipPosters.prefab");
+                if (movedPostersPrefab is null) break;
+
+                var oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");
+
+                if (oldPosters is null) break;
+
+                _oldPostersObject = oldPosters.gameObject;
+                var newPosters = ObjectReplacer.Replace(_oldPostersObject, movedPostersPrefab);
+
+                // Support for custom posters.
+                ObjectReplacer.ReplaceMaterial(_oldPostersObject, newPosters);
 
                 break;
 
@@ -87,10 +89,10 @@ public class ShipWindow : MonoBehaviour {
                     obj?.gameObject.SetActive(false);
                 }
 
-                if (WindowConfig.disableUnderLights.Value) {
-                    var floodLights = ShipReplacer.newShipInside?.transform.Find("WindowContainer/Window3/Lights");
-                    floodLights?.gameObject.SetActive(false);
-                }
+                if (!WindowConfig.disableUnderLights.Value) break;
+
+                var floodLights = ShipReplacer.newShipInside?.transform.Find("WindowContainer/Window3/Lights");
+                floodLights?.gameObject.SetActive(false);
 
                 break;
         }
