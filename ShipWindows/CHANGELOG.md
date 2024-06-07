@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.1.1
+
+\* Fix all window collisions (Hopefully...)<br>
+
 ## 1.1.0
 
 \+ Shutter switch is now non-interactable while the windows are locked<br>
