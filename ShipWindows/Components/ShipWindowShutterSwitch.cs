@@ -12,7 +12,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     public InteractTrigger interactTrigger;
     public Animator animator;
     private static readonly int _OnHash = Animator.StringToHash("on");
-    private bool destroy;
+    private bool _destroy;
 
     public override void OnNetworkSpawn() {
         base.OnNetworkSpawn();
@@ -23,13 +23,13 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     public override void OnNetworkDespawn() {
-        destroy = true;
+        _destroy = true;
 
         base.OnNetworkDespawn();
     }
 
     public override void OnDestroy() {
-        destroy = true;
+        _destroy = true;
 
         base.OnDestroy();
     }
@@ -37,9 +37,9 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     private IEnumerator SyncInteractable() {
         var currentlyLocked = WindowState.Instance.windowsLocked;
 
-        yield return new WaitUntil(() => destroy || WindowState.Instance.windowsLocked != currentlyLocked);
+        yield return new WaitUntil(() => _destroy || WindowState.Instance.windowsLocked != currentlyLocked);
 
-        if (destroy) yield break;
+        if (_destroy) yield break;
 
         interactTrigger.interactable = !WindowState.Instance.windowsLocked;
 
