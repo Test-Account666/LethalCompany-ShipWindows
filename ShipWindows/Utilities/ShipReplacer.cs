@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWindows.Components;
+using ShipWindows.Networking;
 using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -175,6 +176,8 @@ internal static class ShipReplacer {
             newShipInside = ObjectReplacer.Replace(vanillaShipInside, newShipPrefab);
 
             StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());
+
+            WindowState.Instance.SetWindowState(WindowState.Instance.windowsClosed, WindowState.Instance.windowsLocked, false);
         } catch (Exception e) {
             ShipWindows.Logger.LogError($"Failed to replace ShipInside! \n{e}");
         }
