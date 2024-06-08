@@ -1,8 +1,10 @@
 # Ship Windows
 
-Adds three glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
+Adds four glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
 
 ![Screenshot_1](https://raw.githubusercontent.com/jverif/lc-shipwindow/main/Screenshots/showcase.png "Showcase")
+
+(Screenshot with door windows coming next update)
 
 ## Compatibility
 
@@ -39,8 +41,13 @@ There are some differences between these mods.
   landing)
 - Shutters are synced to the shutter switch state instead of being relative
 - Shutters cannot be toggled while they are locked
+- DOOR WINDOWS
 
 ## Thanks to
 
 - Soup (@souper194) - Shutter texture used on versions >= 1.2.0
 - Veri - Creating the original mod
+
+## Known Issues
+
+- Ship door texture breaks with door windows
