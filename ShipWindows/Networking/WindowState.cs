@@ -25,11 +25,11 @@ internal class WindowState {
 
     public static WindowState Instance { get; set; } = null!;
 
-    public void SetWindowState(bool closed, bool locked) {
+    public void SetWindowState(bool closed, bool locked, bool playVoiceLine = true) {
         if (!WindowConfig.enableShutter.Value)
             return;
 
-        PlayVoiceLine(closed? 1 : 0);
+        if (playVoiceLine) PlayVoiceLine(closed? 1 : 0);
 
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
 
@@ -71,7 +71,8 @@ internal class WindowState {
 
         ShipWindows.Logger.LogInfo("Receiving window sync message...");
 
-        SetWindowState(windowsClosed, windowsLocked);
+        //TODO: Check if this causes issues.
+        SetWindowState(windowsClosed, windowsLocked, false);
         SetVolumeState(volumeActive);
         SetVolumeRotation(volumeRotation);
     }

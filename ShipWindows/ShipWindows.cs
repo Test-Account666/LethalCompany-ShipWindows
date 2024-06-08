@@ -250,14 +250,14 @@ public class ShipWindows : BaseUnityPlugin {
     private static IEnumerator OpenWindowCoroutine(float delay) {
         Logger.LogInfo("Opening window in " + delay + " seconds...");
         yield return new WaitForSeconds(delay);
-        WindowState.Instance.SetWindowState(false, false);
+        WindowState.Instance.SetWindowState(false, false, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
         _windowCoroutine = null;
     }
 
     private static IEnumerator OpenWindowOnConditionCoroutine(Func<bool> conditionPredicate) {
         Logger.LogInfo("Opening window when " + conditionPredicate + " is true");
         yield return new WaitUntil(conditionPredicate);
-        WindowState.Instance.SetWindowState(false, false);
+        WindowState.Instance.SetWindowState(false, false, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
         _windowCoroutine = null;
     }
 
@@ -296,7 +296,7 @@ public class ShipWindows : BaseUnityPlugin {
         if (selectedLevel is null)
             return;
 
-        WindowState.Instance.SetWindowState(true, true);
+        WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
 
         OpenWindowDelayed(selectedLevel.timeToArrive + 1.5F);
     }
@@ -420,7 +420,7 @@ public class ShipWindows : BaseUnityPlugin {
         if (!leverPulled)
             return;
 
-        WindowState.Instance.SetWindowState(true, true);
+        WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
     }
 
     // TODO: This does not need to be networked anymore.
@@ -440,7 +440,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ShipHasLeft))]
     private static void OpenWindowAfterShipLeave() {
         //Logger.LogInfo($"StartOfRound.ShipHasLeft -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
-        WindowState.Instance.SetWindowState(true, true);
+        WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
         //OpenWindowDelayed(5f);
 
         OpenWindowOnCondition(() => StartOfRound.Instance.inShipPhase);
