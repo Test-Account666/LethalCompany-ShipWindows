@@ -9,13 +9,23 @@ namespace ShipWindows.Components;
 
 [AddComponentMenu("TestAccount666/ShipWindows/ShipWindowShutterSwitch")]
 public class ShipWindowShutterSwitch : NetworkBehaviour {
-    public InteractTrigger interactTrigger;
+    public InteractTrigger? interactTrigger;
     public Animator animator;
     private static readonly int _OnHash = Animator.StringToHash("on");
     private bool _destroy;
 
     public override void OnNetworkSpawn() {
+        if (_destroy) return;
+
         base.OnNetworkSpawn();
+
+        interactTrigger ??= GetComponent<InteractTrigger>();
+
+        if (interactTrigger is null)
+            throw new("Could not find InteractTrigger!");
+
+        if (interactTrigger?.onInteract is null)
+            throw new("Could not find onInteract in InteractTrigger???");
 
         interactTrigger.onInteract.AddListener(PlayerUsedSwitch);
 
@@ -40,6 +50,14 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         yield return new WaitUntil(() => _destroy || WindowState.Instance.windowsLocked != currentlyLocked);
 
         if (_destroy) yield break;
+
+        interactTrigger ??= GetComponent<InteractTrigger>();
+
+        if (interactTrigger is null)
+            throw new("Could not find InteractTrigger!");
+
+        if (interactTrigger?.onInteract is null)
+            throw new("Could not find onInteract in InteractTrigger???");
 
         interactTrigger.interactable = !WindowState.Instance.windowsLocked;
 
