@@ -11,12 +11,14 @@ internal class Unlockables {
         [1] = "Right Window",
         [2] = "Left Window",
         [3] = "Floor Window",
+        [4] = "Door Window",
     };
 
     public static Dictionary<int, string> windowInfo = new() {
         [1] = "\nAdds a window to the right of the ship's control panel, behind the terminal.\n\n",
         [2] = "\nAdds a window to the left of the ship's control panel.\n\n",
         [3] = "\nAdds a window to the floor of the ship.\n\n",
+        [4] = "\nAdds windows to the door of the ship.\n\n",
     };
 
     private static readonly Dictionary<int, WindowUnlockable> _WindowUnlockables = [

@@ -72,7 +72,8 @@ public class ShipWindows : BaseUnityPlugin {
                      + $"    Windows Unlockable: {WindowConfig.windowsUnlockable.Value}\n"
                      + $"    Window 1 Enabled:   {WindowConfig.enableWindow1.Value}\n"
                      + $"    Window 2 Enabled:   {WindowConfig.enableWindow2.Value}\n"
-                     + $"    Window 3 Enabled:   {WindowConfig.enableWindow3.Value}\n");
+                     + $"    Window 3 Enabled:   {WindowConfig.enableWindow3.Value}\n"
+                     + $"    Window 4 Enabled:   {WindowConfig.enableWindow4.Value}\n");
 
 
         if (!LoadAssetBundle()) {
@@ -128,6 +129,7 @@ public class ShipWindows : BaseUnityPlugin {
             1 => WindowConfig.window1Cost.Value,
             2 => WindowConfig.window2Cost.Value,
             3 => WindowConfig.window3Cost.Value,
+            4 => WindowConfig.window4Cost.Value,
             var _ => 60, // Shouldn't happen, but just in case.
         };
     }
@@ -137,6 +139,7 @@ public class ShipWindows : BaseUnityPlugin {
             1 => WindowConfig.enableWindow1.Value,
             2 => WindowConfig.enableWindow2.Value,
             3 => WindowConfig.enableWindow3.Value,
+            4 => WindowConfig.enableWindow4.Value,
             var _ => false,
         };
     }
@@ -146,12 +149,13 @@ public class ShipWindows : BaseUnityPlugin {
             1 => WindowConfig.defaultWindow1.Value,
             2 => WindowConfig.defaultWindow2.Value,
             3 => WindowConfig.defaultWindow3.Value,
+            4 => WindowConfig.defaultWindow4.Value,
             var _ => false,
         };
     }
 
     private static void RegisterWindows() {
-        for (var id = 1; id <= 3; id++) {
+        for (var id = 1; id <= 4; id++) {
             if (!IsWindowEnabled(id)) continue;
 
             var def = ShipWindowDef.Register(id, GetWindowBaseCost(id));

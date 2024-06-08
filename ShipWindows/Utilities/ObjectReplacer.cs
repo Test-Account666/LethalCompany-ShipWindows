@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -7,6 +8,9 @@ namespace ShipWindows.Utilities;
 
 internal static class ObjectReplacer {
     private static readonly Dictionary<GameObject?, ReplaceInfo> _ReplacedObjects = [
+    ];
+
+    internal static readonly List<ReplacedMeshInfo> ReplacedMeshes = [
     ];
 
     public static void ReplaceMaterial(GameObject fromObj, GameObject toObj) {
@@ -38,14 +42,26 @@ internal static class ObjectReplacer {
         newObj.SetActive(true);
         original.SetActive(false);
 
-        ReplaceInfo info;
-        info.name = originalName;
-        info.original = original;
-        info.replacement = newObj;
+        var info = new ReplaceInfo {
+            name = originalName,
+            original = original,
+            replacement = newObj,
+        };
 
         _ReplacedObjects[original] = info;
 
         return newObj;
+    }
+
+    public static void RestoreMeshes() {
+        foreach (var replacedMesh in ReplacedMeshes.ToList()) {
+            var meshFilter = replacedMesh.meshFilter;
+
+            meshFilter.mesh = replacedMesh.original;
+            meshFilter.sharedMesh = replacedMesh.original;
+
+            ReplacedMeshes.Remove(replacedMesh);
+        }
     }
 
     public static void Restore(GameObject original) {
@@ -69,6 +85,12 @@ internal static class ObjectReplacer {
                                           $"{(original != null? original.name : "Invalid GameObject")}! Not replaced?");
         }
     }
+}
+
+internal struct ReplacedMeshInfo {
+    public MeshFilter meshFilter;
+    public Mesh original;
+    public Mesh replacement;
 }
 
 internal struct ReplaceInfo {

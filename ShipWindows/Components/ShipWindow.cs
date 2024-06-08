@@ -1,6 +1,5 @@
 ﻿using ShipWindows.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ShipWindows.Components;
 
@@ -11,7 +10,7 @@ public class ShipWindow : MonoBehaviour {
         "UnderbellyMachineParts", "NurbsPath.001",
     ];
 
-    [FormerlySerializedAs("ID")]
+
     public int id;
 
     // Misc variables held by the windows. This is kind of nasty.
@@ -94,6 +93,9 @@ public class ShipWindow : MonoBehaviour {
                 var floodLights = ShipReplacer.newShipInside?.transform.Find("WindowContainer/Window3/Lights");
                 floodLights?.gameObject.SetActive(false);
 
+                break;
+
+            case 4:
                 break;
         }
     }
