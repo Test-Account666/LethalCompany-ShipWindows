@@ -75,7 +75,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     private void UpdateScanNode() {
-        var scanNodeObjectTransform = transform.Find("ScanNode");
+        var scanNodeObjectTransform = transform.parent.Find("ScanNode");
 
         if (scanNodeObjectTransform is null) {
             ShipWindows.Logger.LogError("Couldn't find ScanNode object for ShutterSwitch???");
