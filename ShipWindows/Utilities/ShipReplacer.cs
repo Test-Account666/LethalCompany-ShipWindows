@@ -132,28 +132,27 @@ internal static class ShipReplacer {
         var window3 = shipPrefab.transform.Find("WindowContainer/Window3")?.GetComponent<MeshRenderer>();
 
         // Don't worry, veri, this is even worse :)
-        List<MeshRenderer> window4List = [
+        List<MeshRenderer?> window4List = [
         ];
 
-        var left = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)")
-                             ?.GetComponentsInChildren<MeshRenderer>();
-        left ??= [
-        ];
+        var leftFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)/WindowFront");
+        var leftBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)/WindowBack");
 
-        var right = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorRight (1)/WindowsRight(Clone)")
-                              ?.GetComponentsInChildren<MeshRenderer>();
-        right ??= [
-        ];
+        var rightFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowFront");
+        var rightBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowBack");
+        
 
-        window4List.AddRange(left.Where(renderer => renderer is not null));
-        window4List.AddRange(right.Where(renderer => renderer is not null));
+        window4List.Add(leftFront?.GetComponent<MeshRenderer>());
+        window4List.Add(leftBack?.GetComponent<MeshRenderer>());
+        
+        window4List.Add(rightFront?.GetComponent<MeshRenderer>());
+        window4List.Add(rightBack?.GetComponent<MeshRenderer>());
 
         if (window1 is not null) window1.material = material;
         if (window2 is not null) window2.material = material;
         if (window3 is not null) window3.material = material;
 
-        foreach (var meshRenderer in window4List)
-            meshRenderer.material = material;
+        foreach (var meshRenderer in window4List.OfType<MeshRenderer>()) meshRenderer.material = material;
     }
 
     public static void ReplaceShip() {
