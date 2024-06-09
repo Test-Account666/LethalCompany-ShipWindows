@@ -99,15 +99,32 @@ internal static class ShipReplacer {
             RestoreShip();
     }
 
+    private static string GetMaterialName(this WindowMaterial separator) =>
+        separator switch {
+            WindowMaterial.NO_REFRACTION => "GlassNoRefraction",
+            WindowMaterial.NO_REFRACTION_IRIDESCENCE => "GlassNoRefractionIridescence",
+            WindowMaterial.REFRACTION => "GlassWithRefraction",
+            WindowMaterial.REFRACTION_IRIDESCENCE => "GlassWithRefractionIridescence",
+            var _ => throw new ArgumentOutOfRangeException(nameof(separator), separator, null),
+        };
+
+    internal static void ReplaceGlassMaterial() {
+        if (newShipInside is null) return;
+
+        ReplaceGlassMaterial(newShipInside);
+    }
+
     private static void ReplaceGlassMaterial(GameObject shipPrefab) {
-        if (WindowConfig.glassRefraction.Value) return;
+        var glassMaterial = WindowConfig.glassMaterial.Value;
 
-        ShipWindows.Logger.LogInfo("Glass refraction is OFF! Replacing material...");
+        ShipWindows.Logger.LogInfo($"Replacing material glass material with: {glassMaterial}");
 
-        var glassNoRefraction =
-            ShipWindows.mainAssetBundle.LoadAsset<Material>("Assets/LethalCompany/Mods/ShipWindow/Materials/GlassNoRefraction.mat");
+        var material =
+            ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/{
+                glassMaterial.GetMaterialName()}.mat");
 
-        if (glassNoRefraction is null) return;
+        if (material is null)
+            throw new NullReferenceException($"Couldn't find glass material {glassMaterial} ({glassMaterial.GetMaterialName()})!");
 
         // This is bad so, so bad. Don't mind me :)
         var window1 = shipPrefab.transform.Find("WindowContainer/Window1/Glass")?.GetComponent<MeshRenderer>();
@@ -131,12 +148,12 @@ internal static class ShipReplacer {
         window4List.AddRange(left.Where(renderer => renderer is not null));
         window4List.AddRange(right.Where(renderer => renderer is not null));
 
-        if (window1 is not null) window1.material = glassNoRefraction;
-        if (window2 is not null) window2.material = glassNoRefraction;
-        if (window3 is not null) window3.material = glassNoRefraction;
+        if (window1 is not null) window1.material = material;
+        if (window2 is not null) window2.material = material;
+        if (window3 is not null) window3.material = material;
 
         foreach (var meshRenderer in window4List)
-            meshRenderer.material = glassNoRefraction;
+            meshRenderer.material = material;
     }
 
     public static void ReplaceShip() {

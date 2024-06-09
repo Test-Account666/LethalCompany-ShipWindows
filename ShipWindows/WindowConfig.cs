@@ -5,7 +5,9 @@ namespace ShipWindows;
 // ReSharper disable once ClassNeverInstantiated.Global
 public static class WindowConfig {
     public static ConfigEntry<bool> vanillaMode = null!;
-    public static ConfigEntry<bool> glassRefraction = null!;
+
+    public static ConfigEntry<WindowMaterial> glassMaterial = null!;
+
     public static ConfigEntry<bool> enableShutter = null!;
     public static ConfigEntry<bool> hideSpaceProps = null!;
     public static ConfigEntry<int> spaceOutsideSetting = null!;
@@ -42,8 +44,11 @@ public static class WindowConfig {
     public static void InitializeConfig(ConfigFile configFile) {
         vanillaMode = configFile.Bind("General", "VanillaMode", false,
                                       "Enable this to preserve vanilla network compatability. This will disable unlockables and the shutter toggle switch. (default = false)");
-        glassRefraction = configFile.Bind("General", "EnableRefraction", false,
-                                          "Enable refraction on the glass shader. (Note: This will cause issues with certain VFX and is performance heavy.)");
+
+        glassMaterial = configFile.Bind("General", "WindowMaterial", WindowMaterial.NO_REFRACTION_IRIDESCENCE,
+                                        "Defines what material will be used for the glass. Iridescence will give you some nice rainbow colors."
+                                      + " They are more visible with Refraction, but Refraction breaks some VFX.");
+
         enableShutter = configFile.Bind("General", "EnableWindowShutter", true,
                                         "Enable the window shutter to hide transitions between space and the current moon. (default = true)");
         hideSpaceProps = configFile.Bind("General", "HideSpaceProps", false,

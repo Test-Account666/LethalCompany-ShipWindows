@@ -104,6 +104,8 @@ public class ShipWindows : BaseUnityPlugin {
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 
+        WindowConfig.glassMaterial.SettingChanged += (_, _) => ShipReplacer.ReplaceGlassMaterial();
+
         Logger.LogInfo("Loaded successfully!");
     }
 
