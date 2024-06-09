@@ -1,10 +1,17 @@
 # Ship Windows
 
+## 1.2.1
+
+\+ Added iridescence glass materials<br>
+\# If you change the glass material via LethalConfig, the setting will be applied without restart<br>
+\# The enable refraction boolean has been replaced with an enum to allow for iridescence material to co-exist<br>
+
 ## 1.2.0
 
 \+ Added ship door window!<br>
 \+ Added ability for light sources to actually shine through all windows<br>
-\+ Added voice lines for opening/closing the window shutters (Thanks [Wesley](https://thunderstore.io/c/lethal-company/p/Magic_Wesley/) <3)<br>
+\+ Added voice lines for opening/closing the window shutters (
+Thanks [Wesley](https://thunderstore.io/c/lethal-company/p/Magic_Wesley/) <3)<br>
 \+ Added Scan Node for Shutter Switch<br>
 \+ Added option to change the Light Switch tool tip<br>
 \* Fixed being able to place furniture inside windows<br>
