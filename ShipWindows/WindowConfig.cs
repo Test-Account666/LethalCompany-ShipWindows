@@ -35,6 +35,8 @@ public static class WindowConfig {
     public static ConfigEntry<bool> enableShutterVoiceLines = null!;
     public static ConfigEntry<bool> playShutterVoiceLinesOnTransitions = null!;
 
+    public static ConfigEntry<bool> enableShutterSwitchScanNode = null!;
+
     //public static ConfigEntry<bool> celestialTintOverrideSpace;
 
     public static void InitializeConfig(ConfigFile configFile) {
@@ -94,6 +96,9 @@ public static class WindowConfig {
                                                   "If set to true, will load and use Wesley's voice lines for opening/closing the window shutters.");
         playShutterVoiceLinesOnTransitions = configFile.Bind("Misc", "Play Wesley shutter voice lines on transitions", true,
                                                              "If set to true, will play the voice lines, if opening/closing the window shutters is caused by a transition.");
+
+        enableShutterSwitchScanNode = configFile.Bind("Misc", "Enable Shutter Switch scan node", true,
+                                                      "If set to true, will enable the scan node for the shutter switch.");
 
         //celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
         //    "If Celestial Tint is installed, replace the space skybox with the red sky from Ship Windows.");

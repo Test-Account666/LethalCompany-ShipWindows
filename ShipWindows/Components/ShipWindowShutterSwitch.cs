@@ -30,6 +30,8 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         interactTrigger.onInteract.AddListener(PlayerUsedSwitch);
 
         StartCoroutine(SyncInteractable());
+
+        UpdateScanNode();
     }
 
     public override void OnNetworkDespawn() {
@@ -68,5 +70,22 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         var windowState = animator.GetBool(_OnHash);
 
         NetworkHandler.WindowSwitchUsed(windowState);
+
+        UpdateScanNode();
+    }
+
+    private void UpdateScanNode() {
+        var scanNodeObjectTransform = transform.Find("ScanNode");
+
+        if (scanNodeObjectTransform is null) {
+            ShipWindows.Logger.LogError("Couldn't find ScanNode object for ShutterSwitch???");
+            return;
+        }
+
+        var scanNodeObject = scanNodeObjectTransform.gameObject;
+
+        if (scanNodeObject.activeSelf == WindowConfig.enableShutterSwitchScanNode.Value) return;
+
+        scanNodeObject.SetActive(WindowConfig.enableShutterSwitchScanNode.Value);
     }
 }
