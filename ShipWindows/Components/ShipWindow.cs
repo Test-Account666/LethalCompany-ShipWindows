@@ -45,10 +45,7 @@ public class ShipWindow : MonoBehaviour {
     public void SetClosed(bool closed) {
         var animator = GetComponent<Animator>();
 
-        if (animator is null)
-            return;
-
-        animator.SetBool(_ClosedId, closed);
+        animator?.SetBool(_ClosedId, closed);
     }
 
     public void OnStart() {
