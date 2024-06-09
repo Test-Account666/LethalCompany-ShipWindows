@@ -102,8 +102,7 @@ public class ShipWindows : BaseUnityPlugin {
 
         ShipWindow4K.TryToLoad();
 
-        if (WindowConfig.enableShutterVoiceLines.Value)
-            StartCoroutine(SoundLoader.LoadAudioClips());
+        StartCoroutine(SoundLoader.LoadAudioClips());
 
         Logger.LogInfo("Loaded successfully!");
     }
