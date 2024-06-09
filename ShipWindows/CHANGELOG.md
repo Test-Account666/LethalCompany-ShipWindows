@@ -2,7 +2,11 @@
 
 ## 1.2.1
 
+\+ Added option to disable the Shutter Switch ScanNode<br>
+\+ Added option to disable playing Wesley's voice lines on transitions<br>
 \+ Added iridescence glass materials<br>
+\* Fixed speaker sound being played with inactive VoiceLines<br>
+\# Buying a new window will now honor the current shutter state<br>
 \# If you change the glass material via LethalConfig, the setting will be applied without restart<br>
 \# The enable refraction boolean has been replaced with an enum to allow for iridescence material to co-exist<br>
 
