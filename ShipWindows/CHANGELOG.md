@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 1.2.2
+
+\* Fixed door windows shutter being invisible<br>
+\* Fixed shutter ScanNode being not deactivate-able<br>
+
 ## 1.2.1
 
 \+ Added option to disable the Shutter Switch ScanNode<br>
