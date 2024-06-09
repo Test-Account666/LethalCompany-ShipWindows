@@ -42,6 +42,7 @@ There are some differences between these mods.
 - Shutters are synced to the shutter switch state instead of being relative
 - Shutters cannot be toggled while they are locked
 - DOOR WINDOWS
+- Iridescence material for windows
 
 ## Thanks to
 
