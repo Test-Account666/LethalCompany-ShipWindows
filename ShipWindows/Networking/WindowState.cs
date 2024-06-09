@@ -41,6 +41,8 @@ internal class WindowState {
     }
 
     public static void PlayVoiceLine(int clipIndex) {
+        if (!WindowConfig.enableShutterVoiceLines.Value) return;
+
         ShipWindows.Logger.LogDebug("Playing clip: " + clipIndex);
 
         var audioClip = SoundLoader.VoiceLines[clipIndex];
