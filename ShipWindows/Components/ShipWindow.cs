@@ -49,11 +49,6 @@ public class ShipWindow : MonoBehaviour {
             return;
 
         animator.SetBool(_ClosedId, closed);
-
-        if (id is not 3)
-            return;
-
-        gameObject.tag = closed? "Aluminum" : "Wood";
     }
 
     public void OnStart() {
