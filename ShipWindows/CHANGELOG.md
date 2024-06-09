@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.2.3
+
+\* Reduced the intensity of iridescence in glass materials
+
 ## 1.2.2
 
 \* Fixed door windows shutter being invisible<br>
