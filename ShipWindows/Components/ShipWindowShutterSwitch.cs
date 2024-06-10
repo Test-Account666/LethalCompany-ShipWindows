@@ -58,9 +58,6 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         if (interactTrigger is null)
             throw new("Could not find InteractTrigger!");
 
-        if (interactTrigger?.onInteract is null)
-            throw new("Could not find onInteract in InteractTrigger???");
-
         interactTrigger.interactable = !WindowState.Instance.windowsLocked;
 
         StartCoroutine(SyncInteractable());
