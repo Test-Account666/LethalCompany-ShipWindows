@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 1.3.0
+
+\+ Added configurable rotation speed (Replaces boolean)<br>
+\* Fix shutter switch spawning without windows<br>
+\* Fix NullReferenceExceptions when shutter is spawned<br>
+
 ## 1.2.3
 
 \* Reduced the intensity of iridescence in glass materials
