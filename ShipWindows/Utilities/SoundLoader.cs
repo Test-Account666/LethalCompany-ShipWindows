@@ -42,15 +42,14 @@ public static class SoundLoader {
 
         if (shutterOpenVoiceLineAudioClip is null) {
             ShipWindows.Logger.LogError("Failed to load voice line 'ShutterOpen'!");
-        } else {
-            VoiceLines[0] = shutterOpenVoiceLineAudioClip;
-            ShipWindows.Logger.LogInfo($"Loaded line '{shutterOpenVoiceLineAudioClip.name}'!");
+            return;
         }
+
+        VoiceLines[0] = shutterOpenVoiceLineAudioClip;
+        ShipWindows.Logger.LogInfo($"Loaded line '{shutterOpenVoiceLineAudioClip.name}'!");
     }
 
     private static void LoadShutterCloseClip(string voiceLinesAudioPath) {
-        ShipWindows.Logger.LogError("Searching in: " + voiceLinesAudioPath);
-        
         var shutterCloseFile = Path.Combine(voiceLinesAudioPath, "ShutterClose.wav");
 
         var shutterCloseFileName = Path.GetFileName(shutterCloseFile);

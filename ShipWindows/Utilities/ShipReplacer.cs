@@ -46,16 +46,10 @@ internal static class ShipReplacer {
         var leftDoorWindow = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)");
 
         if (leftDoorWindow is not null) {
-            ShipWindows.Logger.LogInfo("Left Door Windows not null!");
-
             if (leftDoorWindow.GetComponent<ShipWindow>() is null) {
-                ShipWindows.Logger.LogInfo("Adding ShipWindow component to it!");
-
                 var shipWindow = leftDoorWindow.AddComponent<ShipWindow>();
                 shipWindow.id = 4;
             }
-        } else {
-            ShipWindows.Logger.LogInfo("Could not find Left Windows!");
         }
 
         var rightDoorWindow = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorRight (1)/WindowsRight(Clone)");
@@ -140,11 +134,11 @@ internal static class ShipReplacer {
 
         var rightFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowFront");
         var rightBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowBack");
-        
+
 
         window4List.Add(leftFront?.GetComponent<MeshRenderer>());
         window4List.Add(leftBack?.GetComponent<MeshRenderer>());
-        
+
         window4List.Add(rightFront?.GetComponent<MeshRenderer>());
         window4List.Add(rightBack?.GetComponent<MeshRenderer>());
 
