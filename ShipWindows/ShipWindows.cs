@@ -299,7 +299,7 @@ public class ShipWindows : BaseUnityPlugin {
 
         WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
 
-        OpenWindowDelayed(selectedLevel.timeToArrive + 1.5F);
+        OpenWindowDelayed(selectedLevel.timeToArrive + 2.5F);
     }
 
     [HarmonyPrefix]
