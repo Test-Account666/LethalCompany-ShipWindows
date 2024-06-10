@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using GameNetcodeStuff;
 using ShipWindows.Networking;
 using Unity.Netcode;
@@ -10,28 +9,23 @@ namespace ShipWindows.Components;
 [AddComponentMenu("TestAccount666/ShipWindows/ShipWindowShutterSwitch")]
 public class ShipWindowShutterSwitch : NetworkBehaviour {
     public InteractTrigger? interactTrigger;
-    public Animator animator;
+    public Animator? animator;
     private static readonly int _OnHash = Animator.StringToHash("on");
     private bool _destroy;
+
+    [SerializeField]
+    private GameObject? scanNodeObject;
 
     public override void OnNetworkSpawn() {
         if (_destroy) return;
 
         base.OnNetworkSpawn();
 
-        interactTrigger ??= GetComponent<InteractTrigger>();
+        StartCoroutine(AddSwitchListener());
 
-        if (interactTrigger is null)
-            throw new("Could not find InteractTrigger!");
-
-        if (interactTrigger?.onInteract is null)
-            throw new("Could not find onInteract in InteractTrigger???");
-
-        interactTrigger.onInteract.AddListener(PlayerUsedSwitch);
+        StartCoroutine(UpdateScanNodeOnce());
 
         StartCoroutine(SyncInteractable());
-
-        UpdateScanNode();
     }
 
     public override void OnNetworkDespawn() {
@@ -46,14 +40,20 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         base.OnDestroy();
     }
 
+    private IEnumerator AddSwitchListener() {
+        yield return new WaitUntil(() => interactTrigger is not null);
+
+        interactTrigger?.onInteract.AddListener(PlayerUsedSwitch);
+
+        ShipWindows.Logger.LogDebug("Added listener! :)");
+    }
+
     private IEnumerator SyncInteractable() {
         var currentlyLocked = WindowState.Instance.windowsLocked;
 
         yield return new WaitUntil(() => _destroy || WindowState.Instance.windowsLocked != currentlyLocked);
 
         if (_destroy) yield break;
-
-        interactTrigger ??= GetComponent<InteractTrigger>();
 
         if (interactTrigger is null)
             throw new("Could not find InteractTrigger!");
@@ -67,6 +67,8 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     public void PlayerUsedSwitch(PlayerControllerB playerControllerB) {
+        if (animator is null) return;
+
         var windowState = animator.GetBool(_OnHash);
 
         NetworkHandler.WindowSwitchUsed(windowState);
@@ -74,15 +76,19 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
         UpdateScanNode();
     }
 
-    private void UpdateScanNode() {
-        var scanNodeObjectTransform = transform.parent.Find("ScanNode");
+    private IEnumerator UpdateScanNodeOnce() {
+        yield return new WaitUntil(() => scanNodeObject is not null);
 
-        if (scanNodeObjectTransform is null) {
+        ShipWindows.Logger.LogDebug("Updating Scan Node! :>");
+
+        UpdateScanNode();
+    }
+
+    private void UpdateScanNode() {
+        if (scanNodeObject is null) {
             ShipWindows.Logger.LogError("Couldn't find ScanNode object for ShutterSwitch???");
             return;
         }
-
-        var scanNodeObject = scanNodeObjectTransform.gameObject;
 
         if (scanNodeObject.activeSelf == WindowConfig.enableShutterSwitchScanNode.Value) return;
 
