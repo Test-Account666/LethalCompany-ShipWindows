@@ -322,11 +322,12 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Awake))]
     private static void SpawnShutterSwitch() {
         try {
-            if (WindowConfig.vanillaMode.Value is false) {
+            if (!WindowConfig.vanillaMode.Value) {
                 // The switch will be removed by a later function if it is not needed
                 // Spawning here will let the (potential) saved position be restored.
                 Unlockables.AddSwitchToUnlockables();
-                ShipReplacer.SpawnSwitch();
+                //ShipReplacer.SpawnSwitch();
+                StartOfRound.Instance.StartCoroutine(ShipReplacer.WaitAndCheckSwitch());
             }
 
 

@@ -268,8 +268,13 @@ internal static class ShipReplacer {
                 IsHost: false, IsServer: false,
             }) return;
 
-        //ShipWindows.Logger.LogInfo("Checking window switch redundancy...");
+        //ShipWindows.Logger.LogFatal("Checking window switch redundancy...");
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
+
+        windows ??= [
+        ];
+
+        //ShipWindows.Logger.LogFatal($"Found {windows.Length} windows!");
 
         if (windows.Length > 0) {
             if (switchInstance is null)
@@ -280,6 +285,7 @@ internal static class ShipReplacer {
             if (switchInstance is null)
                 return;
 
+            switchInstance.GetComponent<NetworkObject>().Despawn();
             Object.Destroy(switchInstance);
             switchInstance = null;
         }
