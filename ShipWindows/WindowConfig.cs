@@ -2,7 +2,6 @@
 
 namespace ShipWindows;
 
-// ReSharper disable once ClassNeverInstantiated.Global
 public static class WindowConfig {
     public static ConfigEntry<bool> vanillaMode = null!;
 
