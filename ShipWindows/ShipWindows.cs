@@ -67,7 +67,7 @@ public class ShipWindows : BaseUnityPlugin {
                      + $"    Space Sky:          {WindowConfig.spaceOutsideSetting.Value}\n"
                      + $"    Bottom Lights:      {WindowConfig.disableUnderLights.Value}\n"
                      + $"    Posters:            {WindowConfig.dontMovePosters.Value}\n"
-                     + $"    Sky Rotation:       {WindowConfig.rotateSkybox.Value}\n"
+                     + $"    Sky Rotation:       {WindowConfig.skyboxRotateSpeed.Value}\n"
                      + $"    Sky Resolution:     {WindowConfig.skyboxResolution.Value}\n"
                      + $"    Windows Unlockable: {WindowConfig.windowsUnlockable.Value}\n"
                      + $"    Window 1 Enabled:   {WindowConfig.enableWindow1.Value}\n"

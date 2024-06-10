@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace ShipWindows.Components;
 
-[AddComponentMenu("TestAccount666/ShipWindows/SpaceSkybox")]
+[AddComponentMenu("TestAccount666/ShipWindows/ SpaceSkybox")]
 public class SpaceSkybox : MonoBehaviour {
     private HDRISky? _sky;
 
@@ -31,21 +31,19 @@ public class SpaceSkybox : MonoBehaviour {
     }
 
     public void Update() {
-        if (WindowConfig.rotateSkybox.Value is false) return;
-
         switch (WindowConfig.spaceOutsideSetting.Value) {
             case 0: break;
             case 1:
                 if (_sky is null) break;
 
-                _sky.rotation.value += Time.deltaTime * 0.1f;
+                _sky.rotation.value += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
                 if (_sky.rotation.value >= 360) _sky.rotation.value = 0f;
                 WindowState.Instance.volumeRotation = _sky.rotation.value;
                 break;
             case 2:
                 if (_starSphere is null) break;
 
-                _starSphere.Rotate(Vector3.forward * (Time.deltaTime * 0.1f));
+                _starSphere.Rotate(Vector3.forward * (Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value));
                 WindowState.Instance.volumeRotation = _starSphere.eulerAngles.y;
                 break;
         }

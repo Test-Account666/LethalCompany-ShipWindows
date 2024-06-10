@@ -12,7 +12,7 @@ public static class WindowConfig {
     public static ConfigEntry<int> spaceOutsideSetting = null!;
     public static ConfigEntry<bool> disableUnderLights = null!;
     public static ConfigEntry<bool> dontMovePosters = null!;
-    public static ConfigEntry<bool> rotateSkybox = null!;
+    public static ConfigEntry<float> skyboxRotateSpeed = null!;
     public static ConfigEntry<int> skyboxResolution = null!;
 
     public static ConfigEntry<bool> windowsUnlockable = null!;
@@ -59,8 +59,10 @@ public static class WindowConfig {
                                              "Disable the flood lights added under the ship if you have the floor window enabled.");
         dontMovePosters = configFile.Bind("General", "DontMovePosters", false,
                                           "Don't move the poster that blocks the second window if set to true.");
-        rotateSkybox = configFile.Bind("General", "RotateSpaceSkybox", true,
-                                       "Enable slow rotation of the space skybox for visual effect. Requires 'SpaceOutside' to be set to 1 or 2.");
+        skyboxRotateSpeed = configFile.Bind("General", "RotateSpaceSkybox", 0.1f,
+                                            new ConfigDescription(
+                                                "Sets the rotation speed of the space skybox for visual effect. Requires 'SpaceOutside' to be set to 1 or 2.",
+                                                new AcceptableValueRange<float>(0F, 1F)));
         skyboxResolution = configFile.Bind("General", "SkyboxResolution", 0,
                                            "OBSOLETE: Download [Ship Windows 4K Skybox] from the Thunderstore to enable!");
 
