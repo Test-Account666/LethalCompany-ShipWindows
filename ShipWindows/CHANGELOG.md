@@ -1,8 +1,13 @@
 # Ship Windows
 
+## 1.3.2
+
+\* Fixed Celestial Tint overriding the skybox override<br>
+\* Fixed log spam, sorry about that<br>
+
 ## 1.3.1
 
-\* Fix voice lines playing without windows<br>
+\* Fixed voice lines playing without windows<br>
 
 ## 1.3.0
 
