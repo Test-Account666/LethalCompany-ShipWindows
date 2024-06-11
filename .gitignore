@@ -74,6 +74,7 @@ crashlytics-build.properties
 
 # User added files
 BuildOutput/
+include/*.dll
 
 # Build files
 bin/
