@@ -26,13 +26,10 @@ internal static class CelestialTint {
         }
 
         WindowConfig.celestialTintOverrideSpace.SettingChanged += (_, _) => CheckSceneState();
+
+        SceneManager.sceneLoaded += (_, _) => CheckSceneState();
         return true;
     }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(ShipPartsLoader), nameof(ShipPartsLoader.CheckSceneState))]
-    private static void OverrideCelestialTintSky() =>
-        CheckSceneState();
 
     private static void CheckSceneState() {
         if (!WindowConfig.celestialTintOverrideSpace.Value) {
