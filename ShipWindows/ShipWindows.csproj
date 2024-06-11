@@ -63,6 +63,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="sounds\" />
+        <Folder Include="sounds\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="CelestialTint" Publicize="true">
+            <HintPath>..\include\CelestialTint.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>
