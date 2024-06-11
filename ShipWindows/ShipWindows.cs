@@ -20,7 +20,7 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
-[CompatibleDependency("CelestialTint", "1.0.1", typeof(CelestialTint))]
+[CompatibleDependency("CelestialTint", "1.0.1", typeof(Compatibility.CelestialTint))]
 [CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
 [CompatibleDependency("com.github.lethalmods.lethalexpansioncore", typeof(LethalExpansion))]
 [CompatibleDependency("BMX.LobbyCompatibility", typeof(Compatibility.LobbyCompatibility))]
@@ -55,7 +55,8 @@ public class ShipWindows : BaseUnityPlugin {
         WindowConfig.InitializeConfig(Config);
 
         if (WindowConfig.enableWindow1.Value is false && WindowConfig.enableWindow2.Value is false
-                                                      && WindowConfig.enableWindow3.Value is false) {
+                                                      && WindowConfig.enableWindow3.Value is false
+                                                      && WindowConfig.enableWindow4.Value is false) {
             Logger.LogWarning("All windows are disabled. Please enable any window in your settings for this mod to have any effect.");
             return;
         }
@@ -165,18 +166,18 @@ public class ShipWindows : BaseUnityPlugin {
     }
 
     private static void AddStars() {
-        if (CelestialTint.Enabled) return;
+        if (Compatibility.CelestialTint.Enabled) return;
 
         var renderingObject = GameObject.Find("Systems/Rendering");
         var vanillaStarSphere = GameObject.Find("Systems/Rendering/StarsSphere");
 
         switch (WindowConfig.spaceOutsideSetting.Value) {
             // do nothing
-            case 0:
+            case SpaceOutside.OTHER_MODS:
                 break;
 
             // spawn Volume sphere
-            case 1:
+            case SpaceOutside.SPACE_HDRI:
                 if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
                 var universePrefab =
@@ -194,7 +195,7 @@ public class ShipWindows : BaseUnityPlugin {
                 break;
 
             // spawn large star sphere
-            case 2:
+            case SpaceOutside.BLACK_AND_STARS:
                 if (vanillaStarSphere is null) throw new("Could not find vanilla Stars Sphere. Wrong scene?");
                 if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
@@ -208,11 +209,13 @@ public class ShipWindows : BaseUnityPlugin {
                 outsideSkybox.AddComponent<SpaceSkybox>();
 
                 break;
+            default:
+                throw new ArgumentOutOfRangeException(WindowConfig.spaceOutsideSetting.Value + " is not a valid option!");
         }
     }
 
     private static void HideSpaceProps() {
-        if (CelestialTint.Enabled) return;
+        if (Compatibility.CelestialTint.Enabled) return;
 
         if (!WindowConfig.hideSpaceProps.Value)
             return;
@@ -289,6 +292,8 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ChangeLevelServerRpc))]
     private static void LockWindowsWhileRouting(int levelID) {
+        if (!WindowConfig.shuttersHideMoonTransitions.Value) return;
+
         var moons = Resources.FindObjectsOfTypeAll<SelectableLevel>();
 
         var selectedLevel =
@@ -376,7 +381,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.LateUpdate))]
     private static void FollowPlayer() {
-        if (CelestialTint.Enabled) return;
+        if (Compatibility.CelestialTint.Enabled) return;
         // Make the stars follow the player when they get sucked out of the ship.
         if (outsideSkybox is null)
             return;
@@ -458,20 +463,22 @@ public class ShipWindows : BaseUnityPlugin {
     private static void Patch_DespawnProps() {
         //Logger.LogInfo($"RoundManager.DespawnPropsAtEndOfRound -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
 
-        if (CelestialTint.Enabled) return;
+        if (Compatibility.CelestialTint.Enabled) return;
 
         try {
             switch (WindowConfig.spaceOutsideSetting.Value) {
-                case 0: break;
+                case SpaceOutside.OTHER_MODS: break;
 
-                case 1:
-                case 2:
+                case SpaceOutside.SPACE_HDRI:
+                case SpaceOutside.BLACK_AND_STARS:
                     // If for whatever reason this code errors, the game breaks.
                     var daysSpent = StartOfRound.Instance.gameStats?.daysSpent;
                     var rotation = (daysSpent ?? 1) * 80f;
                     WindowState.Instance.SetVolumeRotation(rotation);
                     WindowState.Instance.SetVolumeState(true);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(WindowConfig.spaceOutsideSetting.Value + " is not a valid option!");
             }
 
             var props = GameObject.Find("Environment/SpaceProps");

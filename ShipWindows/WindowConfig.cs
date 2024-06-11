@@ -8,8 +8,9 @@ public static class WindowConfig {
     public static ConfigEntry<WindowMaterial> glassMaterial = null!;
 
     public static ConfigEntry<bool> enableShutter = null!;
+    public static ConfigEntry<bool> shuttersHideMoonTransitions = null!;
     public static ConfigEntry<bool> hideSpaceProps = null!;
-    public static ConfigEntry<int> spaceOutsideSetting = null!;
+    public static ConfigEntry<SpaceOutside> spaceOutsideSetting = null!;
     public static ConfigEntry<bool> disableUnderLights = null!;
     public static ConfigEntry<bool> dontMovePosters = null!;
     public static ConfigEntry<float> skyboxRotateSpeed = null!;
@@ -38,7 +39,7 @@ public static class WindowConfig {
 
     public static ConfigEntry<bool> enableShutterSwitchScanNode = null!;
 
-    //public static ConfigEntry<bool> celestialTintOverrideSpace;
+    public static ConfigEntry<bool> celestialTintOverrideSpace = null!;
 
     public static void InitializeConfig(ConfigFile configFile) {
         vanillaMode = configFile.Bind("General", "VanillaMode", false,
@@ -50,10 +51,16 @@ public static class WindowConfig {
 
         enableShutter = configFile.Bind("General", "EnableWindowShutter", true,
                                         "Enable the window shutter to hide transitions between space and the current moon. (default = true)");
+        shuttersHideMoonTransitions = configFile.Bind("Misc", "Shutters hide moon transitions", true,
+                                                      "If set to true, will close the window shutters when routing to a new moon."
+                                                    + "Disabling this will look weird, if CelestialTint isn't installed.");
+
         hideSpaceProps = configFile.Bind("General", "HideSpaceProps", false,
-                                         "Should the planet and moon outside the ship be hidden? (default = false)");
-        spaceOutsideSetting = configFile.Bind("General", "SpaceOutside", 1,
-                                              "Set this value to control how the outside space looks. (0 = Let other mods handle, 1 = Space HDRI Volume (default), 2 = Black sky with stars)");
+                                         "Should the planet and moon outside the ship be hidden?");
+
+
+        spaceOutsideSetting = configFile.Bind("General", "SpaceOutside", SpaceOutside.SPACE_HDRI,
+                                              "Set this value to control how the outside space looks.");
 
         disableUnderLights = configFile.Bind("General", "DisableUnderLights", false,
                                              "Disable the flood lights added under the ship if you have the floor window enabled.");
@@ -62,7 +69,7 @@ public static class WindowConfig {
         skyboxRotateSpeed = configFile.Bind("General", "RotateSpaceSkybox", 0.1f,
                                             new ConfigDescription(
                                                 "Sets the rotation speed of the space skybox for visual effect. Requires 'SpaceOutside' to be set to 1 or 2.",
-                                                new AcceptableValueRange<float>(0F, 1F)));
+                                                new AcceptableValueRange<float>(-1F, 1F)));
         skyboxResolution = configFile.Bind("General", "SkyboxResolution", 0,
                                            "OBSOLETE: Download [Ship Windows 4K Skybox] from the Thunderstore to enable!");
 
@@ -106,7 +113,8 @@ public static class WindowConfig {
         enableShutterSwitchScanNode = configFile.Bind("Misc", "Enable Shutter Switch scan node", true,
                                                       "If set to true, will enable the scan node for the shutter switch.");
 
-        //celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
-        //    "If Celestial Tint is installed, replace the space skybox with the red sky from Ship Windows.");
+        celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
+                                                     "If Celestial Tint is installed, override the skybox. "
+                                                   + "Only effective if skybox is set to Space HDRRI Volume.");
     }
 }
