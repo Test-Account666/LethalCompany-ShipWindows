@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -26,7 +27,5 @@ public class CelestialTintSkyboxRotator : MonoBehaviour {
             _sky.spaceRotation.value += new Vector3(0, 360, 0);
 
         _sky.spaceRotation.value += new Vector3(0, Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value, 0);
-
-        ShipWindows.Logger.LogInfo($"Updating rotation to: {_sky.spaceRotation}");
     }
 }
