@@ -10,9 +10,11 @@ internal static class ShipWindow4K {
     private static readonly DirectoryInfo _BaseDirectory = new(Assembly.GetExecutingAssembly().Location);
 
     public static AssetBundle? TextureBundle { get; private set; }
-    public static Texture2D? Skybox4K { get; private set; }
+    public static Texture? Skybox4K { get; private set; }
 
     public static bool TryToLoad() {
+        if (Skybox4K is not null) return true;
+
         try {
             var pluginsFolder = _BaseDirectory.Parent?.Parent?.FullName;
 
@@ -21,10 +23,18 @@ internal static class ShipWindow4K {
                 var fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.Equals(".old")) break;
 
-                TextureBundle = AssetBundle.LoadFromFile(fileInfo.FullName);
-                Skybox4K = TextureBundle.LoadAsset<Texture2D>("Assets/LethalCompany/Mods/ShipWindow/Textures/Space4KCube.png");
+                TextureBundle ??= AssetBundle.LoadFromFile(fileInfo.FullName);
 
-                ShipWindows.Logger.LogInfo("Found 4K skybox texture!");
+                var allTextures = TextureBundle.LoadAllAssets();
+
+                allTextures ??= [
+                ];
+
+                Skybox4K = allTextures.Length > 0? allTextures[0] as Texture : null;
+
+                if (Skybox4K is null) throw new NullReferenceException("Texture not present");
+
+                ShipWindows.Logger.LogInfo("Found 4K skybox texture! " + (Skybox4K != null));
                 return true;
             }
         } catch (Exception exception) {
