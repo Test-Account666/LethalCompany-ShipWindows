@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
-using ShipWindows.Utilities;
+using ShipWindowsBeta.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.SceneManagement;
 using static UnityEngine.Object;
 
-namespace ShipWindows.Compatibility;
+namespace ShipWindowsBeta.Compatibility;
 
 internal static class CelestialTint {
     private static GameObject? _skyGameObject;

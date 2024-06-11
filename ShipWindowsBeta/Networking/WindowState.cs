@@ -1,11 +1,11 @@
 ﻿using System;
-using ShipWindows.Components;
-using ShipWindows.Utilities;
+using ShipWindowsBeta.Components;
+using ShipWindowsBeta.Utilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-namespace ShipWindows.Networking;
+namespace ShipWindowsBeta.Networking;
 
 [Serializable]
 internal class WindowState {

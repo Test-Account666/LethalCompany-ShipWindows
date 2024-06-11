@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
-namespace ShipWindows.Utilities;
+namespace ShipWindowsBeta.Utilities;
 
 internal static class ShipWindow4K {
     private static readonly DirectoryInfo _BaseDirectory = new(Assembly.GetExecutingAssembly().Location);

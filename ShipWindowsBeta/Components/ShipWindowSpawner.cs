@@ -1,8 +1,8 @@
-﻿using ShipWindows.Utilities;
+﻿using ShipWindowsBeta.Utilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace ShipWindows.Components;
+namespace ShipWindowsBeta.Components;
 
 [AddComponentMenu("TestAccount666/ShipWindows/ShipWindowSpawner")]
 public class ShipWindowSpawner : MonoBehaviour {
@@ -21,5 +21,5 @@ public class ShipWindowSpawner : MonoBehaviour {
     // find all ShipWindowSpawners to replace the ship once instead of n times.
     public void OnStart() =>
         ShipReplacer.ReplaceDebounced(true);
-    //ShipWindows.Logger.LogInfo($"We should spawn window {ID}");
+    //ShipWindowsBeta.Logger.LogInfo($"We should spawn window {ID}");
 }

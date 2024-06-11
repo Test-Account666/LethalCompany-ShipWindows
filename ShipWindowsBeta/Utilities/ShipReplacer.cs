@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWindows.Components;
-using ShipWindows.Networking;
+using ShipWindowsBeta.Components;
+using ShipWindowsBeta.Networking;
 using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ShipWindows.Utilities;
+namespace ShipWindowsBeta.Utilities;
 
 internal static class ShipReplacer {
     public static bool debounceReplace;
@@ -73,7 +73,7 @@ internal static class ShipReplacer {
     }
 
     public static void ReplaceDebounced(bool replace) {
-        //ShipWindows.Logger.LogInfo($"Debounce replace call. Replace? {replace} Is multiple call: {debounceReplace}");
+        //ShipWindowsBeta.Logger.LogInfo($"Debounce replace call. Replace? {replace} Is multiple call: {debounceReplace}");
         if (WindowConfig.windowsUnlockable.Value is false || WindowConfig.vanillaMode.Value) return;
         if (debounceReplace) return;
 
@@ -84,7 +84,7 @@ internal static class ShipReplacer {
     private static IEnumerator ReplacementCoroutine(bool replace) {
         yield return null; // Wait 1 frame.
 
-        //ShipWindows.Logger.LogInfo("Performing ship replacement/restore.");
+        //ShipWindowsBeta.Logger.LogInfo("Performing ship replacement/restore.");
         debounceReplace = false;
 
         if (replace)
@@ -152,13 +152,13 @@ internal static class ShipReplacer {
     public static void ReplaceShip() {
         try {
             if (newShipInside is not null && vanillaShipInside is not null)
-                //ShipWindows.Logger.LogInfo($"Calling ReplaceShip when ship was already replaced! Restoring original...");
+                //ShipWindowsBeta.Logger.LogInfo($"Calling ReplaceShip when ship was already replaced! Restoring original...");
                 ObjectReplacer.Restore(vanillaShipInside);
 
             vanillaShipInside = FindOrThrow("Environment/HangarShip/ShipInside");
             var shipName = GetShipAssetName();
 
-            //ShipWindows.Logger.LogInfo($"Replacing ship with {shipName}");
+            //ShipWindowsBeta.Logger.LogInfo($"Replacing ship with {shipName}");
 
             var newShipPrefab =
                 ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/Ships/{shipName}.prefab");
@@ -268,13 +268,13 @@ internal static class ShipReplacer {
                 IsHost: false, IsServer: false,
             }) return;
 
-        //ShipWindows.Logger.LogFatal("Checking window switch redundancy...");
+        //ShipWindowsBeta.Logger.LogFatal("Checking window switch redundancy...");
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
 
         windows ??= [
         ];
 
-        //ShipWindows.Logger.LogFatal($"Found {windows.Length} windows!");
+        //ShipWindowsBeta.Logger.LogFatal($"Found {windows.Length} windows!");
 
         if (windows.Length > 0) {
             if (switchInstance is null)

@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace ShipWindows;
+namespace ShipWindowsBeta;
 
 public static class WindowConfig {
     public static ConfigEntry<bool> vanillaMode = null!;

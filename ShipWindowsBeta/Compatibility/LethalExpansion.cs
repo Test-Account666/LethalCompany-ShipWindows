@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-namespace ShipWindows.Compatibility;
+namespace ShipWindowsBeta.Compatibility;
 
 internal static class LethalExpansion {
     public static bool Enabled { get; private set; }

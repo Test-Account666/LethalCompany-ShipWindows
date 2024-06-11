@@ -1,4 +1,4 @@
-namespace ShipWindows;
+namespace ShipWindowsBeta;
 
 public enum WindowMaterial {
     NO_REFRACTION,

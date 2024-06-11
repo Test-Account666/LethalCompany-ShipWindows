@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using GameNetcodeStuff;
-using ShipWindows.Networking;
+using ShipWindowsBeta.Networking;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ShipWindows.Components;
+namespace ShipWindowsBeta.Components;
 
 [AddComponentMenu("TestAccount666/ShipWindows/ShipWindowShutterSwitch")]
 public class ShipWindowShutterSwitch : NetworkBehaviour {

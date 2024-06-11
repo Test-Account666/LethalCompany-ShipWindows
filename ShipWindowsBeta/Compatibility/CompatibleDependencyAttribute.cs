@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 
-namespace ShipWindows.Compatibility;
+namespace ShipWindowsBeta.Compatibility;
 
 // https://discord.com/channels/1168655651455639582/1216761387343151134
 // Automatic Soft Dependency Initializer

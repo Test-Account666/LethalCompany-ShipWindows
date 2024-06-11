@@ -1,10 +1,10 @@
 ﻿using System;
-using ShipWindows.Networking;
+using ShipWindowsBeta.Networking;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
-namespace ShipWindows.Components;
+namespace ShipWindowsBeta.Components;
 
 [AddComponentMenu("TestAccount666/ShipWindows/ SpaceSkybox")]
 public class SpaceSkybox : MonoBehaviour {

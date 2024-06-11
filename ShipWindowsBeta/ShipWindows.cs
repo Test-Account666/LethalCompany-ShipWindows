@@ -8,16 +8,16 @@ using BepInEx;
 using BepInEx.Logging;
 using GameNetcodeStuff;
 using HarmonyLib;
-using ShipWindows.Compatibility;
-using ShipWindows.Components;
-using ShipWindows.MiscPatches;
-using ShipWindows.Networking;
-using ShipWindows.Utilities;
+using ShipWindowsBeta.Compatibility;
+using ShipWindowsBeta.Components;
+using ShipWindowsBeta.MiscPatches;
+using ShipWindowsBeta.Networking;
+using ShipWindowsBeta.Utilities;
 using Unity.Netcode;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
-namespace ShipWindows;
+namespace ShipWindowsBeta;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
 [CompatibleDependency("CelestialTint", "1.0.1", typeof(Compatibility.CelestialTint))]

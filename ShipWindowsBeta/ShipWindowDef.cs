@@ -1,8 +1,8 @@
-﻿using ShipWindows.Components;
+﻿using ShipWindowsBeta.Components;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ShipWindows;
+namespace ShipWindowsBeta;
 
 public class ShipWindowDef {
     public int baseCost;

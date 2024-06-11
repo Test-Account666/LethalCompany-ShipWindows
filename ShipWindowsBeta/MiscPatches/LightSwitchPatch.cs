@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace ShipWindows.MiscPatches;
+namespace ShipWindowsBeta.MiscPatches;
 
 [HarmonyPatch(typeof(AutoParentToShip))]
 public class LightSwitchPatch {

@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace ShipWindows.Networking;
+namespace ShipWindowsBeta.Networking;
 
 [Serializable]
 internal class NetworkHandler {
@@ -42,7 +42,7 @@ internal class NetworkHandler {
         using FastBufferWriter stream = new(1, Allocator.Temp);
         stream.WriteValueSafe(currentState);
 
-        //ShipWindows.Logger.LogInfo("Sending window switch toggle message...");
+        //ShipWindowsBeta.Logger.LogInfo("Sending window switch toggle message...");
 
         MessageManager.SendNamedMessage("ShipWindow_WindowSwitchUsed", 0ul, stream);
     }
@@ -53,7 +53,7 @@ internal class NetworkHandler {
         using FastBufferWriter stream = new(1, Allocator.Temp);
         stream.WriteValueSafe(currentState);
 
-        //ShipWindows.Logger.LogInfo($"Received window switch toggle message from client {clientId}");
+        //ShipWindowsBeta.Logger.LogInfo($"Received window switch toggle message from client {clientId}");
 
         MessageManager.SendNamedMessageToAll("ShipWindow_WindowSwitchUsedBroadcast", stream);
     }
@@ -61,7 +61,7 @@ internal class NetworkHandler {
     public static void ReceiveWindowSwitchUsed_Client(ulong _, FastBufferReader reader) {
         reader.ReadValueSafe(out bool currentState);
 
-        //ShipWindows.Logger.LogInfo("Received window switch toggle message from server...");
+        //ShipWindowsBeta.Logger.LogInfo("Received window switch toggle message from server...");
 
         WindowState.Instance.SetWindowState(!currentState, WindowState.Instance.windowsLocked);
     }
@@ -116,7 +116,7 @@ internal class NetworkHandler {
         var state = DeserializeFromBytes<WindowState>(data);
         WindowState.Instance = state;
 
-        //ShipWindows.Logger.LogInfo($"{state.WindowsClosed}, {state.WindowsLocked}, {state.VolumeActive}, {state.VolumeRotation}");
+        //ShipWindowsBeta.Logger.LogInfo($"{state.WindowsClosed}, {state.WindowsLocked}, {state.VolumeActive}, {state.VolumeRotation}");
 
         WindowSyncReceivedEvent?.Invoke();
     }

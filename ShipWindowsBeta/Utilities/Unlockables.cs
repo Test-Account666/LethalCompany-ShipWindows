@@ -4,7 +4,7 @@ using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
-namespace ShipWindows.Utilities;
+namespace ShipWindowsBeta.Utilities;
 
 internal class Unlockables {
     public static Dictionary<int, string> windowNames = new() {

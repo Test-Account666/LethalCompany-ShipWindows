@@ -1,7 +1,7 @@
-﻿using ShipWindows.Utilities;
+﻿using ShipWindowsBeta.Utilities;
 using UnityEngine;
 
-namespace ShipWindows.Components;
+namespace ShipWindowsBeta.Components;
 
 [AddComponentMenu("TestAccount666/ShipWindows/ShipWindow")]
 public class ShipWindow : MonoBehaviour {

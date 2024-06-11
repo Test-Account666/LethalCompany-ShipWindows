@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Debug = System.Diagnostics.Debug;
 
-namespace ShipWindows.Utilities;
+namespace ShipWindowsBeta.Utilities;
 
 public static class SoundLoader {
     public static readonly AudioClip[] VoiceLines = new AudioClip[2];

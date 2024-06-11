@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ShipWindows.Utilities;
+namespace ShipWindowsBeta.Utilities;
 
 internal static class ObjectReplacer {
     private static readonly Dictionary<GameObject?, ReplaceInfo> _ReplacedObjects = [

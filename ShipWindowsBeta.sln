@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWindows", "ShipWindows\ShipWindows.csproj", "{B3C283D5-E507-4ACD-B7D2-6714DF4CEB88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWindowsBeta", "ShipWindowsBeta\ShipWindowsBeta.csproj", "{B3C283D5-E507-4ACD-B7D2-6714DF4CEB88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

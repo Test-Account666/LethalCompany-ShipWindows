@@ -1,7 +1,7 @@
 using LobbyCompatibility.Enums;
 using LobbyCompatibility.Features;
 
-namespace ShipWindows.Compatibility;
+namespace ShipWindowsBeta.Compatibility;
 
 public class LobbyCompatibility {
     public static bool Enabled { get; private set; }
