@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.3.3
+
+\* Fixed skybox override not working in certain scenarios<br>
+
 ## 1.3.2
 
 \* Fixed Celestial Tint overriding the skybox override<br>
