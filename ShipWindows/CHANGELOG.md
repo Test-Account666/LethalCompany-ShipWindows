@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.3.1
+
+\* Fix voice lines playing without windows<br>
+
 ## 1.3.0
 
 \+ Added option to override Celestial Tint's skybox<br>
