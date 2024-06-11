@@ -31,6 +31,10 @@ internal static class CelestialTint {
         return true;
     }
 
+    [HarmonyPatch(typeof(ShipPartsLoader), nameof(ShipPartsLoader.CheckSceneState))]
+    [HarmonyPostfix]
+    private static void CelestialTintCheckSceneState() => CheckSceneState();
+
     private static void CheckSceneState() {
         if (!WindowConfig.celestialTintOverrideSpace.Value) {
             DestroySkyOverride();
