@@ -29,9 +29,10 @@ internal class WindowState {
         if (!WindowConfig.enableShutter.Value)
             return;
 
-        if (playVoiceLine) PlayVoiceLine(closed? 1 : 0);
 
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
+
+        if (playVoiceLine && windows.Length > 0) PlayVoiceLine(closed? 1 : 0);
 
         foreach (var w in windows)
             w.SetClosed(closed);
