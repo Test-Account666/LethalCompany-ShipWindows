@@ -2,9 +2,28 @@
 
 Adds four glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
 
-![Screenshot_1](https://raw.githubusercontent.com/jverif/lc-shipwindow/main/Screenshots/showcase.png "Showcase")
 
-(Screenshot with door windows coming next update)
+
+<details>
+  <summary>Windows when landed</summary>
+
+![MoonLeft](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/a1a26160-897e-432d-afa2-915ee76d923b)
+![MoonRight](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/cd236e80-9457-457d-ba9a-ce9008c6ddf2)
+![MoonFloor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/8f930ad5-d289-4254-8e98-dc02e3c6a235)
+![MoonDoor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/d9ccb5b2-a721-4292-9d47-5f726f3b2988)
+
+</details>
+
+
+<details>
+  <summary>Windows when in orbit</summary>
+
+![SpaceLeft](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/618be4f7-5a2c-4c05-a66a-e520205be4ef)
+![SpaceRight](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/4e36e8b0-d93b-41bd-8411-b8a78a95d3c1)
+![SpaceFloor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/eb06834b-fef3-4cbd-bd36-147b5daf4f87)
+![SpaceDoor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/373af48e-758e-4aec-8dc9-ea2b9e3bbb9f)
+
+</details>
 
 ## Compatibility
 
@@ -43,6 +62,7 @@ There are some differences between these mods.
 - Shutters cannot be toggled while they are locked
 - DOOR WINDOWS
 - Iridescence material for windows
+- And a LOT more
 
 ## Thanks to
 
@@ -52,3 +72,4 @@ There are some differences between these mods.
 ## Known Issues
 
 - Ship door texture breaks with door windows
+- Floor window shutter is slightly too small
