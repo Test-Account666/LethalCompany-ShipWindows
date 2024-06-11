@@ -2,9 +2,16 @@
 
 ## 1.3.0
 
+\+ Added option to override Celestial Tint's skybox<br>
 \+ Added configurable rotation speed (Replaces boolean)<br>
-\* Fix shutter switch spawning without windows<br>
-\* Fix NullReferenceExceptions when shutter is spawned<br>
+\+ Added config option to disable hiding moon transitions<br>
+\+ Added new screenshots to readme<br>
+\* Fixed shutter switch spawning without windows<br>
+\* Fixed NullReferenceExceptions when shutter is spawned<br>
+\* Fixed mod refusing to load, if all except door window are deactivated<br>
+\* Fixed 4k skybox never getting loaded<br>
+\# Increased moon transition time for shutters by 1 second<br>
+\# SpaceOutside config option now uses a self-explanatory enum instead of an integer<br>
 
 ## 1.2.3
 
