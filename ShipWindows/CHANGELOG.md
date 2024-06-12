@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 1.3.6
+
+\* Hopefully finally completely fixed overriding celestial tint skybox<br>
+\* Hopefully fixed all errors with shutter switch<br>
+\- Reverted change regarding the `Window` layer<br>
+
 ## 1.3.5
 
 \+ Added config option to fix enemies killing you through windows (If you're running into issues with enemy behavior,
