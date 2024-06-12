@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 1.3.5
+
+\+ Added config option to fix enemies killing you through windows (If you're running into issues with enemy behavior,
+disable this)<br>
+\# Windows are now on their own layer, called `Windows` (id should be 30)<br>
+
 ## 1.3.4
 
 And again...<br>
