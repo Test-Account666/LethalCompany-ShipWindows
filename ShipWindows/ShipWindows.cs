@@ -10,6 +10,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using ShipWindows.Compatibility;
 using ShipWindows.Components;
+using ShipWindows.EnemyPatches;
 using ShipWindows.MiscPatches;
 using ShipWindows.Networking;
 using ShipWindows.Utilities;
@@ -95,6 +96,12 @@ public class ShipWindows : BaseUnityPlugin {
 
         Harmony.PatchAll(typeof(ShipWindows));
         Harmony.PatchAll(typeof(Unlockables));
+
+        #region EnemyPatches
+
+        Harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
+
+        #endregion EnemyPatches
 
         if (WindowConfig.changeLightSwitchTip.Value)
             Harmony.PatchAll(typeof(LightSwitchPatch));

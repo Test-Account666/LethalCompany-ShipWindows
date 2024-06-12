@@ -41,6 +41,8 @@ public static class WindowConfig {
 
     public static ConfigEntry<bool> celestialTintOverrideSpace = null!;
 
+    public static ConfigEntry<bool> enableEnemyFix = null!;
+
     public static void InitializeConfig(ConfigFile configFile) {
         vanillaMode = configFile.Bind("General", "VanillaMode", false,
                                       "Enable this to preserve vanilla network compatability. This will disable unlockables and the shutter toggle switch. (default = false)");
@@ -116,5 +118,10 @@ public static class WindowConfig {
         celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
                                                      "If Celestial Tint is installed, override the skybox. "
                                                    + "Only effective if skybox is set to Space HDRRI Volume.");
+
+
+        enableEnemyFix = configFile.Bind("Fixes", "Enable Enemy Fix", true,
+                                         "If set to true, will add a check to enemy's ai to prevent them from killing you through the windows. "
+                                       + "Enabling this might cause some issues though.");
     }
 }
