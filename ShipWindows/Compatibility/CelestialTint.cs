@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections;
+using HarmonyLib;
 using ShipWindows.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -27,7 +28,16 @@ internal static class CelestialTint {
 
         WindowConfig.celestialTintOverrideSpace.SettingChanged += (_, _) => CheckSceneState();
 
-        SceneManager.sceneLoaded += (_, _) => CheckSceneState();
+        SceneManager.sceneLoaded += (_, _) => {
+            if (StartOfRound.Instance is null) return;
+
+            StartOfRound.Instance.StartCoroutine(CheckSceneStateDelayed());
+        };
+        SceneManager.sceneUnloaded += _ => {
+            if (StartOfRound.Instance is null) return;
+
+            StartOfRound.Instance.StartCoroutine(CheckSceneStateDelayed());
+        };
         return true;
     }
 
@@ -35,13 +45,21 @@ internal static class CelestialTint {
     [HarmonyPostfix]
     private static void CelestialTintCheckSceneState() => CheckSceneState();
 
+    private static IEnumerator CheckSceneStateDelayed() {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        CheckSceneState();
+    }
+
     private static void CheckSceneState() {
         if (!WindowConfig.celestialTintOverrideSpace.Value) {
             DestroySkyOverride();
             return;
         }
 
-        if (SceneManager.sceneCount is not 1 || SceneManager.GetActiveScene().name is not "SampleSceneRelay") {
+        if (SceneManager.sceneCount is not 1 || SceneManager.GetActiveScene() is not {
+                name: "SampleSceneRelay",
+            }) {
             DestroySkyOverride();
             return;
         }
