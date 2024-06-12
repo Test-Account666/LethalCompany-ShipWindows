@@ -55,6 +55,10 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
 
         if (_destroy) yield break;
 
+        yield return new WaitUntil(() => _destroy || interactTrigger is not null);
+
+        if (_destroy) yield break;
+
         if (interactTrigger is null)
             throw new("Could not find InteractTrigger!");
 
