@@ -132,8 +132,8 @@ internal static class ShipReplacer {
         var leftFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)/WindowFront");
         var leftBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)/WindowBack");
 
-        var rightFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowFront");
-        var rightBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsRight(Clone)/WindowBack");
+        var rightFront = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorRight (1)/WindowsRight(Clone)/WindowFront");
+        var rightBack = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorRight (1)/WindowsRight(Clone)/WindowBack");
 
 
         window4List.Add(leftFront?.GetComponent<MeshRenderer>());
