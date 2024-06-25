@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.3.7
+
+\* Fixed door texture (Sorry it took so long)<br>
+
 ## 1.3.6
 
 \* Hopefully finally completely fixed overriding celestial tint skybox<br>
