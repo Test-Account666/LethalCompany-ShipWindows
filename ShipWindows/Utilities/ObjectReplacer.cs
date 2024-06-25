@@ -13,6 +13,9 @@ internal static class ObjectReplacer {
     internal static readonly List<ReplacedMeshInfo> ReplacedMeshes = [
     ];
 
+    internal static readonly List<ReplacedMaterialInfo> ReplacedMaterials = [
+    ];
+
     public static void ReplaceMaterial(GameObject fromObj, GameObject toObj) {
         try {
             var mesh1 = fromObj.GetComponent<MeshRenderer>();
@@ -64,6 +67,20 @@ internal static class ObjectReplacer {
         }
     }
 
+    public static void RestoreMaterials() {
+        foreach (var replacedMaterial in ReplacedMaterials.ToList()) {
+            var meshFilter = replacedMaterial.meshRenderer;
+
+            meshFilter.material = replacedMaterial.original;
+            meshFilter.sharedMaterial = replacedMaterial.original;
+
+            meshFilter.materials = replacedMaterial.originals;
+            meshFilter.sharedMaterials = replacedMaterial.originals;
+
+            ReplacedMaterials.Remove(replacedMaterial);
+        }
+    }
+
     public static void Restore(GameObject original) {
         if (!_ReplacedObjects.ContainsKey(original)) return;
 
@@ -91,6 +108,15 @@ internal struct ReplacedMeshInfo {
     public MeshFilter meshFilter;
     public Mesh original;
     public Mesh replacement;
+}
+
+internal struct ReplacedMaterialInfo {
+    public MeshRenderer meshRenderer;
+    public Material original;
+    public Material replacement;
+
+    public Material[] originals;
+    public Material[] replacements;
 }
 
 internal struct ReplaceInfo {

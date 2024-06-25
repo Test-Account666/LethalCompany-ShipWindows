@@ -225,6 +225,37 @@ internal static class ShipReplacer {
 
         ShipWindows.Logger.LogInfo("Got new mesh? " + (newDoorMesh != null));
 
+
+        var doorMeshRenderer = door.gameObject.GetComponent<MeshRenderer>();
+
+        for (var index = 0; index < ShipWindows.DoorMaterials.Length; index++) {
+            var material = ShipWindows.DoorMaterials[index];
+
+            if (material is not null) continue;
+
+            material = ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/HangarShipDoor{
+                index + 1
+            }.mat");
+
+            if (material is null) {
+                ShipWindows.Logger.LogError($"Couldn't find ship door material '{index}'!");
+                return;
+            }
+
+            ShipWindows.DoorMaterials[index] = material;
+        }
+
+        var materials = ShipWindows.DoorMaterials;
+
+        ObjectReplacer.ReplacedMaterials.Add(new() {
+            meshRenderer = doorMeshRenderer,
+            original = doorMeshRenderer.material,
+            replacement = materials[0]!,
+
+            originals = doorMeshRenderer.materials,
+            replacements = materials!,
+        });
+
         ObjectReplacer.ReplacedMeshes.Add(new() {
             meshFilter = doorMeshFilter,
             original = doorMeshFilter.mesh,
@@ -238,6 +269,12 @@ internal static class ShipReplacer {
 
         doorCollider.sharedMesh = doorMeshFilter.sharedMesh;
 
+
+        doorMeshRenderer.material = materials[0];
+        doorMeshRenderer.materials = materials;
+
+        doorMeshRenderer.sharedMaterial = materials[0];
+        doorMeshRenderer.sharedMaterials = materials;
 
         var shipWindows =
             ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/ShipDoor/Windows{side}.prefab");
@@ -303,6 +340,7 @@ internal static class ShipReplacer {
         if (vanillaShipInside is null)
             throw new NullReferenceException(nameof(vanillaShipInside) + " is null?!");
 
+        ObjectReplacer.RestoreMaterials();
         ObjectReplacer.RestoreMeshes();
         ObjectReplacer.Restore(vanillaShipInside);
         StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());

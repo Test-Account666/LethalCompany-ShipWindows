@@ -41,8 +41,11 @@ public class ShipWindows : BaseUnityPlugin {
     // Spawned objects
     public static GameObject? outsideSkybox;
 
+    public static readonly Material?[] DoorMaterials = new Material[2];
+    
     // Various
     private static Coroutine? _windowCoroutine;
+
     public static ShipWindows Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; private set; }
