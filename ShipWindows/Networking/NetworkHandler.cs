@@ -25,8 +25,7 @@ internal class NetworkHandler {
         MessageManager.RegisterNamedMessageHandler("ShipWindow_WindowSwitchUsed", ReceiveWindowSwitchUsed_Server);
         MessageManager.RegisterNamedMessageHandler("ShipWindow_WindowSwitchUsedBroadcast", ReceiveWindowSwitchUsed_Client);
 
-        if (IsHost)
-            MessageManager.RegisterNamedMessageHandler("ShipWindow_WindowSyncRequest", ReceiveWindowSyncRequest);
+        if (IsHost) MessageManager.RegisterNamedMessageHandler("ShipWindow_WindowSyncRequest", ReceiveWindowSyncRequest);
     }
 
     public static void UnregisterMessages() {

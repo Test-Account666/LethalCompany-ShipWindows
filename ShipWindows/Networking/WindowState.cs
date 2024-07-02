@@ -26,8 +26,7 @@ internal class WindowState {
     public static WindowState Instance { get; set; } = null!;
 
     public void SetWindowState(bool closed, bool locked, bool playVoiceLine = true) {
-        if (!WindowConfig.enableShutter.Value)
-            return;
+        if (!WindowConfig.enableShutter.Value) return;
 
 
         var windows = Object.FindObjectsByType<ShipWindow>(FindObjectsSortMode.None);
