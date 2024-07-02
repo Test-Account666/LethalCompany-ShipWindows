@@ -39,10 +39,8 @@ Thunderstore Link: https://thunderstore.io/c/lethal-company/p/TestAccount666/Shi
 - **[Celestial Tint](https://thunderstore.io/c/lethal-company/p/sfDesat/Celestial_Tint/)** by **sfDesat** - For an
   amazing view of space outside the windows.
 
-OR
-
 - **[Ship Windows 4K Skybox](https://thunderstore.io/c/lethal-company/p/veri/ShipWindows_4K_Skybox/)** by **veri** - For
-  a higher definition space skybox. This does not work with Celestial Tint.
+  a higher definition space skybox. This **DOES** work with Celestial Tint. Ignore what the description says.
 
 ## Differences to the original
 
@@ -72,5 +70,7 @@ There are some differences between these mods.
 ## Known Issues
 
 - Floor window shutter is slightly too small
+- Error may throw on disconnect/re-host
+- Shutter Switch may vanish on re-host
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P6ZWLCY)
