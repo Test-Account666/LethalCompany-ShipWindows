@@ -41,7 +41,7 @@ internal static class CelestialTint {
         return true;
     }
 
-    [HarmonyPatch(typeof(ShipPartsLoader), nameof(ShipPartsLoader.CheckSceneState))]
+    [HarmonyPatch(typeof(global::CelestialTint), nameof(global::CelestialTint.CheckSceneState))]
     [HarmonyPostfix]
     private static void CelestialTintCheckSceneState() => CheckSceneState();
 
