@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.4.0
+
+\+ Add compatibility with latest Celestial Tint<br>
+
 ## 1.3.7
 
 \* Fixed door texture (Sorry it took so long)<br>
