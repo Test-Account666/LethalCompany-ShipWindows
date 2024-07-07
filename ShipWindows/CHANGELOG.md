@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.5.0
+
+\* Fixed a lot of bugs by using proper null checks. No more disappearing light switch<br>
+
 ## 1.4.0
 
 \+ Add compatibility with latest Celestial Tint<br>
