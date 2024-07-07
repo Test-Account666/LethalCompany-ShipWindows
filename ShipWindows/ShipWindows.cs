@@ -42,7 +42,7 @@ public class ShipWindows : BaseUnityPlugin {
     public static GameObject? outsideSkybox;
 
     public static readonly Material?[] DoorMaterials = new Material[2];
-    
+
     // Various
     private static Coroutine? _windowCoroutine;
 
@@ -106,8 +106,7 @@ public class ShipWindows : BaseUnityPlugin {
 
         #endregion EnemyPatches
 
-        if (WindowConfig.changeLightSwitchTip.Value)
-            Harmony.PatchAll(typeof(LightSwitchPatch));
+        if (WindowConfig.changeLightSwitchTip.Value) Harmony.PatchAll(typeof(LightSwitchPatch));
 
         CompatibleDependencyAttribute.Init(this);
 
@@ -190,18 +189,15 @@ public class ShipWindows : BaseUnityPlugin {
             case SpaceOutside.SPACE_HDRI:
                 if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
-                var universePrefab =
-                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/UniverseVolume.prefab");
+                var universePrefab = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/UniverseVolume.prefab");
 
                 outsideSkybox = Instantiate(universePrefab, renderingObject.transform);
                 vanillaStarSphere.GetComponent<MeshRenderer>().enabled = false;
 
                 outsideSkybox.AddComponent<SpaceSkybox>();
 
-                // Load texture
-                if (ShipWindow4K.Skybox4K != null) // 4K
-                    outsideSkybox.GetComponent<SpaceSkybox>()?.SetSkyboxTexture(ShipWindow4K.Skybox4K);
-
+                // Load 4k texture
+                if (ShipWindow4K.Skybox4K != null) outsideSkybox.GetComponent<SpaceSkybox>()?.SetSkyboxTexture(ShipWindow4K.Skybox4K);
                 break;
 
             // spawn large star sphere
@@ -227,8 +223,7 @@ public class ShipWindows : BaseUnityPlugin {
     private static void HideSpaceProps() {
         if (Compatibility.CelestialTint.Enabled) return;
 
-        if (!WindowConfig.hideSpaceProps.Value)
-            return;
+        if (!WindowConfig.hideSpaceProps.Value) return;
 
         var props = GameObject.Find("Environment/SpaceProps");
         props?.SetActive(false);
@@ -243,21 +238,17 @@ public class ShipWindows : BaseUnityPlugin {
 
         var renderer1 = notSpawnedPlatform1?.GetComponent<MeshRenderer>();
         var renderer2 = notSpawnedPlatform2?.GetComponent<MeshRenderer>();
-        if (renderer1 != null)
-            renderer1.enabled = false;
-        if (renderer2 != null)
-            renderer2.enabled = false;
+        if (renderer1 != null) renderer1.enabled = false;
+        if (renderer2 != null) renderer2.enabled = false;
     }
 
     public static void OpenWindowDelayed(float delay) {
-        if (_windowCoroutine != null)
-            StartOfRound.Instance.StopCoroutine(_windowCoroutine);
+        if (_windowCoroutine != null) StartOfRound.Instance.StopCoroutine(_windowCoroutine);
         _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowCoroutine(delay));
     }
 
     public static void OpenWindowOnCondition(Func<bool> conditionPredicate) {
-        if (_windowCoroutine != null)
-            StartOfRound.Instance.StopCoroutine(_windowCoroutine);
+        if (_windowCoroutine != null) StartOfRound.Instance.StopCoroutine(_windowCoroutine);
         _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowOnConditionCoroutine(conditionPredicate));
     }
 
@@ -275,8 +266,7 @@ public class ShipWindows : BaseUnityPlugin {
         _windowCoroutine = null;
     }
 
-    private static void HandleWindowSync() =>
-        WindowState.Instance.ReceiveSync();
+    private static void HandleWindowSync() => WindowState.Instance.ReceiveSync();
 
     //TODO: Move patches
 
@@ -289,8 +279,7 @@ public class ShipWindows : BaseUnityPlugin {
     private static void AddPrefabsToNetwork() {
         if (WindowConfig.vanillaMode.Value) return;
 
-        var shutterSwitchAsset =
-            mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
+        var shutterSwitchAsset = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
         shutterSwitchAsset.AddComponent<ShipWindowShutterSwitch>();
         NetworkManager.Singleton.AddNetworkPrefab(shutterSwitchAsset);
 
@@ -304,13 +293,14 @@ public class ShipWindows : BaseUnityPlugin {
     private static void LockWindowsWhileRouting(int levelID) {
         if (!WindowConfig.shuttersHideMoonTransitions.Value) return;
 
-        var moons = Resources.FindObjectsOfTypeAll<SelectableLevel>();
+        var moons = StartOfRound.Instance.levels;
+        moons ??= [
+        ];
 
         var selectedLevel =
             moons.Where(level => level != null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
 
-        if (selectedLevel == null)
-            return;
+        if (selectedLevel == null) return;
 
         WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
 
@@ -358,8 +348,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Start))]
     private static void InitializeWindows() {
         try {
-            if (WindowConfig.windowsUnlockable.Value == false || WindowConfig.vanillaMode.Value)
-                ShipReplacer.ReplaceShip();
+            if (WindowConfig.windowsUnlockable.Value == false || WindowConfig.vanillaMode.Value) ShipReplacer.ReplaceShip();
 
             AddStars();
             HideSpaceProps();
@@ -375,8 +364,7 @@ public class ShipWindows : BaseUnityPlugin {
         NetworkHandler.RegisterMessages();
         NetworkHandler.WindowSyncReceivedEvent += HandleWindowSync;
 
-        if (NetworkHandler.IsHost)
-            return;
+        if (NetworkHandler.IsHost) return;
 
         NetworkHandler.RequestWindowSync();
     }
@@ -393,41 +381,18 @@ public class ShipWindows : BaseUnityPlugin {
     private static void FollowPlayer() {
         if (Compatibility.CelestialTint.Enabled) return;
         // Make the stars follow the player when they get sucked out of the ship.
-        if (outsideSkybox == null)
-            return;
+        if (outsideSkybox == null) return;
 
         if (StartOfRound.Instance.suckingPlayersOutOfShip)
             outsideSkybox.transform.position = GameNetworkManager.Instance.localPlayerController.transform.position;
-        else
-            outsideSkybox.transform.localPosition = Vector3.zero;
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Start))]
-    // ReSharper disable once InconsistentNaming
-    private static void Patch_AIStart(EnemyAI __instance) {
-        if (GameNetworkManager.Instance.localPlayerController == null)
-            return;
-
-        __instance.EnableEnemyMesh(true);
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.Start))]
-    // ReSharper disable once InconsistentNaming
-    private static void Patch_MaskStart(MaskedPlayerEnemy __instance) {
-        if (GameNetworkManager.Instance.localPlayerController == null)
-            return;
-
-        __instance.EnableEnemyMesh(true);
+        else outsideSkybox.transform.localPosition = Vector3.zero;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartMatchLever), nameof(StartMatchLever.PullLeverAnim))]
     private static void CloseAndLockWindows(bool leverPulled) {
         //Logger.LogInfo($"StartMatchLever.StartGame -> Is Host:{NetworkHandler.IsHost} / Is Client:{NetworkHandler.IsClient} ");
-        if (!leverPulled)
-            return;
+        if (!leverPulled) return;
 
         WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
     }
@@ -457,8 +422,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ResetShip))]
-    private static void CheckForKeptSpawners() =>
-        StartOfRound.Instance.StartCoroutine(ShipReplacer.CheckForKeptSpawners());
+    private static void CheckForKeptSpawners() => StartOfRound.Instance.StartCoroutine(ShipReplacer.CheckForKeptSpawners());
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.DespawnPropsAtEndOfRound))]
@@ -484,8 +448,7 @@ public class ShipWindows : BaseUnityPlugin {
             }
 
             var props = GameObject.Find("Environment/SpaceProps");
-            if (props == null || !WindowConfig.hideSpaceProps.Value)
-                return;
+            if (props == null || !WindowConfig.hideSpaceProps.Value) return;
 
             props.SetActive(false);
         } catch (Exception e) {
@@ -499,8 +462,7 @@ public class ShipWindows : BaseUnityPlugin {
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             foreach (var method in methods) {
                 var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
-                if (attributes.Length <= 0)
-                    continue;
+                if (attributes.Length <= 0) continue;
                 method.Invoke(null, null);
             }
         }
