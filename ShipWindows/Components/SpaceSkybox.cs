@@ -37,14 +37,14 @@ public class SpaceSkybox : MonoBehaviour {
         switch (WindowConfig.spaceOutsideSetting.Value) {
             case SpaceOutside.OTHER_MODS: break;
             case SpaceOutside.SPACE_HDRI:
-                if (_sky is null) break;
+                if (_sky == null) break;
 
                 _sky.rotation.value += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
                 if (_sky.rotation.value >= 360) _sky.rotation.value = 0f;
                 WindowState.Instance.volumeRotation = _sky.rotation.value;
                 break;
             case SpaceOutside.BLACK_AND_STARS:
-                if (_starSphere is null) break;
+                if (_starSphere == null) break;
 
                 _starSphere.Rotate(Vector3.forward * (Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value));
                 WindowState.Instance.volumeRotation = _starSphere.eulerAngles.y;
@@ -58,7 +58,7 @@ public class SpaceSkybox : MonoBehaviour {
         switch (WindowConfig.spaceOutsideSetting.Value) {
             case SpaceOutside.OTHER_MODS: break;
             case SpaceOutside.SPACE_HDRI:
-                if (_sky is null) break;
+                if (_sky == null) break;
 
                 var rClamped = r % 360;
                 if (rClamped < 0f) rClamped += 360f;
@@ -67,7 +67,7 @@ public class SpaceSkybox : MonoBehaviour {
                 WindowState.Instance.volumeRotation = _sky.rotation.value;
                 break;
             case SpaceOutside.BLACK_AND_STARS:
-                if (_starSphere is null) break;
+                if (_starSphere == null) break;
 
                 _starSphere.rotation = Quaternion.identity;
                 _starSphere.Rotate(Vector3.forward * r);
@@ -82,7 +82,7 @@ public class SpaceSkybox : MonoBehaviour {
         switch (WindowConfig.spaceOutsideSetting.Value) {
             case SpaceOutside.OTHER_MODS: break;
             case SpaceOutside.SPACE_HDRI:
-                if (_sky is null) return;
+                if (_sky == null) return;
 
                 _sky.hdriSky.value = skybox;
                 break;

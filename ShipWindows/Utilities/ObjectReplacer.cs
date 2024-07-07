@@ -91,7 +91,7 @@ internal static class ObjectReplacer {
 
             info.original?.SetActive(true);
 
-            if (info.original is not null)
+            if (info.original != null)
                 info.original.name = info.name;
 
             Object.DestroyImmediate(info.replacement);

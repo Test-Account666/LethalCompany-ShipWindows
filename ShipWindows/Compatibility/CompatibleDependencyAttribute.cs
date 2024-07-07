@@ -40,7 +40,7 @@ internal class CompatibleDependencyAttribute : BepInDependency {
             if (!Chainloader.PluginInfos.TryGetValue(attribute.DependencyGUID, out var info))
                 continue;
 
-            if (attribute.versionRequired is not null && attribute.versionRequired.CompareTo(info.Metadata.Version) > 0) {
+            if (attribute.versionRequired != null && attribute.versionRequired.CompareTo(info.Metadata.Version) > 0) {
                 ShipWindows.Logger.LogInfo($"Found compatible mod, but it does not meet version requirements:  {attribute.DependencyGUID
                 } {info.Metadata.Version}");
                 continue;

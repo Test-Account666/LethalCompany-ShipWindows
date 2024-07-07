@@ -29,12 +29,12 @@ internal static class CelestialTint {
         WindowConfig.celestialTintOverrideSpace.SettingChanged += (_, _) => CheckSceneState();
 
         SceneManager.sceneLoaded += (_, _) => {
-            if (StartOfRound.Instance is null) return;
+            if (StartOfRound.Instance == null) return;
 
             StartOfRound.Instance.StartCoroutine(CheckSceneStateDelayed());
         };
         SceneManager.sceneUnloaded += _ => {
-            if (StartOfRound.Instance is null) return;
+            if (StartOfRound.Instance == null) return;
 
             StartOfRound.Instance.StartCoroutine(CheckSceneStateDelayed());
         };
@@ -68,7 +68,7 @@ internal static class CelestialTint {
     }
 
     private static void DestroySkyOverride() {
-        if (_skyGameObject is null) return;
+        if (_skyGameObject == null) return;
 
         Destroy(_skyGameObject);
 
@@ -76,7 +76,7 @@ internal static class CelestialTint {
     }
 
     private static void LoadSkyOverride() {
-        if (_skyGameObject is not null) DestroySkyOverride();
+        if (_skyGameObject != null) DestroySkyOverride();
 
         var skyPrefab =
             ShipWindows.mainAssetBundle.LoadAsset<GameObject>(
@@ -86,7 +86,7 @@ internal static class CelestialTint {
 
         CheckFor4KTexture();
 
-        if (ShipWindow4K.Skybox4K is null) {
+        if (ShipWindow4K.Skybox4K == null) {
             ShipWindows.Logger.LogFatal("Did not find Skybox4k!");
             return;
         }
@@ -97,7 +97,7 @@ internal static class CelestialTint {
     private static void OverrideSpaceEmissionTexture() {
         ShipWindows.Logger.LogFatal("Overriding texture now!");
 
-        if (_skyGameObject is null) {
+        if (_skyGameObject == null) {
             ShipWindows.Logger.LogFatal("Nevermind!");
             return;
         }
@@ -106,7 +106,7 @@ internal static class CelestialTint {
 
         skyBoxVolume.profile.TryGet<PhysicallyBasedSky>(out var physicallyBasedSky);
 
-        if (physicallyBasedSky is null) {
+        if (physicallyBasedSky == null) {
             ShipWindows.Logger.LogFatal("Couldn't find PhysicallyBasedSky in celestial tint sky override!");
             return;
         }

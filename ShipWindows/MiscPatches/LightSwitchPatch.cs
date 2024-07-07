@@ -15,7 +15,7 @@ public class LightSwitchPatch {
 
         var interactTrigger = __instance?.GetComponentInChildren<InteractTrigger>();
 
-        if (interactTrigger is null) return;
+        if (interactTrigger == null) return;
 
         if (!interactTrigger.hoverTip.Equals("Switch lights : [LMB]")) return;
 

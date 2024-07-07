@@ -40,7 +40,7 @@ public static class SoundLoader {
 
         var shutterOpenVoiceLineAudioClip = LoadAudioClipFromFile(new(shutterOpenFile), shutterOpenFileName[..^4]);
 
-        if (shutterOpenVoiceLineAudioClip is null) {
+        if (shutterOpenVoiceLineAudioClip == null) {
             ShipWindows.Logger.LogError("Failed to load voice line 'ShutterOpen'!");
             return;
         }
@@ -56,7 +56,7 @@ public static class SoundLoader {
 
         var shutterCloseVoiceLineAudioClip = LoadAudioClipFromFile(new(shutterCloseFile), shutterCloseFileName[..^4]);
 
-        if (shutterCloseVoiceLineAudioClip is null) {
+        if (shutterCloseVoiceLineAudioClip == null) {
             ShipWindows.Logger.LogError("Failed to load voice line 'ShutterClose'!");
             return;
         }

@@ -123,10 +123,10 @@ public class ShipWindows : BaseUnityPlugin {
     private static bool LoadAssetBundle() {
         Logger.LogInfo("Loading ShipWindow AssetBundle...");
         var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        Debug.Assert(assemblyLocation is not null, nameof(assemblyLocation) + " != null");
+        Debug.Assert(assemblyLocation != null, nameof(assemblyLocation) + " != null");
         mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(assemblyLocation, "ship_window"));
 
-        return mainAssetBundle is not null;
+        return mainAssetBundle != null;
     }
 
     private static GameObject FindOrThrow(string name) {
@@ -188,7 +188,7 @@ public class ShipWindows : BaseUnityPlugin {
 
             // spawn Volume sphere
             case SpaceOutside.SPACE_HDRI:
-                if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
+                if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
                 var universePrefab =
                     mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/UniverseVolume.prefab");
@@ -199,19 +199,19 @@ public class ShipWindows : BaseUnityPlugin {
                 outsideSkybox.AddComponent<SpaceSkybox>();
 
                 // Load texture
-                if (ShipWindow4K.Skybox4K is not null) // 4K
+                if (ShipWindow4K.Skybox4K != null) // 4K
                     outsideSkybox.GetComponent<SpaceSkybox>()?.SetSkyboxTexture(ShipWindow4K.Skybox4K);
 
                 break;
 
             // spawn large star sphere
             case SpaceOutside.BLACK_AND_STARS:
-                if (vanillaStarSphere is null) throw new("Could not find vanilla Stars Sphere. Wrong scene?");
-                if (renderingObject is null) throw new("Could not find Systems/Rendering. Wrong scene?");
+                if (vanillaStarSphere == null) throw new("Could not find vanilla Stars Sphere. Wrong scene?");
+                if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
                 var starSpherePrefab =
                     mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/StarsSphereLarge.prefab");
-                if (starSpherePrefab is null) throw new("Could not load star sphere large prefab!");
+                if (starSpherePrefab == null) throw new("Could not load star sphere large prefab!");
 
                 outsideSkybox = Instantiate(starSpherePrefab, renderingObject.transform);
                 vanillaStarSphere.GetComponent<MeshRenderer>().enabled = false;
@@ -243,20 +243,20 @@ public class ShipWindows : BaseUnityPlugin {
 
         var renderer1 = notSpawnedPlatform1?.GetComponent<MeshRenderer>();
         var renderer2 = notSpawnedPlatform2?.GetComponent<MeshRenderer>();
-        if (renderer1 is not null)
+        if (renderer1 != null)
             renderer1.enabled = false;
-        if (renderer2 is not null)
+        if (renderer2 != null)
             renderer2.enabled = false;
     }
 
     public static void OpenWindowDelayed(float delay) {
-        if (_windowCoroutine is not null)
+        if (_windowCoroutine != null)
             StartOfRound.Instance.StopCoroutine(_windowCoroutine);
         _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowCoroutine(delay));
     }
 
     public static void OpenWindowOnCondition(Func<bool> conditionPredicate) {
-        if (_windowCoroutine is not null)
+        if (_windowCoroutine != null)
             StartOfRound.Instance.StopCoroutine(_windowCoroutine);
         _windowCoroutine = StartOfRound.Instance.StartCoroutine(OpenWindowOnConditionCoroutine(conditionPredicate));
     }
@@ -307,9 +307,9 @@ public class ShipWindows : BaseUnityPlugin {
         var moons = Resources.FindObjectsOfTypeAll<SelectableLevel>();
 
         var selectedLevel =
-            moons.Where(level => level is not null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
+            moons.Where(level => level != null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
 
-        if (selectedLevel is null)
+        if (selectedLevel == null)
             return;
 
         WindowState.Instance.SetWindowState(true, true, WindowConfig.playShutterVoiceLinesOnTransitions.Value);
@@ -393,7 +393,7 @@ public class ShipWindows : BaseUnityPlugin {
     private static void FollowPlayer() {
         if (Compatibility.CelestialTint.Enabled) return;
         // Make the stars follow the player when they get sucked out of the ship.
-        if (outsideSkybox is null)
+        if (outsideSkybox == null)
             return;
 
         if (StartOfRound.Instance.suckingPlayersOutOfShip)
@@ -406,7 +406,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Start))]
     // ReSharper disable once InconsistentNaming
     private static void Patch_AIStart(EnemyAI __instance) {
-        if (GameNetworkManager.Instance.localPlayerController is null)
+        if (GameNetworkManager.Instance.localPlayerController == null)
             return;
 
         __instance.EnableEnemyMesh(true);
@@ -416,18 +416,10 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.Start))]
     // ReSharper disable once InconsistentNaming
     private static void Patch_MaskStart(MaskedPlayerEnemy __instance) {
-        if (GameNetworkManager.Instance.localPlayerController is null)
+        if (GameNetworkManager.Instance.localPlayerController == null)
             return;
 
         __instance.EnableEnemyMesh(true);
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.SetPlayerSafeInShip))]
-    private static void Patch_SafeInShip() {
-        var array = FindObjectsOfType<EnemyAI>();
-        foreach (var enemyAI in array)
-            enemyAI.EnableEnemyMesh(true);
     }
 
     [HarmonyPostfix]
@@ -492,7 +484,7 @@ public class ShipWindows : BaseUnityPlugin {
             }
 
             var props = GameObject.Find("Environment/SpaceProps");
-            if (props is null || !WindowConfig.hideSpaceProps.Value)
+            if (props == null || !WindowConfig.hideSpaceProps.Value)
                 return;
 
             props.SetActive(false);

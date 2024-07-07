@@ -13,12 +13,12 @@ internal static class ShipWindow4K {
     public static Texture? Skybox4K { get; private set; }
 
     public static bool TryToLoad() {
-        if (Skybox4K is not null) return true;
+        if (Skybox4K != null) return true;
 
         try {
             var pluginsFolder = _BaseDirectory.Parent?.Parent?.FullName;
 
-            Debug.Assert(pluginsFolder is not null, nameof(pluginsFolder) + " != null");
+            Debug.Assert(pluginsFolder != null, nameof(pluginsFolder) + " != null");
             foreach (var file in Directory.GetFiles(pluginsFolder, "ship_window_4k", SearchOption.AllDirectories)) {
                 var fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.Equals(".old")) break;
@@ -32,7 +32,7 @@ internal static class ShipWindow4K {
 
                 Skybox4K = allTextures.Length > 0? allTextures[0] as Texture : null;
 
-                if (Skybox4K is null) throw new NullReferenceException("Texture not present");
+                if (Skybox4K == null) throw new NullReferenceException("Texture not present");
 
                 ShipWindows.Logger.LogInfo("Found 4K skybox texture! " + (Skybox4K != null));
                 return true;

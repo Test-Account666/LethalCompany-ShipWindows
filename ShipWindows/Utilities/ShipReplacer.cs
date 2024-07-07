@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MonoMod.Utils;
 using ShipWindows.Components;
 using ShipWindows.Networking;
 using Unity.Netcode;
@@ -30,9 +31,9 @@ internal static class ShipReplacer {
         if (WindowConfig.windowsUnlockable.Value && WindowConfig.vanillaMode.Value is false) {
             var spawners = Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
 
-            var windowSpawner1 = spawners.FirstOrDefault(spawner => spawner.id is 1) is not null;
-            var windowSpawner2 = spawners.FirstOrDefault(spawner => spawner.id is 2) is not null;
-            var windowSpawner3 = spawners.FirstOrDefault(spawner => spawner.id is 3) is not null;
+            var windowSpawner1 = spawners.FirstOrDefault(spawner => spawner.id is 1) != null;
+            var windowSpawner2 = spawners.FirstOrDefault(spawner => spawner.id is 2) != null;
+            var windowSpawner3 = spawners.FirstOrDefault(spawner => spawner.id is 3) != null;
             return $"ShipInsideWithWindow{(windowSpawner1? 1 : 0)}{(windowSpawner2? 1 : 0)}{(windowSpawner3? 1 : 0)}";
         }
 
@@ -45,8 +46,8 @@ internal static class ShipReplacer {
     private static void AddWindowScripts(GameObject ship) {
         var leftDoorWindow = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorLeft (1)/WindowsLeft(Clone)");
 
-        if (leftDoorWindow is not null) {
-            if (leftDoorWindow.GetComponent<ShipWindow>() is null) {
+        if (leftDoorWindow != null) {
+            if (leftDoorWindow.GetComponent<ShipWindow>() == null) {
                 var shipWindow = leftDoorWindow.AddComponent<ShipWindow>();
                 shipWindow.id = 4;
             }
@@ -54,18 +55,18 @@ internal static class ShipReplacer {
 
         var rightDoorWindow = GameObject.Find("Environment/HangarShip/AnimatedShipDoor/HangarDoorRight (1)/WindowsRight(Clone)");
 
-        if (rightDoorWindow is not null) {
-            if (rightDoorWindow.GetComponent<ShipWindow>() is null) {
+        if (rightDoorWindow != null) {
+            if (rightDoorWindow.GetComponent<ShipWindow>() == null) {
                 var shipWindow = rightDoorWindow.AddComponent<ShipWindow>();
                 shipWindow.id = 4;
             }
         }
 
         var container = ship.transform.Find("WindowContainer");
-        if (container is null) return;
+        if (container == null) return;
 
         foreach (Transform window in container) {
-            if (window.gameObject.GetComponent<ShipWindow>() is not null) continue;
+            if (window.gameObject.GetComponent<ShipWindow>() != null) continue;
 
             if (int.TryParse(window.gameObject.name[^1].ToString(), out var id))
                 window.gameObject.AddComponent<ShipWindow>().id = id;
@@ -103,7 +104,7 @@ internal static class ShipReplacer {
         };
 
     internal static void ReplaceGlassMaterial() {
-        if (newShipInside is null) return;
+        if (newShipInside == null) return;
 
         ReplaceGlassMaterial(newShipInside);
     }
@@ -117,7 +118,7 @@ internal static class ShipReplacer {
             ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/{
                 glassMaterial.GetMaterialName()}.mat");
 
-        if (material is null)
+        if (material == null)
             throw new NullReferenceException($"Couldn't find glass material {glassMaterial} ({glassMaterial.GetMaterialName()})!");
 
         // This is bad so, so bad. Don't mind me :)
@@ -142,16 +143,16 @@ internal static class ShipReplacer {
         window4List.Add(rightFront?.GetComponent<MeshRenderer>());
         window4List.Add(rightBack?.GetComponent<MeshRenderer>());
 
-        if (window1 is not null) window1.material = material;
-        if (window2 is not null) window2.material = material;
-        if (window3 is not null) window3.material = material;
+        if (window1 != null) window1.material = material;
+        if (window2 != null) window2.material = material;
+        if (window3 != null) window3.material = material;
 
         foreach (var meshRenderer in window4List.OfType<MeshRenderer>()) meshRenderer.material = material;
     }
 
     public static void ReplaceShip() {
         try {
-            if (newShipInside is not null && vanillaShipInside is not null)
+            if (newShipInside != null && vanillaShipInside != null)
                 //ShipWindows.Logger.LogInfo($"Calling ReplaceShip when ship was already replaced! Restoring original...");
                 ObjectReplacer.Restore(vanillaShipInside);
 
@@ -163,7 +164,7 @@ internal static class ShipReplacer {
             var newShipPrefab =
                 ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/Ships/{shipName}.prefab");
 
-            if (newShipPrefab is null) {
+            if (newShipPrefab == null) {
                 if (!shipName.Equals("ShipInsideWithWindow000"))
                     throw new($"Could not load requested ship replacement! {shipName}");
 
@@ -172,7 +173,7 @@ internal static class ShipReplacer {
 
             var spawners = Object.FindObjectsByType<ShipWindowSpawner>(FindObjectsSortMode.None);
 
-            var windowSpawner4 = spawners.FirstOrDefault(spawner => spawner.id is 4) is not null;
+            var windowSpawner4 = spawners.FirstOrDefault(spawner => spawner.id is 4) != null;
 
             var window4Enabled = (!WindowConfig.windowsUnlockable.Value || WindowConfig.vanillaMode.Value)
                               && WindowConfig.enableWindow4.Value;
@@ -199,7 +200,7 @@ internal static class ShipReplacer {
         var boxColliders = shipDoors.GetComponentsInChildren<BoxCollider>();
 
         foreach (var boxCollider in boxColliders) {
-            if (boxColliders is null)
+            if (boxColliders == null)
                 continue;
 
             boxCollider.isTrigger = true;
@@ -231,13 +232,13 @@ internal static class ShipReplacer {
         for (var index = 0; index < ShipWindows.DoorMaterials.Length; index++) {
             var material = ShipWindows.DoorMaterials[index];
 
-            if (material is not null) continue;
+            if (material != null) continue;
 
             material = ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/HangarShipDoor{
                 index + 1
             }.mat");
 
-            if (material is null) {
+            if (material == null) {
                 ShipWindows.Logger.LogError($"Couldn't find ship door material '{index}'!");
                 return;
             }
@@ -284,13 +285,13 @@ internal static class ShipReplacer {
 
     public static void SpawnSwitch() {
         var windowSwitch = Object.FindFirstObjectByType<ShipWindowShutterSwitch>();
-        if (windowSwitch is not null) {
+        if (windowSwitch != null) {
             switchInstance = windowSwitch.gameObject;
             return;
         }
 
         ShipWindows.Logger.LogInfo("Spawning shutter switch...");
-        if (ShipWindows.windowSwitchPrefab is null)
+        if (ShipWindows.windowSwitchPrefab == null)
             return;
 
         if (!NetworkManager.Singleton.IsHost && !NetworkManager.Singleton.IsServer)
@@ -314,15 +315,15 @@ internal static class ShipReplacer {
         //ShipWindows.Logger.LogFatal($"Found {windows.Length} windows!");
 
         if (windows.Length > 0) {
-            if (switchInstance is null)
-                SpawnSwitch();
-            else
-                switchInstance.SetActive(true);
+            if (switchInstance == null) SpawnSwitch();
+            else switchInstance.SetActive(true);
         } else {
-            if (switchInstance is null)
-                return;
+            if (switchInstance == null) return;
 
-            switchInstance.GetComponent<NetworkObject>().Despawn();
+            var networkObject = switchInstance.GetComponent<NetworkObject>();
+
+            if (networkObject != null) networkObject.Despawn();
+
             Object.Destroy(switchInstance);
             switchInstance = null;
         }
@@ -335,10 +336,10 @@ internal static class ShipReplacer {
     }
 
     public static void RestoreShip() {
-        if (newShipInside is null) return;
+        if (newShipInside == null) return;
 
-        if (vanillaShipInside is null)
-            throw new NullReferenceException(nameof(vanillaShipInside) + " is null?!");
+        if (vanillaShipInside == null)
+            throw new NullReferenceException(nameof(vanillaShipInside) + " == null?!");
 
         ObjectReplacer.RestoreMaterials();
         ObjectReplacer.RestoreMeshes();

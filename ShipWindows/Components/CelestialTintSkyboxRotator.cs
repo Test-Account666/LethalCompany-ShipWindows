@@ -13,9 +13,9 @@ public class CelestialTintSkyboxRotator : MonoBehaviour {
     private PhysicallyBasedSky? _sky;
 
     private void Update() {
-        if (skyVolume is null) return;
+        if (skyVolume == null) return;
 
-        if (_sky is null) {
+        if (_sky == null) {
             skyVolume.profile.TryGet(out _sky);
             return;
         }

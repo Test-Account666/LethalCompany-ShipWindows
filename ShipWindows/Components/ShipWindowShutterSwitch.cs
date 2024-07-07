@@ -41,7 +41,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     private IEnumerator AddSwitchListener() {
-        yield return new WaitUntil(() => interactTrigger is not null);
+        yield return new WaitUntil(() => interactTrigger != null);
 
         interactTrigger?.onInteract.AddListener(PlayerUsedSwitch);
 
@@ -55,11 +55,11 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
 
         if (_destroy) yield break;
 
-        yield return new WaitUntil(() => _destroy || interactTrigger is not null);
+        yield return new WaitUntil(() => _destroy || interactTrigger != null);
 
         if (_destroy) yield break;
 
-        if (interactTrigger is null)
+        if (interactTrigger == null)
             throw new("Could not find InteractTrigger!");
 
         interactTrigger.interactable = !WindowState.Instance.windowsLocked;
@@ -68,7 +68,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     public void PlayerUsedSwitch(PlayerControllerB playerControllerB) {
-        if (animator is null) return;
+        if (animator == null) return;
 
         var windowState = animator.GetBool(_OnHash);
 
@@ -78,7 +78,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     private IEnumerator UpdateScanNodeOnce() {
-        yield return new WaitUntil(() => scanNodeObject is not null);
+        yield return new WaitUntil(() => scanNodeObject != null);
 
         ShipWindows.Logger.LogDebug("Updating Scan Node! :>");
 
@@ -86,7 +86,7 @@ public class ShipWindowShutterSwitch : NetworkBehaviour {
     }
 
     private void UpdateScanNode() {
-        if (scanNodeObject is null) {
+        if (scanNodeObject == null) {
             ShipWindows.Logger.LogError("Couldn't find ScanNode object for ShutterSwitch???");
             return;
         }
