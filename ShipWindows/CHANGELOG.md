@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.5.1
+
+\* Remove useless optimizations that actually worsened performance<br>
+
 ## 1.5.0
 
 \* Fixed a lot of bugs by using proper null checks. No more disappearing light switch<br>
