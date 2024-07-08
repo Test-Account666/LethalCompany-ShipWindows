@@ -104,6 +104,8 @@ public class ShipWindows : BaseUnityPlugin {
 
         Harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
 
+        Harmony.PatchAll(typeof(EnemyMeshPatch));
+
         #endregion EnemyPatches
 
         if (WindowConfig.changeLightSwitchTip.Value) Harmony.PatchAll(typeof(LightSwitchPatch));
