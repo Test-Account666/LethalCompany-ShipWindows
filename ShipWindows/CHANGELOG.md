@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.5.2
+
+\* Hmmm, turns out, the code I removed was important. I improved it instead of removing it<br>
+
 ## 1.5.1
 
 \* Remove useless optimizations that actually worsened performance<br>
