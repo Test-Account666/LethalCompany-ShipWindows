@@ -283,11 +283,13 @@ public class ShipWindows : BaseUnityPlugin {
     private static void AddPrefabsToNetwork() {
         if (WindowConfig.vanillaMode.Value) return;
 
-        var shutterSwitchAsset = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
-        shutterSwitchAsset.AddComponent<ShipWindowShutterSwitch>();
-        NetworkManager.Singleton.AddNetworkPrefab(shutterSwitchAsset);
+        if (WindowConfig.enableShutter.Value) {
+            var shutterSwitchAsset = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
+            shutterSwitchAsset.AddComponent<ShipWindowShutterSwitch>();
+            NetworkManager.Singleton.AddNetworkPrefab(shutterSwitchAsset);
 
-        windowSwitchPrefab = shutterSwitchAsset;
+            windowSwitchPrefab = shutterSwitchAsset;
+        }
 
         RegisterWindows();
     }
@@ -331,7 +333,7 @@ public class ShipWindows : BaseUnityPlugin {
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Awake))]
     private static void SpawnShutterSwitch() {
         try {
-            if (!WindowConfig.vanillaMode.Value) {
+            if (!WindowConfig.vanillaMode.Value && WindowConfig.enableShutter.Value) {
                 // The switch will be removed by a later function if it is not needed
                 // Spawning here will let the (potential) saved position be restored.
                 Unlockables.AddSwitchToUnlockables();
