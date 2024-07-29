@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.6.1
+
+\+ Actually add the sell counter voice line file...
+
 ## 1.6.0
 
 \+ Added rare sell counter voice line (Thank you, Wes!)<br>
