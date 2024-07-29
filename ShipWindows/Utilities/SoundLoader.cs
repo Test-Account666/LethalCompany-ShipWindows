@@ -10,6 +10,7 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows.Utilities;
 
 public static class SoundLoader {
+    public static readonly AudioClip[] RareSellCounterLines = new AudioClip[1];
     public static readonly AudioClip[] VoiceLines = new AudioClip[2];
 
     public static IEnumerator LoadAudioClips() {
@@ -30,6 +31,7 @@ public static class SoundLoader {
 
         LoadShutterOpenClip(voiceLinesAudioPath);
 
+        LoadSellCounterClips(voiceLinesAudioPath);
         yield break;
     }
 
@@ -42,6 +44,7 @@ public static class SoundLoader {
 
         if (shutterOpenVoiceLineAudioClip == null) {
             ShipWindows.Logger.LogError("Failed to load voice line 'ShutterOpen'!");
+            ShipWindows.Logger.LogError($"Path: {voiceLinesAudioPath}");
             return;
         }
 
@@ -58,11 +61,29 @@ public static class SoundLoader {
 
         if (shutterCloseVoiceLineAudioClip == null) {
             ShipWindows.Logger.LogError("Failed to load voice line 'ShutterClose'!");
+            ShipWindows.Logger.LogError($"Path: {voiceLinesAudioPath}");
             return;
         }
 
         VoiceLines[1] = shutterCloseVoiceLineAudioClip;
         ShipWindows.Logger.LogInfo($"Loaded line '{shutterCloseVoiceLineAudioClip.name}'!");
+    }
+
+    private static void LoadSellCounterClips(string voiceLinesAudioPath) {
+        var sellCounterFile = Path.Combine(voiceLinesAudioPath, "SellCounter1.wav");
+
+        var sellCounterFileName = Path.GetFileName(sellCounterFile);
+
+        var sellCounterAudioClip = LoadAudioClipFromFile(new(sellCounterFile), sellCounterFileName[..^4]);
+
+        if (sellCounterAudioClip == null) {
+            ShipWindows.Logger.LogError("Failed to load voice line 'SellCounter1'!");
+            ShipWindows.Logger.LogError($"Path: {voiceLinesAudioPath}");
+            return;
+        }
+
+        RareSellCounterLines[0] = sellCounterAudioClip;
+        ShipWindows.Logger.LogInfo($"Loaded line '{sellCounterAudioClip.name}'!");
     }
 
     private static AudioClip? LoadAudioClipFromFile(Uri filePath, string name) {

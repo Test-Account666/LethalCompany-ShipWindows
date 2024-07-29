@@ -110,6 +110,8 @@ public class ShipWindows : BaseUnityPlugin {
 
         if (WindowConfig.changeLightSwitchTip.Value) Harmony.PatchAll(typeof(LightSwitchPatch));
 
+        Harmony.PatchAll(typeof(DepositItemsDeskPatch));
+
         CompatibleDependencyAttribute.Init(this);
 
         ShipWindow4K.TryToLoad();
