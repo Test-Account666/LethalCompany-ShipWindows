@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.6.0
+
+\+ Added rare sell counter voice line (Thank you, Wes!)<br>
+
 ## 1.5.3
 
 \* Fixed Ship Shutters Lever texture<br>
