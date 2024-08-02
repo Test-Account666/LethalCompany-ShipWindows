@@ -10,6 +10,7 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows.Utilities;
 
 public static class SoundLoader {
+    public static readonly AudioClip[] CommonSellCounterLines = new AudioClip[1];
     public static readonly AudioClip[] RareSellCounterLines = new AudioClip[1];
     public static readonly AudioClip[] VoiceLines = new AudioClip[2];
 
@@ -82,7 +83,8 @@ public static class SoundLoader {
             return;
         }
 
-        RareSellCounterLines[0] = sellCounterAudioClip;
+        if (WindowConfig.makeWesleySellAudioRare.Value) RareSellCounterLines[0] = sellCounterAudioClip;
+        else CommonSellCounterLines[0] = sellCounterAudioClip;
         ShipWindows.Logger.LogInfo($"Loaded line '{sellCounterAudioClip.name}'!");
     }
 

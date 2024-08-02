@@ -39,6 +39,8 @@ public static class WindowConfig {
 
     public static ConfigEntry<bool> enableShutterSwitchScanNode = null!;
 
+    public static ConfigEntry<bool> makeWesleySellAudioRare = null!;
+
     public static ConfigEntry<bool> celestialTintOverrideSpace = null!;
 
     public static ConfigEntry<bool> enableEnemyFix = null!;
@@ -114,6 +116,9 @@ public static class WindowConfig {
 
         enableShutterSwitchScanNode = configFile.Bind("Misc", "Enable Shutter Switch scan node", true,
                                                       "If set to true, will enable the scan node for the shutter switch.");
+
+        makeWesleySellAudioRare = configFile.Bind("Misc", "Make Wesley Sell Audio Rare", false,
+                                                  "If set to true, will add the wesley sell audio to the rare audio list.");
 
         celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
                                                      "If Celestial Tint is installed, override the skybox. "

@@ -10,12 +10,21 @@ public static class DepositItemsDeskPatch {
     [HarmonyPostfix]
     // ReSharper disable once InconsistentNaming
     private static void AddVoiceLines(DepositItemsDesk __instance) {
-        var voiceLines = __instance.rareMicrophoneAudios.ToList();
+        var rareVoiceLines = __instance.rareMicrophoneAudios.ToList();
 
-        voiceLines.AddRange(SoundLoader.RareSellCounterLines);
+        rareVoiceLines.AddRange(SoundLoader.RareSellCounterLines);
 
-        voiceLines.RemoveAll(clip => clip == null);
+        rareVoiceLines.RemoveAll(clip => clip == null);
 
-        __instance.rareMicrophoneAudios = voiceLines.ToArray();
+        __instance.rareMicrophoneAudios = rareVoiceLines.ToArray();
+
+
+        var commonVoiceLines = __instance.microphoneAudios.ToList();
+
+        commonVoiceLines.AddRange(SoundLoader.CommonSellCounterLines);
+
+        commonVoiceLines.RemoveAll(clip => clip == null);
+
+        __instance.microphoneAudios = commonVoiceLines.ToArray();
     }
 }
