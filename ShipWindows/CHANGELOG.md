@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.7.0
+
+\# Made the sell voice line common by default<br>
+
 ## 1.6.1
 
 \+ Actually add the sell counter voice line file...
