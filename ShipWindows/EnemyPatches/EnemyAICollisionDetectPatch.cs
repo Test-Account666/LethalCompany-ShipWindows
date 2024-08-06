@@ -19,8 +19,7 @@ public static class EnemyAICollisionDetectPatch {
 
         var canCollide = ___mainScript.isInsidePlayerShip == localPlayer.isInHangarShipRoom;
 
-        if (!canCollide)
-            other = new();
+        if (!canCollide) other = new();
 
         return canCollide;
     }
