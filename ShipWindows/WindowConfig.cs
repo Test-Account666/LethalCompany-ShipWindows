@@ -45,6 +45,8 @@ public static class WindowConfig {
 
     public static ConfigEntry<bool> enableEnemyFix = null!;
 
+    public static ConfigEntry<bool> allowEnemyTriggerThroughWindows = null!;
+
     public static void InitializeConfig(ConfigFile configFile) {
         vanillaMode = configFile.Bind("General", "VanillaMode", false,
                                       "Enable this to preserve vanilla network compatability. This will disable unlockables and the shutter toggle switch. (default = false)");
@@ -119,6 +121,11 @@ public static class WindowConfig {
 
         makeWesleySellAudioRare = configFile.Bind("Misc", "Make Wesley Sell Audio Rare", false,
                                                   "If set to true, will add the wesley sell audio to the rare audio list.");
+
+        allowEnemyTriggerThroughWindows = configFile.Bind("Misc", "Allow Enemy Trigger Through Windows", true,
+                                                          "If set to true, will allow you to trigger enemies through windows. "
+                                                        + "Will also allow enemies to see you through windows. "
+                                                        + "Does not have any effect on vanilla mode.");
 
         celestialTintOverrideSpace = configFile.Bind("Other Mods", "CelestialTintOverrideSpace", false,
                                                      "If Celestial Tint is installed, override the skybox. "
