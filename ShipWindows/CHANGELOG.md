@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.7.1
+
+\* Fixed ship object placement<br>
+
 ## 1.7.0
 
 \# Made the sell voice line common by default<br>
