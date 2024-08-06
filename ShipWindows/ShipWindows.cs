@@ -112,6 +112,8 @@ public class ShipWindows : BaseUnityPlugin {
 
         Harmony.PatchAll(typeof(DepositItemsDeskPatch));
 
+        Harmony.PatchAll(typeof(ShipBuildModeManagerPatch));
+
         CompatibleDependencyAttribute.Init(this);
 
         ShipWindow4K.TryToLoad();
