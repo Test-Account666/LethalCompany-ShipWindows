@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.8.0
+
+\+ Added config option to change enemy + window behavior (Defaults to `false` when vanilla mode is enabled)<br>
+
 ## 1.7.1
 
 \* Fixed ship object placement<br>
