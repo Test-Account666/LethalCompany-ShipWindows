@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Networking;
 using Debug = System.Diagnostics.Debug;
@@ -32,7 +33,7 @@ public static class SoundLoader {
 
         LoadShutterOpenClip(voiceLinesAudioPath);
 
-        LoadSellCounterClips(voiceLinesAudioPath);
+        if (WindowConfig.enableWesleySellAudio.Value) LoadSellCounterClips(voiceLinesAudioPath);
         yield break;
     }
 

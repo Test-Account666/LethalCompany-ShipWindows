@@ -40,6 +40,7 @@ public static class WindowConfig {
     public static ConfigEntry<bool> enableShutterSwitchScanNode = null!;
 
     public static ConfigEntry<bool> makeWesleySellAudioRare = null!;
+    public static ConfigEntry<bool> enableWesleySellAudio = null!;
 
     public static ConfigEntry<bool> celestialTintOverrideSpace = null!;
 
@@ -121,6 +122,9 @@ public static class WindowConfig {
 
         makeWesleySellAudioRare = configFile.Bind("Misc", "Make Wesley Sell Audio Rare", false,
                                                   "If set to true, will add the wesley sell audio to the rare audio list.");
+
+        enableWesleySellAudio = configFile.Bind("Misc", "Enable Wesley Sell Audio", true,
+                                                "If set to true, will add the wesley sell audio to the audio list.");
 
         allowEnemyTriggerThroughWindows = configFile.Bind("Misc", "Allow Enemy Trigger Through Windows", true,
                                                           "If set to true, will allow you to trigger enemies through windows. "
