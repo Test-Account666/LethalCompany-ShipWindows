@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MonoMod.Utils;
 using ShipWindows.Components;
 using ShipWindows.Networking;
 using Unity.Netcode;
@@ -185,6 +184,8 @@ internal static class ShipReplacer {
             ReplaceGlassMaterial(newShipPrefab);
 
             newShipInside = ObjectReplacer.Replace(vanillaShipInside, newShipPrefab);
+
+            if (Compatibility.ShipColors.Enabled) Compatibility.ShipColors.RefreshColors();
 
             StartOfRound.Instance.StartCoroutine(WaitAndCheckSwitch());
 

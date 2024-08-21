@@ -21,6 +21,7 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
+[CompatibleDependency("darmuh.ShipColors", "0.1.0", typeof(Compatibility.ShipColors))]
 [CompatibleDependency("CelestialTint", "1.0.1", typeof(Compatibility.CelestialTint))]
 [CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
 [CompatibleDependency("com.github.lethalmods.lethalexpansioncore", typeof(LethalExpansion))]
