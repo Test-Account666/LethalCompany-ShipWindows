@@ -5,7 +5,7 @@
         <AssemblyName>TestAccount666.ShipWindows</AssemblyName>
         <Product>ShipWindows</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.8.0</Version>
+        <Version>1.9.0</Version>
         <Description>Adds glass windows to the ship so you can see what's going on outside.</Description>
         <Source>https://github.com/Test-Account666/LethalCompany-ShipWindows/</Source>
     </PropertyGroup>
@@ -69,6 +69,9 @@
     <ItemGroup>
         <Reference Include="CelestialTint" Publicize="true">
             <HintPath>..\include\CelestialTint.dll</HintPath>
+        </Reference>
+        <Reference Include="ShipColors" Publicize="true">
+            <HintPath>..\include\ShipColors.dll</HintPath>
         </Reference>
     </ItemGroup>
 </Project>
