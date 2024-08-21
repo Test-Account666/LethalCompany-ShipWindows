@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.9.0
+
+\+ Added support for [ShipColors](https://thunderstore.io/c/lethal-company/p/darmuh/ShipColors/)<br>
+
 ## 1.8.0
 
 \+ Added config option to change enemy + window behavior (Defaults to `false` when vanilla mode is enabled)<br>
