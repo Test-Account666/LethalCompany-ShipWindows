@@ -87,7 +87,7 @@ internal static class CelestialTint {
         CheckFor4KTexture();
 
         if (ShipWindow4K.Skybox4K == null) {
-            ShipWindows.Logger.LogFatal("Did not find Skybox4k!");
+            ShipWindows.Logger.LogDebug("Did not find Skybox4k! (This is not an error, unless you installed the 4k extension!)");
             return;
         }
 
@@ -95,10 +95,10 @@ internal static class CelestialTint {
     }
 
     private static void OverrideSpaceEmissionTexture() {
-        ShipWindows.Logger.LogFatal("Overriding texture now!");
+        ShipWindows.Logger.LogDebug("Overriding texture now!");
 
         if (_skyGameObject == null) {
-            ShipWindows.Logger.LogFatal("Nevermind!");
+            ShipWindows.Logger.LogDebug("Nevermind!");
             return;
         }
 
@@ -107,13 +107,13 @@ internal static class CelestialTint {
         skyBoxVolume.profile.TryGet<PhysicallyBasedSky>(out var physicallyBasedSky);
 
         if (physicallyBasedSky == null) {
-            ShipWindows.Logger.LogFatal("Couldn't find PhysicallyBasedSky in celestial tint sky override!");
+            ShipWindows.Logger.LogError("Couldn't find PhysicallyBasedSky in celestial tint sky override!");
             return;
         }
 
         physicallyBasedSky.spaceEmissionTexture.value = ShipWindow4K.Skybox4K;
 
-        ShipWindows.Logger.LogFatal("Loaded 4k Skybox!");
+        ShipWindows.Logger.LogDebug("Loaded 4k Skybox!");
     }
 
     private static void CheckFor4KTexture() {
