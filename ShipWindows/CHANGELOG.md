@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.10.2
+
+\* Fixed ship shutter switch sound<br>
+
 ## 1.10.1
 
 \* No more fatal debug messages<br>
