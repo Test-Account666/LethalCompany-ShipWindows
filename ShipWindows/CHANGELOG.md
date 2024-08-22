@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 1.10.0
+
+\* Fixed Ship Floor using the Ship Wall material<br>
+\# Switched to v61 Unity Project. Stuff may look/react differently now. Please report issues.<br>
+
 ## 1.9.0
 
 \+ Added support for [ShipColors](https://thunderstore.io/c/lethal-company/p/darmuh/ShipColors/)<br>
