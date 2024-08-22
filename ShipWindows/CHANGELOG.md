@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 1.10.1
+
+\* No more fatal debug messages<br>
+
 ## 1.10.0
 
 \* Fixed Ship Floor using the Ship Wall material<br>
