@@ -196,7 +196,7 @@ public class ShipWindows : BaseUnityPlugin {
             case SpaceOutside.SPACE_HDRI:
                 if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
-                var universePrefab = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/UniverseVolume.prefab");
+                var universePrefab = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/UniverseVolume.prefab");
 
                 outsideSkybox = Instantiate(universePrefab, renderingObject.transform);
                 vanillaStarSphere.GetComponent<MeshRenderer>().enabled = false;
@@ -213,7 +213,7 @@ public class ShipWindows : BaseUnityPlugin {
                 if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
                 var starSpherePrefab =
-                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/StarsSphereLarge.prefab");
+                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/StarsSphereLarge.prefab");
                 if (starSpherePrefab == null) throw new("Could not load star sphere large prefab!");
 
                 outsideSkybox = Instantiate(starSpherePrefab, renderingObject.transform);
@@ -287,7 +287,7 @@ public class ShipWindows : BaseUnityPlugin {
         if (WindowConfig.vanillaMode.Value) return;
 
         if (WindowConfig.enableShutter.Value) {
-            var shutterSwitchAsset = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/WindowShutterSwitch.prefab");
+            var shutterSwitchAsset = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/WindowShutterSwitch.prefab");
             shutterSwitchAsset.AddComponent<ShipWindowShutterSwitch>();
             NetworkManager.Singleton.AddNetworkPrefab(shutterSwitchAsset);
 

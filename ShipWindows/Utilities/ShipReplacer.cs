@@ -114,7 +114,7 @@ internal static class ShipReplacer {
         ShipWindows.Logger.LogInfo($"Replacing material glass material with: {glassMaterial}");
 
         var material =
-            ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/{
+            ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/plugins/ShipWindows/Materials/{
                 glassMaterial.GetMaterialName()}.mat");
 
         if (material == null)
@@ -161,7 +161,7 @@ internal static class ShipReplacer {
             //ShipWindows.Logger.LogInfo($"Replacing ship with {shipName}");
 
             var newShipPrefab =
-                ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/Ships/{shipName}.prefab");
+                ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/plugins/ShipWindows/Ships/{shipName}.prefab");
 
             if (newShipPrefab == null) {
                 if (!shipName.Equals("ShipInsideWithWindow000"))
@@ -223,7 +223,7 @@ internal static class ShipReplacer {
         var doorMeshFilter = door.gameObject.GetComponent<MeshFilter>();
 
         var newDoorMesh =
-            ShipWindows.mainAssetBundle.LoadAsset<Mesh>($"Assets/LethalCompany/Mods/ShipWindow/ShipDoor/ShipDoor{side}.mesh");
+            ShipWindows.mainAssetBundle.LoadAsset<Mesh>($"Assets/LethalCompany/Mods/plugins/ShipWindows/ShipDoor/ShipDoor{side}.asset");
 
         ShipWindows.Logger.LogInfo("Got new mesh? " + (newDoorMesh != null));
 
@@ -235,7 +235,7 @@ internal static class ShipReplacer {
 
             if (material != null) continue;
 
-            material = ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/ShipWindow/Materials/HangarShipDoor{
+            material = ShipWindows.mainAssetBundle.LoadAsset<Material>($"Assets/LethalCompany/Mods/plugins/ShipWindows/Materials/HangarShipDoor{
                 index + 1
             }.mat");
 
@@ -279,7 +279,7 @@ internal static class ShipReplacer {
         doorMeshRenderer.sharedMaterials = materials;
 
         var shipWindows =
-            ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/ShipDoor/Windows{side}.prefab");
+            ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/plugins/ShipWindows/ShipDoor/Windows{side}.prefab");
 
         Object.Instantiate(shipWindows, door);
     }

@@ -58,7 +58,7 @@ public class ShipWindow : MonoBehaviour {
                     break;
 
                 var movedPostersPrefab =
-                    ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ShipWindow/ShipPosters.prefab");
+                    ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/ShipPosters.prefab");
                 if (movedPostersPrefab == null) break;
 
                 var oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");

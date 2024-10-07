@@ -80,9 +80,12 @@ internal static class CelestialTint {
 
         var skyPrefab =
             ShipWindows.mainAssetBundle.LoadAsset<GameObject>(
-                "Assets/LethalCompany/Mods/ShipWindow/CelestialTint/CelestialTintSkyOverridePrefab.prefab");
+                "Assets/LethalCompany/Mods/plugins/ShipWindows/CelestialTint/CelestialTintSkyOverridePrefab.prefab");
 
         _skyGameObject = Instantiate(skyPrefab);
+
+        var vanillaStarSphere = GameObject.Find("Systems/Rendering/StarsSphere");
+        if (vanillaStarSphere != null && vanillaStarSphere) vanillaStarSphere.SetActive(false);
 
         CheckFor4KTexture();
 

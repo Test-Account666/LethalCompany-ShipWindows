@@ -19,7 +19,7 @@ public class ShipWindowDef {
     public static ShipWindowDef Register(int id, int baseCost) {
         ShipWindows.Logger.LogInfo($"Registering window prefab: Window {id}");
         var windowSpawner =
-            ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/ShipWindow/SpawnWindow{id}.prefab");
+            ShipWindows.mainAssetBundle.LoadAsset<GameObject>($"Assets/LethalCompany/Mods/plugins/ShipWindows/SpawnWindow{id}.prefab");
         windowSpawner.AddComponent<ShipWindowSpawner>().id = id;
 
         NetworkManager.Singleton.AddNetworkPrefab(windowSpawner);
