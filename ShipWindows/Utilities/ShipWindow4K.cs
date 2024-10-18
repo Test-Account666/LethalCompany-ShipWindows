@@ -34,7 +34,7 @@ internal static class ShipWindow4K {
 
                 if (Skybox4K == null) throw new NullReferenceException("Texture not present");
 
-                ShipWindows.Logger.LogInfo("Found 4K skybox texture! " + (Skybox4K != null));
+                ShipWindows.Logger.LogDebug("Found 4K skybox texture! " + (Skybox4K != null));
                 return true;
             }
         } catch (Exception exception) {
@@ -42,7 +42,7 @@ internal static class ShipWindow4K {
             return false;
         }
 
-        ShipWindows.Logger.LogInfo("Did not locate 4K skybox bundle.");
+        ShipWindows.Logger.LogDebug("Did not locate 4K skybox bundle.");
         return false;
     }
 }
