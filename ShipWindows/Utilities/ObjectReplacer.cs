@@ -82,6 +82,8 @@ internal static class ObjectReplacer {
     }
 
     public static void Restore(GameObject original) {
+        if (!original) return;
+
         if (!_ReplacedObjects.ContainsKey(original)) return;
 
         try {
@@ -91,8 +93,7 @@ internal static class ObjectReplacer {
 
             info.original?.SetActive(true);
 
-            if (info.original != null)
-                info.original.name = info.name;
+            if (info.original != null) info.original.name = info.name;
 
             Object.DestroyImmediate(info.replacement);
 
@@ -104,19 +105,28 @@ internal static class ObjectReplacer {
     }
 }
 
-internal struct ReplacedMeshInfo {
+internal record struct ReplacedMeshInfo {
     public MeshFilter meshFilter;
     public Mesh original;
     public Mesh replacement;
 }
 
-internal struct ReplacedMaterialInfo {
+internal record struct ReplacedMaterialInfo {
     public MeshRenderer meshRenderer;
     public Material original;
     public Material replacement;
 
     public Material[] originals;
     public Material[] replacements;
+
+    public bool Equals(ReplacedMaterialInfo other) =>
+        meshRenderer == other.meshRenderer &&
+        original == other.original &&
+        replacement == other.replacement &&
+        originals.SequenceEqual(other.originals) &&
+        replacements.SequenceEqual(other.replacements);
+
+    public override int GetHashCode() => HashCode.Combine(meshRenderer, original, replacement, originals, replacements);
 }
 
 internal struct ReplaceInfo {
