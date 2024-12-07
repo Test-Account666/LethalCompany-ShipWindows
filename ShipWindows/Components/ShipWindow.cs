@@ -1,4 +1,5 @@
-﻿using ShipWindows.Utilities;
+﻿using ShipWindows.Compatibility;
+using ShipWindows.Utilities;
 using UnityEngine;
 
 namespace ShipWindows.Components;
@@ -54,11 +55,10 @@ public class ShipWindow : MonoBehaviour {
                 break;
 
             case 2:
-                if (WindowConfig.dontMovePosters.Value)
+                if (WindowConfig.dontMovePosters.Value || ShipMods.Enabled)
                     break;
 
-                var movedPostersPrefab =
-                    ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/ShipPosters.prefab");
+                var movedPostersPrefab = ShipWindows.mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/ShipPosters.prefab");
                 if (movedPostersPrefab == null) break;
 
                 var oldPosters = ShipReplacer.newShipInside?.transform.parent.Find("Plane.001");
