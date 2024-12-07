@@ -42,6 +42,13 @@ Thunderstore Link: https://thunderstore.io/c/lethal-company/p/TestAccount666/Shi
 - **[Ship Windows 4K Skybox](https://thunderstore.io/c/lethal-company/p/veri/ShipWindows_4K_Skybox/)** by **veri** - For
   a higher definition space skybox. This **DOES** work with Celestial Tint. Ignore what the description says.
 
+## Other compatible Mods
+
+- **[Wider Ship Mod](https://thunderstore.io/c/lethal-company/p/mborsh/Wider_Ship_Mod/)** by **mborsh** - In case your
+  ship wasn't wide enough
+
+- **[Two Story Ship Mod](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/MelanieMelicious_2_sToRy_ShIp__works_w_Wider_Ship_Mod/)** by **MelanieMelicious** - For a second or third story on your ship.
+
 ## Differences to the original
 
 As you may have noticed, this is a fork/continuation
