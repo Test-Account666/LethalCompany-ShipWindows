@@ -82,12 +82,10 @@ internal static class ObjectReplacer {
     }
 
     public static void Restore(GameObject original) {
-        if (!original) return;
-
-        if (!_ReplacedObjects.ContainsKey(original)) return;
-
         try {
-            _ReplacedObjects.TryGetValue(original, out var info);
+            var containsObject = _ReplacedObjects.TryGetValue(original, out var info);
+
+            if (!containsObject) return;
 
             ShipWindows.Logger.LogInfo($"Restoring object {info.name}...");
 
@@ -99,8 +97,8 @@ internal static class ObjectReplacer {
 
             _ReplacedObjects.Remove(original);
         } catch (Exception) {
-            ShipWindows.Logger.LogWarning($"GameObject replacement info not found for: " +
-                                          $"{(original != null? original.name : "Invalid GameObject")}! Not replaced?");
+            ShipWindows.Logger.LogWarning($"GameObject replacement info not found for: {(original != null? original.name : "Invalid GameObject")
+            }! Not replaced?");
         }
     }
 }
@@ -120,11 +118,8 @@ internal record struct ReplacedMaterialInfo {
     public Material[] replacements;
 
     public bool Equals(ReplacedMaterialInfo other) =>
-        meshRenderer == other.meshRenderer &&
-        original == other.original &&
-        replacement == other.replacement &&
-        originals.SequenceEqual(other.originals) &&
-        replacements.SequenceEqual(other.replacements);
+        meshRenderer == other.meshRenderer && original == other.original && replacement == other.replacement && originals.SequenceEqual(other.originals)
+     && replacements.SequenceEqual(other.replacements);
 
     public override int GetHashCode() => HashCode.Combine(meshRenderer, original, replacement, originals, replacements);
 }
