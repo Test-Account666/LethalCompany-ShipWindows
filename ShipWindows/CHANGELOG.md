@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 1.11.0
+
+\* Fixed NullReferenceException on re-host<br>
+\# "Don't move posters" is now forcefully enabled, if another Ship Mod like 2 Story Ship is detected<br>
+
 ## 1.10.2
 
 \* Fixed ship shutter switch sound<br>
