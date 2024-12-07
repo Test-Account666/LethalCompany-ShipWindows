@@ -13,8 +13,7 @@ public class LobbyCompatibility {
         ShipWindows.Logger.LogInfo("Found LobbyCompatibility Mod, initializing support :)");
 
         PluginHelper.RegisterPlugin(MyPluginInfo.PLUGIN_GUID, new(MyPluginInfo.PLUGIN_VERSION),
-                                    WindowConfig.vanillaMode.Value? CompatibilityLevel.ClientOnly : CompatibilityLevel.Everyone,
-                                    VersionStrictness.Minor);
+                                    WindowConfig.vanillaMode.Value? CompatibilityLevel.ClientOnly : CompatibilityLevel.Everyone, VersionStrictness.Minor);
 
         return true;
     }

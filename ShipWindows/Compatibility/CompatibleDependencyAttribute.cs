@@ -21,8 +21,7 @@ internal class CompatibleDependencyAttribute : BepInDependency {
     public CompatibleDependencyAttribute(string guid, Type handlerType) : base(guid, DependencyFlags.SoftDependency) =>
         handler = handlerType;
 
-    public CompatibleDependencyAttribute(string guid, string versionRequired, Type handlerType) :
-        base(guid, DependencyFlags.SoftDependency) {
+    public CompatibleDependencyAttribute(string guid, string versionRequired, Type handlerType) : base(guid, DependencyFlags.SoftDependency) {
         handler = handlerType;
         this.versionRequired = new(versionRequired);
     }
@@ -41,8 +40,8 @@ internal class CompatibleDependencyAttribute : BepInDependency {
                 continue;
 
             if (attribute.versionRequired != null && attribute.versionRequired.CompareTo(info.Metadata.Version) > 0) {
-                ShipWindows.Logger.LogInfo($"Found compatible mod, but it does not meet version requirements:  {attribute.DependencyGUID
-                } {info.Metadata.Version}");
+                ShipWindows.Logger.LogInfo($"Found compatible mod, but it does not meet version requirements:  {attribute.DependencyGUID} {info.Metadata.Version
+                }");
                 continue;
             }
 
@@ -50,8 +49,7 @@ internal class CompatibleDependencyAttribute : BepInDependency {
             var initialized = (bool) attribute.handler.GetMethod("Initialize", bindingFlags)?.Invoke(null, null)!;
 
             if (!initialized) {
-                ShipWindows.Logger.LogInfo($"Found compatible mod, but patches have already been applied:  {attribute.DependencyGUID
-                } {info.Metadata.Version}");
+                ShipWindows.Logger.LogInfo($"Found compatible mod, but patches have already been applied:  {attribute.DependencyGUID} {info.Metadata.Version}");
                 continue;
             }
 

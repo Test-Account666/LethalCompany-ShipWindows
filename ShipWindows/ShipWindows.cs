@@ -21,6 +21,8 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
+[CompatibleDependency("mborsh.WiderShipMod", typeof(ShipMods))]
+[CompatibleDependency("MelanieMelicious.2StoryShip", typeof(ShipMods))]
 [CompatibleDependency("darmuh.ShipColors", "0.1.0", typeof(Compatibility.ShipColors))]
 [CompatibleDependency("CelestialTint", "1.0.1", typeof(Compatibility.CelestialTint))]
 [CompatibleDependency("LethalExpansion", typeof(LethalExpansion))]
@@ -59,27 +61,25 @@ public class ShipWindows : BaseUnityPlugin {
 
         WindowConfig.InitializeConfig(Config);
 
-        if (WindowConfig.enableWindow1.Value is false && WindowConfig.enableWindow2.Value is false
-                                                      && WindowConfig.enableWindow3.Value is false
-                                                      && WindowConfig.enableWindow4.Value is false) {
+        if (WindowConfig.enableWindow1.Value is false && WindowConfig.enableWindow2.Value is false && WindowConfig.enableWindow3.Value is false
+         && WindowConfig.enableWindow4.Value is false) {
             Logger.LogWarning("All windows are disabled. Please enable any window in your settings for this mod to have any effect.");
             return;
         }
 
-        Logger.LogInfo($"\nCurrent settings:\n"
-                     + $"    Vanilla Mode:       {WindowConfig.vanillaMode.Value}\n"
-                     + $"    Shutters:           {WindowConfig.enableShutter.Value}\n"
-                     + $"    Hide Space Props:   {WindowConfig.hideSpaceProps.Value}\n"
-                     + $"    Space Sky:          {WindowConfig.spaceOutsideSetting.Value}\n"
-                     + $"    Bottom Lights:      {WindowConfig.disableUnderLights.Value}\n"
-                     + $"    Posters:            {WindowConfig.dontMovePosters.Value}\n"
-                     + $"    Sky Rotation:       {WindowConfig.skyboxRotateSpeed.Value}\n"
-                     + $"    Sky Resolution:     {WindowConfig.skyboxResolution.Value}\n"
-                     + $"    Windows Unlockable: {WindowConfig.windowsUnlockable.Value}\n"
-                     + $"    Window 1 Enabled:   {WindowConfig.enableWindow1.Value}\n"
-                     + $"    Window 2 Enabled:   {WindowConfig.enableWindow2.Value}\n"
-                     + $"    Window 3 Enabled:   {WindowConfig.enableWindow3.Value}\n"
-                     + $"    Window 4 Enabled:   {WindowConfig.enableWindow4.Value}\n");
+        Logger.LogInfo($"\nCurrent settings:\n" + $"    Vanilla Mode:       {WindowConfig.vanillaMode.Value}\n"
+                                                + $"    Shutters:           {WindowConfig.enableShutter.Value}\n"
+                                                + $"    Hide Space Props:   {WindowConfig.hideSpaceProps.Value}\n"
+                                                + $"    Space Sky:          {WindowConfig.spaceOutsideSetting.Value}\n"
+                                                + $"    Bottom Lights:      {WindowConfig.disableUnderLights.Value}\n"
+                                                + $"    Posters:            {WindowConfig.dontMovePosters.Value}\n"
+                                                + $"    Sky Rotation:       {WindowConfig.skyboxRotateSpeed.Value}\n"
+                                                + $"    Sky Resolution:     {WindowConfig.skyboxResolution.Value}\n"
+                                                + $"    Windows Unlockable: {WindowConfig.windowsUnlockable.Value}\n"
+                                                + $"    Window 1 Enabled:   {WindowConfig.enableWindow1.Value}\n"
+                                                + $"    Window 2 Enabled:   {WindowConfig.enableWindow2.Value}\n"
+                                                + $"    Window 3 Enabled:   {WindowConfig.enableWindow3.Value}\n"
+                                                + $"    Window 4 Enabled:   {WindowConfig.enableWindow4.Value}\n");
 
 
         if (!LoadAssetBundle()) {
@@ -212,8 +212,7 @@ public class ShipWindows : BaseUnityPlugin {
                 if (vanillaStarSphere == null) throw new("Could not find vanilla Stars Sphere. Wrong scene?");
                 if (renderingObject == null) throw new("Could not find Systems/Rendering. Wrong scene?");
 
-                var starSpherePrefab =
-                    mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/StarsSphereLarge.prefab");
+                var starSpherePrefab = mainAssetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/plugins/ShipWindows/StarsSphereLarge.prefab");
                 if (starSpherePrefab == null) throw new("Could not load star sphere large prefab!");
 
                 outsideSkybox = Instantiate(starSpherePrefab, renderingObject.transform);
@@ -306,8 +305,7 @@ public class ShipWindows : BaseUnityPlugin {
         moons ??= [
         ];
 
-        var selectedLevel =
-            moons.Where(level => level != null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
+        var selectedLevel = moons.Where(level => level != null).FirstOrDefault(selectableLevel => selectableLevel.levelID == levelID);
 
         if (selectedLevel == null) return;
 

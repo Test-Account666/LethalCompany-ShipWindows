@@ -101,8 +101,7 @@ internal class Unlockables {
 
             var buyNode2 = ScriptableObject.CreateInstance<TerminalNode>();
             buyNode2.name = $"{name.Replace(" ", "-")}BuyNode2";
-            buyNode2.displayText = $"Ordered {name
-            }! Your new balance is [playerCredits].\n\nPlease clean the windows at the end of your contract.\n\n";
+            buyNode2.displayText = $"Ordered {name}! Your new balance is [playerCredits].\n\nPlease clean the windows at the end of your contract.\n\n";
             buyNode2.clearPreviousText = true;
             buyNode2.maxCharactersToType = 15;
             buyNode2.buyItemIndex = -1;

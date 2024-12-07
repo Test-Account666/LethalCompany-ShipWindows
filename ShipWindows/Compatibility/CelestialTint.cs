@@ -78,9 +78,8 @@ internal static class CelestialTint {
     private static void LoadSkyOverride() {
         if (_skyGameObject != null) DestroySkyOverride();
 
-        var skyPrefab =
-            ShipWindows.mainAssetBundle.LoadAsset<GameObject>(
-                "Assets/LethalCompany/Mods/plugins/ShipWindows/CelestialTint/CelestialTintSkyOverridePrefab.prefab");
+        var skyPrefab = ShipWindows.mainAssetBundle.LoadAsset<GameObject>(
+            "Assets/LethalCompany/Mods/plugins/ShipWindows/CelestialTint/CelestialTintSkyOverridePrefab.prefab");
 
         _skyGameObject = Instantiate(skyPrefab);
 
