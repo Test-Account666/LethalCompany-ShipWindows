@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShipWindows.Api.events;
 
-public class EventAPI {
+public static class EventAPI {
     public delegate void WindowEvent(WindowEventArguments windowEvent);
 
     internal static WindowEventArguments BeforeWindowSpawn(WindowInfo windowInfo) {
