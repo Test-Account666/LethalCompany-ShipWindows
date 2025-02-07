@@ -1,9 +1,8 @@
 # Ship Windows
 
-## 1.11.0
+## 2.0.0
 
-\* Fixed NullReferenceException on re-host<br>
-\# "Don't move posters" is now forcefully enabled, if another Ship Mod like 2 Story Ship is detected<br>
+\# Start of the rewrite
 
 ## 1.10.2
 

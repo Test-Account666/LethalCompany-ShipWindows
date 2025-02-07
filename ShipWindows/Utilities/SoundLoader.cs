@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using Unity.Properties;
+using ShipWindows.Config;
 using UnityEngine;
 using UnityEngine.Networking;
 using Debug = System.Diagnostics.Debug;

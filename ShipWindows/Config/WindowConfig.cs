@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace ShipWindows;
+namespace ShipWindows.Config;
 
 public static class WindowConfig {
     public static ConfigEntry<bool> vanillaMode = null!;
@@ -15,22 +15,6 @@ public static class WindowConfig {
     public static ConfigEntry<bool> dontMovePosters = null!;
     public static ConfigEntry<float> skyboxRotateSpeed = null!;
     public static ConfigEntry<int> skyboxResolution = null!;
-
-    public static ConfigEntry<bool> windowsUnlockable = null!;
-    public static ConfigEntry<int> window1Cost = null!;
-    public static ConfigEntry<int> window2Cost = null!;
-    public static ConfigEntry<int> window3Cost = null!;
-    public static ConfigEntry<int> window4Cost = null!;
-
-    public static ConfigEntry<bool> enableWindow1 = null!;
-    public static ConfigEntry<bool> enableWindow2 = null!;
-    public static ConfigEntry<bool> enableWindow3 = null!;
-    public static ConfigEntry<bool> enableWindow4 = null!;
-
-    public static ConfigEntry<bool> defaultWindow1 = null!;
-    public static ConfigEntry<bool> defaultWindow2 = null!;
-    public static ConfigEntry<bool> defaultWindow3 = null!;
-    public static ConfigEntry<bool> defaultWindow4 = null!;
 
     public static ConfigEntry<bool> changeLightSwitchTip = null!;
 
@@ -75,25 +59,6 @@ public static class WindowConfig {
                                                 "Sets the rotation speed of the space skybox for visual effect. Requires 'SpaceOutside' to be set to 1 or 2.",
                                                 new AcceptableValueRange<float>(-1F, 1F)));
         skyboxResolution = configFile.Bind("General", "SkyboxResolution", 0, "OBSOLETE: Download [Ship Windows 4K Skybox] from the Thunderstore to enable!");
-
-        windowsUnlockable = configFile.Bind("General", "WindowsUnlockable", true,
-                                            "Adds the windows to the terminal as ship upgrades. Set this to false and use below settings to have them enabled by default.");
-        window1Cost = configFile.Bind("General", "Window1Cost", 60, "The base cost of the window behind the terminal / right of the switch.");
-        window2Cost = configFile.Bind("General", "Window2Cost", 60, "The base cost of the window across from the terminal / left of the switch.");
-        window3Cost = configFile.Bind("General", "Window3Cost", 100, "The base cost of the large floor window.");
-        window4Cost = configFile.Bind("General", "Window4Cost", 75, "The base cost of the door windows.");
-
-        enableWindow1 = configFile.Bind("General", "EnableWindow1", true, "Enable the window to the right of the switch, behind the terminal.");
-        enableWindow2 = configFile.Bind("General", "EnableWindow2", true, "Enable the window to the left of the switch, across from the first window.");
-        enableWindow3 = configFile.Bind("General", "EnableWindow3", true, "Enable the large floor window.");
-        enableWindow4 = configFile.Bind("General", "EnableWindow4", true, "Enable the door windows.");
-
-        defaultWindow1 = configFile.Bind("General", "UnlockWindow1", true,
-                                         "If set as unlockable, start the game with window to the right of the switch unlocked already.");
-        defaultWindow2 = configFile.Bind("General", "UnlockWindow2", false,
-                                         "If set as unlockable, start the game with window across from the terminal unlocked already.");
-        defaultWindow3 = configFile.Bind("General", "UnlockWindow3", false, "If set as unlockable, start the game with the floor window unlocked already.");
-        defaultWindow4 = configFile.Bind("General", "UnlockWindow4", false, "If set as unlockable, start the game with the door windows unlocked already.");
 
         changeLightSwitchTip = configFile.Bind("Misc", "Change light switch tool tip", true,
                                                "If set to true, will change the tool tip for the light switch to match the shutter's tool tip.");
