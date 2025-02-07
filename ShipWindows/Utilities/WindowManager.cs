@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWindows.Api;
+using ShipWindows.Api.events;
 using ShipWindows.WindowDefinition;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,7 +18,7 @@ public class WindowManager {
     public WindowManager() {
         foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) {
             unlockedWindows.Add(windowInfo.windowName);
-            CreateWindow(windowInfo);
+            CreateWindow(windowInfo, out var _);
         }
     }
 
@@ -37,8 +38,18 @@ public class WindowManager {
         shipInside.GetComponent<MeshCollider>().enabled = false;
     }
 
-    public void CreateWindow(WindowInfo windowInfo) {
-        if (unlockedWindows.Contains(windowInfo.windowName.ToLower())) return;
+    public bool CreateWindow(WindowInfo windowInfo, out string? cancelReason) {
+        if (unlockedWindows.Contains(windowInfo.windowName.ToLower())) {
+            cancelReason = "Already unlocked";
+            return true;
+        }
+
+        var eventArguments = EventAPI.BeforeWindowSpawn(windowInfo);
+
+        if (eventArguments.cancelled) {
+            cancelReason = eventArguments.cancelReason;
+            return true;
+        }
 
         if (!decapitatedShip) CreateDecapitatedShip();
 
@@ -59,5 +70,9 @@ public class WindowManager {
         }
 
         unlockedWindows.Add(windowInfo.windowName.ToLower());
+        cancelReason = null;
+
+        EventAPI.AfterWindowSpawn(windowInfo, windowObject);
+        return false;
     }
 }
