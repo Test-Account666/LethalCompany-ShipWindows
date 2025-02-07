@@ -14,8 +14,8 @@ public class EventAPI {
     }
 
     [Tooltip("Cancelling this event is obviously not possible.")]
-    internal static WindowEventArguments AfterWindowSpawn(WindowInfo windowInfo) {
-        var windowEvent = new WindowEventArguments(windowInfo);
+    internal static WindowEventArguments AfterWindowSpawn(WindowInfo windowInfo, GameObject windowObject) {
+        var windowEvent = new WindowEventArguments(windowInfo, windowObject);
 
         AfterWindowSpawned?.Invoke(windowEvent);
 
