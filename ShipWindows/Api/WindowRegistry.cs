@@ -6,15 +6,13 @@ using System.Reflection;
 namespace ShipWindows.Api;
 
 public class WindowRegistry {
-    private readonly HashSet<WindowInfo> _windows = [
+    internal readonly HashSet<WindowInfo> windows = [
     ];
-
-    public IReadOnlyCollection<WindowInfo> GetWindows() => _windows;
 
     public void UnregisterWindow(WindowInfo window) {
         var source = Assembly.GetCallingAssembly().GetName().Name;
 
-        _windows.Remove(window);
+        windows.Remove(window);
 
         ShipWindows.Logger.LogDebug($"Unregistering window {window.windowName} from {source}!");
     }
@@ -34,15 +32,15 @@ public class WindowRegistry {
         var price = ShipWindows.Instance.Config.Bind($"{windowName} ({window.windowType})", "2. Unlock Cost", window.cost, $"Cost to unlock {windowName}").Value;
         window.cost = price;
 
-        var alreadyExists = _windows.Any(info => info.windowName.ToLower().Equals(windowName.ToLower()));
+        var alreadyExists = windows.Any(info => info.windowName.ToLower().Equals(windowName.ToLower()));
 
         if (alreadyExists) throw new DuplicateNameException($"There is already a window with name {windowName}! Source: {source}");
 
-        var typeAlreadyExists = _windows.Any(info => info.windowType.ToLower().Equals(window.windowType.ToLower()));
+        var typeAlreadyExists = windows.Any(info => info.windowType.ToLower().Equals(window.windowType.ToLower()));
 
         if (typeAlreadyExists) throw new DuplicateNameException($"Window {windowName} has duplicate window type {window.windowType}! Source: {source}");
 
-        _windows.Add(window);
+        windows.Add(window);
 
         ShipWindows.Logger.LogDebug($"Registering window {windowName} from {source}!");
     }

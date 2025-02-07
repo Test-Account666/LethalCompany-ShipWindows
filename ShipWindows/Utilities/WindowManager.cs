@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ShipWindows.Api;
 using ShipWindows.WindowDefinition;
 using UnityEngine;
@@ -14,9 +15,7 @@ public class WindowManager {
     ];
 
     public WindowManager() {
-        foreach (var windowInfo in ShipWindows.windowRegistry.GetWindows()) {
-            if (!windowInfo.alwaysUnlocked) continue;
-
+        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) {
             unlockedWindows.Add(windowInfo.windowName);
             CreateWindow(windowInfo);
         }
