@@ -1,4 +1,6 @@
-# Ship Windows
+# Ship Windows **BETA**
+
+This version is currently *not* in a usable state.<br><br>
 
 Adds four glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
 

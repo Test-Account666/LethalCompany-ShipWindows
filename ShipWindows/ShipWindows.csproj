@@ -2,10 +2,10 @@
 
     <!-- BepInEx Properties -->
     <PropertyGroup>
-        <AssemblyName>TestAccount666.ShipWindows</AssemblyName>
-        <Product>ShipWindows</Product>
+        <AssemblyName>TestAccount666.ShipWindowsBeta</AssemblyName>
+        <Product>ShipWindowsBeta</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.10.2</Version>
+        <Version>2.0.0</Version>
         <Description>Adds glass windows to the ship so you can see what's going on outside.</Description>
         <Source>https://github.com/Test-Account666/LethalCompany-ShipWindows/</Source>
     </PropertyGroup>
@@ -63,12 +63,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="sounds\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Reference Include="CelestialTint" Publicize="true">
             <HintPath>..\include\CelestialTint.dll</HintPath>
+        </Reference>
+        <Reference Include="InteractiveTerminalAPI">
+          <HintPath>..\include\InteractiveTerminalAPI.dll</HintPath>
         </Reference>
         <Reference Include="ShipColors" Publicize="true">
             <HintPath>..\include\ShipColors.dll</HintPath>

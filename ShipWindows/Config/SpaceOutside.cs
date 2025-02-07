@@ -1,4 +1,4 @@
-namespace ShipWindows;
+namespace ShipWindows.Config;
 
 public enum SpaceOutside {
     OTHER_MODS,

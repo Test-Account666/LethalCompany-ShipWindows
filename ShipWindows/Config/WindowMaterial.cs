@@ -1,0 +1,39 @@
+using System.Collections.Generic;
+using BepInEx;
+using UnityEngine;
+
+namespace ShipWindows.Config;
+
+public enum WindowMaterial {
+    NO_REFRACTION,
+    NO_REFRACTION_IRIDESCENCE,
+    REFRACTION,
+    REFRACTION_IRIDESCENCE,
+}
+
+public static class WindowMaterialConverter {
+    private static readonly Dictionary<WindowMaterial, Material> _MaterialDictionary = new();
+
+    public static Material? GetMaterial(this WindowMaterial windowMaterial) {
+        LoadMaterial(windowMaterial);
+
+        return _MaterialDictionary[windowMaterial];
+    }
+
+    private static void LoadMaterial(WindowMaterial windowMaterial) {
+        if (_MaterialDictionary.ContainsKey(windowMaterial)) return;
+
+        var materialPath = windowMaterial switch {
+            WindowMaterial.NO_REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassNoRefraction.mat",
+            WindowMaterial.NO_REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassNoRefractionIridescence.mat",
+            WindowMaterial.REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassWithRefraction.mat",
+            WindowMaterial.REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassWithRefractionIridescence.mat",
+            var _ => null,
+        };
+
+        if (materialPath.IsNullOrWhiteSpace()) return;
+
+        var material = ShipWindows.mainAssetBundle.LoadAsset<Material>(materialPath);
+        _MaterialDictionary.Add(windowMaterial, material);
+    }
+}
