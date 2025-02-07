@@ -5,7 +5,6 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
 using ShipWindows.Api;
-using ShipWindows.Patches.WindowManager;
 
 namespace ShipWindows;
 
@@ -44,7 +43,12 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
 
                 terminal.SyncGroupCreditsServerRpc(credits - window.cost, terminal.numberOfItemsInDropship);
 
-                ShipWindows.windowManager.CreateWindow(window);
+                var cancelled = ShipWindows.windowManager.CreateWindow(window, out var cancelReason);
+
+                if (cancelled) {
+                    ErrorMessage(window.windowName, window.windowDescription, Initialization, cancelReason);
+                    return;
+                }
 
                 Initialization();
             }, Initialization);
