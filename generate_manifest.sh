@@ -14,7 +14,9 @@ manifest=$(cat <<EOF
     "website_url": "$website",
     "description": "$description",
     "dependencies": [
-        "BepInEx-BepInExPack-5.4.2100"
+        "BepInEx-BepInExPack-5.4.2100",
+        "MaxWasUnavailable-LethalModDataLib-1.2.2",
+        "WhiteSpike-Interactive_Terminal_API-1.2.0"
     ]
 }
 EOF
