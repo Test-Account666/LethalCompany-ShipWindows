@@ -13,8 +13,8 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
         List<CursorElement> cursorElements = [
         ];
         cursorElements.AddRange(from windowInfo in ShipWindows.windowRegistry.windows
-                                let isUnlocked = ShipWindows.windowManager.unlockedWindows.Contains(windowInfo.windowName.ToLower())
-                                let elementAction = !isUnlocked? WindowAction(windowInfo) : WindowAlreadyUnlockedAction(windowInfo)
+                                let isUnlocked = ShipWindows.windowManager.unlockedWindows.Contains(windowInfo.windowName)
+                                let elementAction = !isUnlocked? WindowBuyAction(windowInfo) : WindowAlreadyUnlockedAction(windowInfo)
                                 select CursorElement.Create(windowInfo.windowName, $"{windowInfo.cost}'", elementAction, _ => !isUnlocked));
 
 
@@ -29,7 +29,7 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
         return () => ErrorMessage(window.windowName, window.windowDescription, Initialization, $"{window.windowName} already unlocked!");
     }
 
-    public Action WindowAction(WindowInfo window) {
+    public Action WindowBuyAction(WindowInfo window) {
         return () => {
             Confirm(window.windowName, window.windowDescription, () => {
                 var credits = terminal.groupCredits;
@@ -39,16 +39,7 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
                     return;
                 }
 
-                //TODO: Network this.
-
-                terminal.SyncGroupCreditsServerRpc(credits - window.cost, terminal.numberOfItemsInDropship);
-
-                var cancelled = ShipWindows.windowManager.CreateWindow(window, out var cancelReason);
-
-                if (cancelled) {
-                    ErrorMessage(window.windowName, window.windowDescription, Initialization, cancelReason);
-                    return;
-                }
+                ShipWindows.networkManager?.SpawnWindow(window);
 
                 Initialization();
             }, Initialization);

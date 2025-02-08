@@ -2,12 +2,13 @@ using System;
 using System.IO;
 using System.Reflection;
 using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using InteractiveTerminalAPI.UI;
 using ShipWindows.Api;
 using ShipWindows.Config;
+using ShipWindows.Networking;
+using ShipWindows.Patches.Networking;
 using ShipWindows.Patches.WindowManager;
 using ShipWindows.Utilities;
 using UnityEngine;
@@ -25,6 +26,8 @@ public class ShipWindows : BaseUnityPlugin {
 
     public static WindowRegistry windowRegistry = null!;
     public static WindowManager windowManager = null!;
+
+    public static INetworkManager? networkManager;
 
     public static ShipWindows Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
@@ -55,9 +58,15 @@ public class ShipWindows : BaseUnityPlugin {
 
         WindowLoader.LoadWindows();
 
-        InteractiveTerminalManager.RegisterApplication<ShipWindowApplication>("windows", false);
+        if (!WindowConfig.vanillaMode.Value) {
+            InteractiveTerminalManager.RegisterApplication<ShipWindowApplication>("windows", false);
+            Harmony.PatchAll(typeof(GameNetworkManagerPatch));
+        } else {
+            networkManager = new DummyNetworkManager();
+        }
 
         Harmony.PatchAll(typeof(HUDManagerPatch));
+
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 
@@ -93,5 +102,14 @@ public class ShipWindows : BaseUnityPlugin {
 
         _decapitatedShipPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/PrefabDecapitatedShip.prefab");
         return _decapitatedShipPrefab;
+    }
+
+    private GameObject _networkManagerPrefab = null!;
+
+    public GameObject GetNetworkManagerPrefab() {
+        if (_networkManagerPrefab) return _networkManagerPrefab;
+
+        _networkManagerPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/PrefabShipWindowsNetworkManager.prefab");
+        return _networkManagerPrefab;
     }
 }
