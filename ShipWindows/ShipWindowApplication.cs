@@ -41,6 +41,8 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
 
                 ShipWindows.networkManager?.SpawnWindow(window);
 
+                terminal.PlayTerminalAudioServerRpc(0);
+
                 ErrorMessage(window.windowName, window.windowDescription, Initialization, "Thanks for your purchase!");
             }, Initialization);
         };
