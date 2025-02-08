@@ -41,7 +41,7 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
 
                 ShipWindows.networkManager?.SpawnWindow(window);
 
-                Initialization();
+                ErrorMessage(window.windowName, window.windowDescription, Initialization, "Thanks for your purchase!");
             }, Initialization);
         };
     }
