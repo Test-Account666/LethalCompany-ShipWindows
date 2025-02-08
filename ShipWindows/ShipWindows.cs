@@ -9,6 +9,7 @@ using ShipWindows.Api;
 using ShipWindows.Config;
 using ShipWindows.Networking;
 using ShipWindows.Patches.Networking;
+using ShipWindows.Patches.ShipReset;
 using ShipWindows.Patches.WindowManager;
 using ShipWindows.Utilities;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
 [BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.1.4")]
+[BepInDependency("MaxWasUnavailable.LethalModDataLib")]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
     public const string ASSET_BUNDLE_PATH_PREFIX = "Assets/LethalCompany/Mods/plugins/ShipWindows/Beta";
@@ -66,7 +68,7 @@ public class ShipWindows : BaseUnityPlugin {
         }
 
         Harmony.PatchAll(typeof(HUDManagerPatch));
-
+        Harmony.PatchAll(typeof(StartOfRoundPatch));
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 

@@ -46,7 +46,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
             return;
         }
 
-        foreach (var unlockedWindow in ShipWindows.windowManager.unlockedWindows) SpawnWindowClientRpc(unlockedWindow);
+        foreach (var unlockedWindow in WindowUnlockData.UnlockedWindows) SpawnWindowClientRpc(unlockedWindow);
     }
 
     [ServerRpc(RequireOwnership = false)]

@@ -11,7 +11,7 @@ public static class WindowConfig {
     public static ConfigEntry<bool> shuttersHideMoonTransitions = null!;
     public static ConfigEntry<bool> hideSpaceProps = null!;
     public static ConfigEntry<SpaceOutside> spaceOutsideSetting = null!;
-    public static ConfigEntry<bool> disableUnderLights = null!;
+    public static ConfigEntry<bool> enableUnderLights = null!;
     public static ConfigEntry<bool> dontMovePosters = null!;
     public static ConfigEntry<float> skyboxRotateSpeed = null!;
     public static ConfigEntry<int> skyboxResolution = null!;
@@ -51,8 +51,6 @@ public static class WindowConfig {
 
         spaceOutsideSetting = configFile.Bind("General", "SpaceOutside", SpaceOutside.SPACE_HDRI, "Set this value to control how the outside space looks.");
 
-        disableUnderLights = configFile.Bind("General", "DisableUnderLights", false,
-                                             "Disable the flood lights added under the ship if you have the floor window enabled.");
         dontMovePosters = configFile.Bind("General", "DontMovePosters", false, "Don't move the poster that blocks the second window if set to true.");
         skyboxRotateSpeed = configFile.Bind("General", "RotateSpaceSkybox", 0.1f,
                                             new ConfigDescription(

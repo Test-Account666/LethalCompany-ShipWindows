@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using LethalModDataLib.Features;
+using LethalModDataLib.Helpers;
 using ShipWindows.Api;
 using ShipWindows.Api.events;
 using ShipWindows.WindowDefinition;
@@ -12,14 +13,22 @@ namespace ShipWindows.Utilities;
 public class WindowManager {
     public GameObject decapitatedShip = null!;
 
-    public readonly List<string> unlockedWindows = [
-    ];
+    //TODO: Call ShipColors
 
     public WindowManager() {
-        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) {
-            unlockedWindows.Add(windowInfo.windowName);
-            CreateWindow(windowInfo);
+        SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(typeof(WindowUnlockData), nameof(WindowUnlockData.UnlockedWindows))!);
+
+        CreateDecapitatedShip();
+
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var windowName in WindowUnlockData.UnlockedWindows) {
+            var windowInfo = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
+            if (!windowInfo) continue;
+
+            CreateWindow(windowInfo!, addToList: false, check: false);
         }
+
+        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: false);
     }
 
     //TODO: Figure out if destroying windows is worth it
@@ -38,15 +47,16 @@ public class WindowManager {
         shipInside.GetComponent<MeshCollider>().enabled = false;
     }
 
-    public void CreateWindow(WindowInfo windowInfo) {
-        if (unlockedWindows.Contains(windowInfo.windowName)) return;
+    public void CreateWindow(WindowInfo windowInfo, bool addToList = true, bool check = true) {
+        var contains = WindowUnlockData.UnlockedWindows.Contains(windowInfo.windowName);
+        if (check && contains) return;
 
         EventAPI.BeforeWindowSpawn(windowInfo);
 
         if (!decapitatedShip) CreateDecapitatedShip();
 
         var windowObject = Object.Instantiate(windowInfo.windowPrefab, decapitatedShip.transform);
-        var window = windowObject.GetComponentInChildren<Window>();
+        var window = windowObject.GetComponentInChildren<AbstractWindow>();
 
         window.Initialize();
 
@@ -61,7 +71,7 @@ public class WindowManager {
             foundObject.SetActive(false);
         }
 
-        unlockedWindows.Add(windowInfo.windowName);
+        if (addToList && !contains) WindowUnlockData.UnlockedWindows.Add(windowInfo.windowName);
 
         EventAPI.AfterWindowSpawn(windowInfo, windowObject);
     }

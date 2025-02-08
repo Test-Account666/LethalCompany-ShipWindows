@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BepInEx.Configuration;
 using ShipWindows.Api;
+using ShipWindows.Config;
 
 namespace ShipWindows.Utilities;
 
@@ -27,7 +28,7 @@ internal static class WindowLoader {
             new((config, windowInfo) => {
                 if (!windowInfo.windowName.Equals("Floor Window")) return;
 
-                config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Spawn Underlights", true);
+                WindowConfig.enableUnderLights = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Spawn Underlights", true);
             }),
         ];
 
