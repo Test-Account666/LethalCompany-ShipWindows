@@ -53,9 +53,9 @@
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all"/>
-        <PackageReference Include="LethalCompany.GameLibs.Steam" Version="56.0.1-ngd.0" />
+        <PackageReference Include="LethalCompany.GameLibs.Steam" Version="67.0.0-ngd.0" />
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all"/>
-        <PackageReference Include="TeamBMX.LobbyCompatibility" Version="1.1.0" PrivateAssets="all"/>
+        <PackageReference Include="TeamBMX.LobbyCompatibility" Version="1.4.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -63,11 +63,18 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.3.4" PrivateAssets="all"/>
+    </ItemGroup>
+    <ItemGroup>
+        <NetcodePatch Include="$(TargetPath)"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <Reference Include="CelestialTint" Publicize="true">
             <HintPath>..\include\CelestialTint.dll</HintPath>
         </Reference>
         <Reference Include="InteractiveTerminalAPI">
-          <HintPath>..\include\InteractiveTerminalAPI.dll</HintPath>
+            <HintPath>..\include\InteractiveTerminalAPI.dll</HintPath>
         </Reference>
         <Reference Include="ShipColors" Publicize="true">
             <HintPath>..\include\ShipColors.dll</HintPath>

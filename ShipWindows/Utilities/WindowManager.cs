@@ -18,13 +18,13 @@ public class WindowManager {
     public WindowManager() {
         foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) {
             unlockedWindows.Add(windowInfo.windowName);
-            CreateWindow(windowInfo, out var _);
+            CreateWindow(windowInfo);
         }
     }
 
     //TODO: Figure out if destroying windows is worth it
 
-    public void CreateDecapitatedShip() {
+    private void CreateDecapitatedShip() {
         var shipInside = GameObject.Find("Environment/HangarShip/ShipInside");
 
         if (!shipInside) throw new NullReferenceException("Could not find ShipInside!");
@@ -38,18 +38,10 @@ public class WindowManager {
         shipInside.GetComponent<MeshCollider>().enabled = false;
     }
 
-    public bool CreateWindow(WindowInfo windowInfo, out string? cancelReason) {
-        if (unlockedWindows.Contains(windowInfo.windowName.ToLower())) {
-            cancelReason = "Already unlocked";
-            return true;
-        }
+    public void CreateWindow(WindowInfo windowInfo) {
+        if (unlockedWindows.Contains(windowInfo.windowName)) return;
 
-        var eventArguments = EventAPI.BeforeWindowSpawn(windowInfo);
-
-        if (eventArguments.cancelled) {
-            cancelReason = eventArguments.cancelReason;
-            return true;
-        }
+        EventAPI.BeforeWindowSpawn(windowInfo);
 
         if (!decapitatedShip) CreateDecapitatedShip();
 
@@ -69,10 +61,8 @@ public class WindowManager {
             foundObject.SetActive(false);
         }
 
-        unlockedWindows.Add(windowInfo.windowName.ToLower());
-        cancelReason = null;
+        unlockedWindows.Add(windowInfo.windowName);
 
         EventAPI.AfterWindowSpawn(windowInfo, windowObject);
-        return false;
     }
 }
