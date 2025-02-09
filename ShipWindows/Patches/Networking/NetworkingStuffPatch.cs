@@ -5,7 +5,7 @@ using static UnityEngine.Object;
 namespace ShipWindows.Patches.Networking;
 
 [HarmonyPatch(typeof(GameNetworkManager))]
-public static class GameNetworkManagerPatch {
+public static class NetworkingStuffPatch {
     [HarmonyPatch(nameof(GameNetworkManager.Start))]
     [HarmonyPostfix]
     public static void RegisterNetworkPrefab() {

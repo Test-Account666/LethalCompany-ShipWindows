@@ -31,8 +31,6 @@ public class WindowManager {
         foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: false);
     }
 
-    //TODO: Figure out if destroying windows is worth it
-
     private void CreateDecapitatedShip() {
         var shipInside = GameObject.Find("Environment/HangarShip/ShipInside");
 
@@ -56,6 +54,8 @@ public class WindowManager {
         if (!decapitatedShip) CreateDecapitatedShip();
 
         var windowObject = Object.Instantiate(windowInfo.windowPrefab, decapitatedShip.transform);
+        if (windowObject.name.ToLower().StartsWith("prefab")) windowObject.name = windowObject.name["prefab".Length..];
+
         var window = windowObject.GetComponentInChildren<AbstractWindow>();
 
         window.Initialize();
