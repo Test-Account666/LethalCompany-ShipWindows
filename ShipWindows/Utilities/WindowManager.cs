@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using LethalModDataLib.Features;
 using LethalModDataLib.Helpers;
@@ -13,6 +14,9 @@ namespace ShipWindows.Utilities;
 public class WindowManager {
     public GameObject decapitatedShip = null!;
 
+    public List<AbstractWindow> spawnedWindows = [
+    ];
+
     //TODO: Call ShipColors
 
     public WindowManager() {
@@ -20,15 +24,15 @@ public class WindowManager {
 
         CreateDecapitatedShip();
 
+        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: false);
+
         // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         foreach (var windowName in WindowUnlockData.UnlockedWindows) {
             var windowInfo = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
             if (!windowInfo) continue;
 
-            CreateWindow(windowInfo!, addToList: false, check: false);
+            CreateWindow(windowInfo!, addToList: false, check: true);
         }
-
-        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: false);
     }
 
     private void CreateDecapitatedShip() {

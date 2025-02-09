@@ -80,5 +80,8 @@
         <Reference Include="ShipColors" Publicize="true">
             <HintPath>..\include\ShipColors.dll</HintPath>
         </Reference>
+        <Reference Include="TestAccount666.TestAccountCore">
+          <HintPath>..\include\TestAccountCore.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>
