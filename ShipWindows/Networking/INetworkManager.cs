@@ -13,4 +13,6 @@ public interface INetworkManager {
     public void SyncUnlockedWindows();
 
     public void SyncSkyboxRotation();
+
+    public void SyncShutter();
 }

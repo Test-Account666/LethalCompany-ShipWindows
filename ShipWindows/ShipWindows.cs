@@ -11,11 +11,14 @@ using ShipWindows.Networking;
 using ShipWindows.Patches.EnemyFixes;
 using ShipWindows.Patches.Networking;
 using ShipWindows.Patches.ShipReset;
+using ShipWindows.Patches.Shutters;
 using ShipWindows.Patches.Skybox;
 using ShipWindows.Patches.WindowManager;
 using ShipWindows.SkyBox;
 using ShipWindows.Utilities;
 using UnityEngine;
+using static TestAccountCore.AssetLoader;
+using static TestAccountCore.Netcode;
 using Debug = System.Diagnostics.Debug;
 
 namespace ShipWindows;
@@ -23,6 +26,8 @@ namespace ShipWindows;
 [BepInIncompatibility("veri.lc.shipwindow")]
 [BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.1.4")]
 [BepInDependency("MaxWasUnavailable.LethalModDataLib")]
+[BepInDependency("TestAccount666.TestAccountCore", "1.14.0")]
+[BepInDependency("evaisa.lethallib", "0.16.2")]
 [BepInDependency("CelestialTint", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
@@ -54,12 +59,19 @@ public class ShipWindows : BaseUnityPlugin {
             return;
         }
 
+        var assembly = Assembly.GetExecutingAssembly();
+
         try {
-            InitializeNetcode();
+            ExecuteNetcodePatcher(assembly);
         } catch (Exception e) {
             Logger.LogError("Something went wrong with the netcode patcher!");
             Logger.LogError(e);
             return;
+        }
+
+        if (!WindowConfig.vanillaMode.Value) {
+            LoadBundle(assembly, "ship_windows_shutter");
+            LoadUnlockables(Config);
         }
 
         windowRegistry = new();
@@ -77,6 +89,7 @@ public class ShipWindows : BaseUnityPlugin {
         Harmony.PatchAll(typeof(ShipResetPatch));
         Harmony.PatchAll(typeof(EnemyMeshPatch));
         Harmony.PatchAll(typeof(SkyboxCreatePatch));
+        Harmony.PatchAll(typeof(HideMoonTransitionPatch));
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 
@@ -92,7 +105,7 @@ public class ShipWindows : BaseUnityPlugin {
         return mainAssetBundle != null;
     }
 
-    private static void InitializeNetcode() {
+    /*private static void InitializeNetcode() {
         var types = Assembly.GetExecutingAssembly().GetTypes();
         foreach (var type in types) {
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
@@ -102,7 +115,7 @@ public class ShipWindows : BaseUnityPlugin {
                 method.Invoke(null, null);
             }
         }
-    }
+    }*/
 
     private GameObject _decapitatedShipPrefab = null!;
 

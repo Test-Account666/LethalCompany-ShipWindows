@@ -1,5 +1,6 @@
 using System.Linq;
 using ShipWindows.Api;
+using ShipWindows.ShutterSwitch;
 using Unity.Netcode;
 
 namespace ShipWindows.Networking;
@@ -12,6 +13,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
 
         SyncUnlockedWindows();
         SyncSkyboxRotation();
+        SyncShutter();
     }
 
     public override void OnNetworkDespawn() => ShipWindows.networkManager = null;
@@ -37,7 +39,32 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     private static void SpawnWindowOnLocalClient(WindowInfo windowInfo) => ShipWindows.windowManager.CreateWindow(windowInfo);
 
     public void ToggleShutters(bool closeShutters, bool lockShutters = false) {
-        //TODO: Network Shutters
+        if (!IsHost && !IsServer) {
+            ToggleShuttersServerRpc(closeShutters);
+            return;
+        }
+
+        ToggleShuttersClientRpc(closeShutters, lockShutters);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ToggleShuttersServerRpc(bool closeShutters) {
+        ToggleShutters(closeShutters);
+    }
+
+    [ClientRpc]
+    public void ToggleShuttersClientRpc(bool closeShutters, bool lockShutters = false) {
+        ToggleShutterOnLocalClient(closeShutters, lockShutters);
+    }
+
+    private static void ToggleShutterOnLocalClient(bool closeShutters, bool lockShutters) {
+        var windows = ShipWindows.windowManager.spawnedWindows;
+
+        foreach (var window in windows) window.ToggleWindowShutter(closeShutters, lockShutters);
+
+        if (!ShutterSwitchBehavior.Instance) return;
+
+        ShutterSwitchBehavior.Instance.ToggleSwitch(closeShutters, lockShutters);
     }
 
     public void SyncUnlockedWindows() {
@@ -58,6 +85,32 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
         }
 
         SyncSkyboxRotationClientRpc(ShipWindows.skyBox.CurrentRotation);
+    }
+
+    public void SyncShutter() {
+        if (!IsHost && !IsServer) {
+            SyncShutterServerRpc();
+            return;
+        }
+
+        var shutterSwitch = ShutterSwitchBehavior.Instance;
+
+        if (!shutterSwitch) return;
+
+        var closeShutters = shutterSwitch.animator.GetBool(ShutterSwitchBehavior.EnabledAnimatorHash);
+        var lockShutters = !shutterSwitch.interactTrigger.interactable;
+
+        SyncShutterClientRpc(closeShutters, lockShutters);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SyncShutterServerRpc() {
+        SyncShutter();
+    }
+
+    [ClientRpc]
+    public void SyncShutterClientRpc(bool closeShutters, bool lockShutters = false) {
+        ToggleShutterOnLocalClient(closeShutters, lockShutters);
     }
 
     [ServerRpc(RequireOwnership = false)]
