@@ -11,4 +11,6 @@ public interface INetworkManager {
     public void ToggleShutters(bool closeShutters, bool lockShutters = false);
 
     public void SyncUnlockedWindows();
+
+    public void SyncSkyboxRotation();
 }

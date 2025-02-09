@@ -24,18 +24,24 @@ public class HdriSpaceSkybox : MonoBehaviour, ISkyBox {
         _sceneListener = new();
     }
 
-    private void Update() {
-        if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
-
-        _sky.rotation.value += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
-        if (_sky.rotation.value >= 360) _sky.rotation.value = 0f;
-        if (_sky.rotation.value <= 0) _sky.rotation.value = 360f;
-
-        CurrentRotation = _sky.rotation.value;
-    }
+    private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
 
     public void SetSkyboxTexture(Texture? skybox) => _sky.hdriSky.value = skybox;
-    public float CurrentRotation { get; private set; }
+
+    public float CurrentRotation {
+        get {
+            if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
+
+            return _sky.rotation.value;
+        }
+        set {
+            if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
+
+            _sky.rotation.value += value - _sky.rotation.value;
+            if (_sky.rotation.value >= 360) _sky.rotation.value = 0f;
+            if (_sky.rotation.value <= 0) _sky.rotation.value = 360f;
+        }
+    }
 
     public void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
 }

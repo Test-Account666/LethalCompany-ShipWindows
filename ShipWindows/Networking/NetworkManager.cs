@@ -11,6 +11,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
         NetworkObject = ((NetworkBehaviour) this).NetworkObject;
 
         SyncUnlockedWindows();
+        SyncSkyboxRotation();
     }
 
     public override void OnNetworkDespawn() => ShipWindows.networkManager = null;
@@ -41,7 +42,6 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
 
     public void SyncUnlockedWindows() {
         if (!IsHost && !IsServer) {
-            ShipWindows.Logger.LogFatal("Requesting sync!");
             SyncUnlockedWindowsServerRpc();
             return;
         }
@@ -49,9 +49,31 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
         foreach (var unlockedWindow in WindowUnlockData.UnlockedWindows) SpawnWindowClientRpc(unlockedWindow);
     }
 
+    public void SyncSkyboxRotation() {
+        if (ShipWindows.skyBox == null) return;
+
+        if (!IsHost && !IsServer) {
+            SyncSkyboxRotationServerRpc();
+            return;
+        }
+
+        SyncSkyboxRotationClientRpc(ShipWindows.skyBox.CurrentRotation);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SyncSkyboxRotationServerRpc() {
+        SyncSkyboxRotation();
+    }
+
+    [ClientRpc]
+    public void SyncSkyboxRotationClientRpc(float rotation) {
+        if (ShipWindows.skyBox == null) return;
+
+        ShipWindows.skyBox.CurrentRotation = rotation;
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SyncUnlockedWindowsServerRpc() {
-        ShipWindows.Logger.LogFatal("Sync requested!");
         SyncUnlockedWindows();
     }
 
@@ -67,11 +89,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     public void SpawnWindowClientRpc(string windowName) {
         if (IsHost || IsServer) return;
 
-        ShipWindows.Logger.LogFatal($"Trying to unlock {windowName}!");
-
         var window = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
-
-        ShipWindows.Logger.LogFatal($"Found window? {window && true}");
 
         if (!window) return;
 

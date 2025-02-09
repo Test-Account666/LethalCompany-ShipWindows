@@ -24,19 +24,25 @@ public class CelestialTintSkybox : MonoBehaviour, ISkyBox {
         _sceneListener = new();
     }
 
-    private void Update() {
-        if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
-
-        if (_sky.spaceRotation.value.y > 360) _sky.spaceRotation.value -= new Vector3(0, 360, 0);
-        if (_sky.spaceRotation.value.y < 0) _sky.spaceRotation.value += new Vector3(0, 360, 0);
-
-        _sky.spaceRotation.value += new Vector3(0, Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value, 0);
-
-        CurrentRotation = _sky.spaceRotation.value.y;
-    }
+    private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
 
     public void SetSkyboxTexture(Texture? skybox) => _sky.spaceEmissionTexture.value = skybox;
-    public float CurrentRotation { get; private set; }
+
+    public float CurrentRotation {
+        get {
+            if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
+
+            return _sky.spaceRotation.value.y;
+        }
+        set {
+            if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
+
+            if (_sky.spaceRotation.value.y > 360) _sky.spaceRotation.value -= new Vector3(0, 360, 0);
+            if (_sky.spaceRotation.value.y < 0) _sky.spaceRotation.value += new Vector3(0, 360, 0);
+
+            _sky.spaceRotation.value += new Vector3(0, value - _sky.spaceRotation.value.y, 0);
+        }
+    }
 
     public void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
 }

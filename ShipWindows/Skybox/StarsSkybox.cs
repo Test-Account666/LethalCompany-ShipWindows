@@ -21,19 +21,20 @@ public class StarsSkybox : MonoBehaviour, ISkyBox {
         _sceneListener = new();
     }
 
-    private void Update() {
-        stars.Rotate(Vector3.forward * (Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value));
+    private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
 
-        var rotation = stars.rotation.eulerAngles;
+    public float CurrentRotation {
+        get => stars.rotation.eulerAngles.y;
+        set {
+            var rotation = stars.rotation.eulerAngles;
 
-        if (rotation.y >= 360) rotation.y -= 360;
-        if (rotation.y <= 0) rotation.y += 360;
-        stars.rotation = stars.rotation = Quaternion.Euler(rotation);
+            rotation.y += value - rotation.y;
 
-        CurrentRotation = rotation.y;
+            if (rotation.y >= 360) rotation.y -= 360;
+            if (rotation.y <= 0) rotation.y += 360;
+            stars.rotation = Quaternion.Euler(rotation);
+        }
     }
-
-    public float CurrentRotation { get; private set; }
 
     public void ToggleSkyBox(bool enable) => starsObject.SetActive(enable);
 

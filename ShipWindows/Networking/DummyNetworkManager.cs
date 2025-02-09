@@ -14,4 +14,7 @@ public class DummyNetworkManager : INetworkManager {
 
     public void SyncUnlockedWindows() {
     }
+
+    public void SyncSkyboxRotation() {
+    }
 }

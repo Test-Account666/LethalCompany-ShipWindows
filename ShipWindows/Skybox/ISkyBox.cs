@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ShipWindows.SkyBox;
 
 public interface ISkyBox {
-    public float CurrentRotation { get; }
+    public float CurrentRotation { get; set; }
 
     public void ToggleSkyBox(bool enabled);
 
