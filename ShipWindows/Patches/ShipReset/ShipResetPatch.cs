@@ -2,13 +2,12 @@ using System.Collections;
 using HarmonyLib;
 using LethalModDataLib.Features;
 using LethalModDataLib.Helpers;
-using UnityEngine;
 using static UnityEngine.Object;
 
 namespace ShipWindows.Patches.ShipReset;
 
 [HarmonyPatch(typeof(StartOfRound))]
-public static class StartOfRoundPatch {
+public static class ShipResetPatch {
     [HarmonyPatch(nameof(StartOfRound.ResetShip))]
     [HarmonyPostfix]
     public static void DeleteAndRespawnWindows() => StartOfRound.Instance.StartCoroutine(DeleteAndRespawnCoroutine());

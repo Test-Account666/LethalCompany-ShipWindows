@@ -8,9 +8,12 @@ using InteractiveTerminalAPI.UI;
 using ShipWindows.Api;
 using ShipWindows.Config;
 using ShipWindows.Networking;
+using ShipWindows.Patches.EnemyFixes;
 using ShipWindows.Patches.Networking;
 using ShipWindows.Patches.ShipReset;
+using ShipWindows.Patches.Skybox;
 using ShipWindows.Patches.WindowManager;
+using ShipWindows.SkyBox;
 using ShipWindows.Utilities;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
@@ -20,6 +23,7 @@ namespace ShipWindows;
 [BepInIncompatibility("veri.lc.shipwindow")]
 [BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.1.4")]
 [BepInDependency("MaxWasUnavailable.LethalModDataLib")]
+[BepInDependency("CelestialTint", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
     public const string ASSET_BUNDLE_PATH_PREFIX = "Assets/LethalCompany/Mods/plugins/ShipWindows/Beta";
@@ -30,6 +34,8 @@ public class ShipWindows : BaseUnityPlugin {
     public static WindowManager windowManager = null!;
 
     public static INetworkManager? networkManager;
+
+    public static ISkyBox? skyBox;
 
     public static ShipWindows Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
@@ -62,13 +68,15 @@ public class ShipWindows : BaseUnityPlugin {
 
         if (!WindowConfig.vanillaMode.Value) {
             InteractiveTerminalManager.RegisterApplication<ShipWindowApplication>("windows", false);
-            Harmony.PatchAll(typeof(GameNetworkManagerPatch));
+            Harmony.PatchAll(typeof(NetworkingStuffPatch));
         } else {
             networkManager = new DummyNetworkManager();
         }
 
-        Harmony.PatchAll(typeof(HUDManagerPatch));
-        Harmony.PatchAll(typeof(StartOfRoundPatch));
+        Harmony.PatchAll(typeof(WindowManagerCreatePatch));
+        Harmony.PatchAll(typeof(ShipResetPatch));
+        Harmony.PatchAll(typeof(EnemyMeshPatch));
+        Harmony.PatchAll(typeof(SkyboxCreatePatch));
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 
@@ -113,5 +121,32 @@ public class ShipWindows : BaseUnityPlugin {
 
         _networkManagerPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/PrefabShipWindowsNetworkManager.prefab");
         return _networkManagerPrefab;
+    }
+
+    private GameObject _hdriSpacePrefab = null!;
+
+    public GameObject GetSpaceHdriPrefab() {
+        if (_hdriSpacePrefab) return _hdriSpacePrefab;
+
+        _hdriSpacePrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/SkyBox/HDRI/UniverseVolume.prefab");
+        return _hdriSpacePrefab;
+    }
+
+    private GameObject _celestialTintOverlayPrefab = null!;
+
+    public GameObject GetCelestialTintOverlayPrefab() {
+        if (_celestialTintOverlayPrefab) return _celestialTintOverlayPrefab;
+
+        _celestialTintOverlayPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/SkyBox/HDRI/CelestialTintOverride.prefab");
+        return _celestialTintOverlayPrefab;
+    }
+
+    private GameObject _starsPrefab = null!;
+
+    public GameObject GetStarsPrefab() {
+        if (_starsPrefab) return _starsPrefab;
+
+        _starsPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/SkyBox/StarsSphereLarge.prefab");
+        return _starsPrefab;
     }
 }
