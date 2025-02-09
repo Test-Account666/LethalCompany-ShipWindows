@@ -35,10 +35,10 @@ public static class EnemyMeshPatch {
         }
 
         if (start is -1 || end is -1) {
-            ShipWindows.Logger.LogFatal("Couldn't find instructions to remove!");
-            ShipWindows.Logger.LogFatal("Start: " + start);
-            ShipWindows.Logger.LogFatal("End: " + end);
-            ShipWindows.Logger.LogFatal("Please report this error!");
+            ShipWindows.Logger.LogError("Couldn't find instructions to remove!");
+            ShipWindows.Logger.LogError("Start: " + start);
+            ShipWindows.Logger.LogError("End: " + end);
+            ShipWindows.Logger.LogError("Please report this error!");
             return codeInstructions;
         }
 
