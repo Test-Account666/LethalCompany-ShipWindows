@@ -1,4 +1,5 @@
 using GameNetcodeStuff;
+using ShipWindows.Config;
 using UnityEngine;
 
 namespace ShipWindows.ShutterSwitch;
@@ -16,15 +17,27 @@ public class ShutterSwitchBehavior : MonoBehaviour {
     public AudioSource shutterSound;
     public AudioClip enableSound;
     public AudioClip disableSound;
+
+    public GameObject scanNodeObject;
+    public BoxCollider scanNodeCollider;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    private void Awake() => Instance = this;
+    private void Awake() {
+        Instance = this;
+
+        WindowConfig.enableShutterSwitchScanNode.SettingChanged += (_, _) => UpdateScanNode();
+    }
+
+    private void UpdateScanNode() {
+        scanNodeObject.SetActive(WindowConfig.enableShutterSwitchScanNode.Value);
+        scanNodeCollider.enabled = WindowConfig.enableShutterSwitchScanNode.Value;
+    }
 
 
     public void ToggleSwitch() {
         ToggleSwitch(!animator.GetBool(EnabledAnimatorHash));
 
-        ShipWindows.networkManager?.ToggleShutters(animator.GetBool(EnabledAnimatorHash));
+        ShipWindows.networkManager?.ToggleShutters(animator.GetBool(EnabledAnimatorHash), playAudio: WindowConfig.playShutterVoiceLinesOnShutterToggle.Value);
     }
 
     public void ToggleSwitch(PlayerControllerB playerControllerB) => ToggleSwitch();

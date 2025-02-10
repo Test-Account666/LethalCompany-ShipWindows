@@ -18,10 +18,12 @@ public static class HideMoonTransitionPatch {
     }
 
     private static IEnumerator ShutAndLockShuttersForTransition(float transitionTime) {
-        ShipWindows.networkManager?.ToggleShutters(true, true);
+        var playAudio = WindowConfig.playShutterVoiceLinesOnTransitions.Value;
+
+        ShipWindows.networkManager?.ToggleShutters(true, true, playAudio);
 
         yield return new WaitForSeconds(transitionTime + 2.5F);
 
-        ShipWindows.networkManager?.ToggleShutters(false);
+        ShipWindows.networkManager?.ToggleShutters(false, playAudio: playAudio);
     }
 }

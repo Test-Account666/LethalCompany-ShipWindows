@@ -16,6 +16,8 @@ public class WindowInfo : ScriptableObject {
     public List<string> objectsToDisable;
 
     public GameObject windowPrefab;
+
+    public bool deactivatedByDefault;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     [Header("Not part of the API and initial value will be ignored.")]

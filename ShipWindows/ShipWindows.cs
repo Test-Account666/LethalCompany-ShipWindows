@@ -10,6 +10,7 @@ using ShipWindows.Config;
 using ShipWindows.Networking;
 using ShipWindows.Patches.EnemyFixes;
 using ShipWindows.Patches.Networking;
+using ShipWindows.Patches.SellAudios;
 using ShipWindows.Patches.ShipReset;
 using ShipWindows.Patches.Shutters;
 using ShipWindows.Patches.Skybox;
@@ -90,6 +91,9 @@ public class ShipWindows : BaseUnityPlugin {
         Harmony.PatchAll(typeof(EnemyMeshPatch));
         Harmony.PatchAll(typeof(SkyboxCreatePatch));
         Harmony.PatchAll(typeof(HideMoonTransitionPatch));
+        Harmony.PatchAll(typeof(HideMoonLandingPatch));
+        Harmony.PatchAll(typeof(AddSellAudiosPatch));
+        Harmony.PatchAll(typeof(FixEnemyAttackPatch));
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 

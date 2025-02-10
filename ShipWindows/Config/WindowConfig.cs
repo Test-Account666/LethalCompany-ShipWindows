@@ -7,23 +7,24 @@ public static class WindowConfig {
 
     public static ConfigEntry<WindowMaterial> glassMaterial = null!;
 
-    public static ConfigEntry<bool> enableShutter = null!;
+    public static ConfigEntry<bool> hideMoonLanding = null!;
     public static ConfigEntry<bool> shuttersHideMoonTransitions = null!;
-    public static ConfigEntry<bool> hideSpaceProps = null!;
-    public static ConfigEntry<SpaceOutside> spaceOutsideSetting = null!;
-    public static ConfigEntry<bool> enableUnderLights = null!;
-    public static ConfigEntry<bool> dontMovePosters = null!;
-    public static ConfigEntry<float> skyboxRotateSpeed = null!;
-
-    public static ConfigEntry<bool> changeLightSwitchTip = null!;
-
-    public static ConfigEntry<bool> enableShutterVoiceLines = null!;
-    public static ConfigEntry<bool> playShutterVoiceLinesOnTransitions = null!;
-
     public static ConfigEntry<bool> enableShutterSwitchScanNode = null!;
 
-    public static ConfigEntry<bool> makeWesleySellAudioRare = null!;
+    public static ConfigEntry<bool> hideSpaceProps = null!;
+    public static ConfigEntry<SpaceOutside> spaceOutsideSetting = null!;
+    public static ConfigEntry<float> skyboxRotateSpeed = null!;
+
+    public static ConfigEntry<bool> enableUnderLights = null!;
+    public static ConfigEntry<bool> dontMovePosters = null!;
+
+    public static ConfigEntry<bool> playShutterVoiceLinesOnShutterToggle = null!;
+    public static ConfigEntry<bool> playShutterVoiceLinesOnTransitions = null!;
+    public static ConfigEntry<bool> playShutterVoiceLinesOnLanding = null!;
+
+
     public static ConfigEntry<bool> enableWesleySellAudio = null!;
+    public static ConfigEntry<bool> makeWesleySellAudioRare = null!;
 
     public static ConfigEntry<bool> celestialTintOverrideSpace = null!;
 
@@ -45,12 +46,14 @@ public static class WindowConfig {
                                                         + "Will also allow enemies to see you through windows. Does not have any effect on vanilla mode.");
 
 
-        enableShutter = configFile.Bind("General", "EnableWindowShutter", true,
-                                        "Enable the window shutter to hide transitions between space and the current moon.");
+        hideMoonLanding = configFile.Bind("Shutter", "Hide Moon Landing", true, "If enabled, will hide the transition between space and moon.");
 
-        shuttersHideMoonTransitions = configFile.Bind("Misc", "Shutters hide moon transitions", true,
+        shuttersHideMoonTransitions = configFile.Bind("Shutter", "Hide Moon Transitions", true,
                                                       "If set to true, will close the window shutters when routing to a new moon."
                                                     + "Disabling this will look weird, if CelestialTint isn't installed.");
+
+        enableShutterSwitchScanNode = configFile.Bind("Shutter", "Enable Shutter Switch scan node", true,
+                                                      "If set to true, will enable the scan node for the shutter switch.");
 
 
         spaceOutsideSetting = configFile.Bind("Skybox", "Skybox Type", SpaceOutside.SPACE_HDRI, "Set this value to control how the outside space looks.");
@@ -66,18 +69,15 @@ public static class WindowConfig {
         hideSpaceProps = configFile.Bind("Skybox", "HideSpaceProps", false, "Should the planet and moon outside the ship be hidden?");
 
 
-        dontMovePosters = configFile.Bind("General", "DontMovePosters", false, "Don't move the poster that blocks the second window if set to true.");
+        playShutterVoiceLinesOnShutterToggle = configFile.Bind("Shutter Misc", "Play Wesley Shutter Voice Lines On Shutter Toggle", true,
+                                                               "If set to true, will play Wesley's voice lines for opening/closing the window shutters.");
 
-        changeLightSwitchTip = configFile.Bind("Misc", "Change light switch tool tip", true,
-                                               "If set to true, will change the tool tip for the light switch to match the shutter's tool tip.");
-
-        enableShutterVoiceLines = configFile.Bind("Misc", "Enable Wesley shutter voice lines", true,
-                                                  "If set to true, will load and use Wesley's voice lines for opening/closing the window shutters.");
-        playShutterVoiceLinesOnTransitions = configFile.Bind("Misc", "Play Wesley shutter voice lines on transitions", true,
+        playShutterVoiceLinesOnTransitions = configFile.Bind("Shutter Misc", "Play Wesley Shutter Voice Lines On Transitions", true,
                                                              "If set to true, will play the voice lines, if opening/closing the window shutters is caused by a transition.");
 
-        enableShutterSwitchScanNode = configFile.Bind("Misc", "Enable Shutter Switch scan node", true,
-                                                      "If set to true, will enable the scan node for the shutter switch.");
+        playShutterVoiceLinesOnLanding = configFile.Bind("Shutter Misc", "Play Wesley Shutter Voice Lines On Landing", true,
+                                                         "If set to true, will play the voice lines, if opening/closing the window shutters is caused by a landing.");
+
 
         makeWesleySellAudioRare = configFile.Bind("Misc", "Make Wesley Sell Audio Rare", false,
                                                   "If set to true, will add the wesley sell audio to the rare audio list.");

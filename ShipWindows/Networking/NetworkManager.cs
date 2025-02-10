@@ -1,7 +1,10 @@
+using System.Collections;
 using System.Linq;
 using ShipWindows.Api;
 using ShipWindows.ShutterSwitch;
+using ShipWindows.Utilities;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace ShipWindows.Networking;
 
@@ -38,12 +41,13 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
 
     private static void SpawnWindowOnLocalClient(WindowInfo windowInfo) => ShipWindows.windowManager.CreateWindow(windowInfo);
 
-    public void ToggleShutters(bool closeShutters, bool lockShutters = false) {
+    public void ToggleShutters(bool closeShutters, bool lockShutters = false, bool playAudio = false) {
         if (!IsHost && !IsServer) {
             ToggleShuttersServerRpc(closeShutters);
             return;
         }
 
+        if (playAudio) PlayWesleyVoice(closeShutters? 1 : 0);
         ToggleShuttersClientRpc(closeShutters, lockShutters);
     }
 
@@ -101,6 +105,38 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
         var lockShutters = !shutterSwitch.interactTrigger.interactable;
 
         SyncShutterClientRpc(closeShutters, lockShutters);
+    }
+
+    public void PlayWesleyVoice(int index) {
+        if (!IsHost && !IsServer) {
+            PlayWesleyVoiceServerRpc(index);
+            return;
+        }
+
+        PlayWesleyVoiceClientRpc(index);
+    }
+
+    private static IEnumerator PlayWesleyVoiceCoroutine(int index) {
+        var speakerAudio = StartOfRound.Instance.speakerAudioSource;
+
+        if (speakerAudio.isPlaying) StartOfRound.Instance.DisableShipSpeakerLocalClient();
+        yield return new WaitUntil(() => !speakerAudio.isPlaying);
+
+        speakerAudio.PlayOneShot(SoundLoader.VoiceLines[index]);
+        yield return new WaitUntil(() => !speakerAudio.isPlaying);
+
+        speakerAudio.PlayOneShot(StartOfRound.Instance.disableSpeakerSFX);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void PlayWesleyVoiceServerRpc(int index) {
+        PlayWesleyVoiceClientRpc(index);
+    }
+
+    [ClientRpc]
+    public void PlayWesleyVoiceClientRpc(int index) {
+        StopAllCoroutines();
+        StartCoroutine(PlayWesleyVoiceCoroutine(index));
     }
 
     [ServerRpc(RequireOwnership = false)]

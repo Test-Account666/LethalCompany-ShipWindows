@@ -35,7 +35,8 @@ public class WindowRegistry {
 
         var windowName = window.windowName;
 
-        var isEnabled = ShipWindows.Instance.Config.Bind($"{windowName} ({window.windowType})", "1. Enabled", true, $"If {windowName} is enabled").Value;
+        var isEnabled = ShipWindows.Instance.Config
+                                   .Bind($"{windowName} ({window.windowType})", "1. Enabled", !window.deactivatedByDefault, $"If {windowName} is enabled").Value;
         if (!isEnabled) return;
 
         var alwaysUnlocked = ShipWindows.Instance.Config
