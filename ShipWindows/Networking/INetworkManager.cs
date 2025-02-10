@@ -8,11 +8,13 @@ public interface INetworkManager {
 
     public void SpawnWindow(WindowInfo windowInfo);
 
-    public void ToggleShutters(bool closeShutters, bool lockShutters = false);
+    public void ToggleShutters(bool closeShutters, bool lockShutters = false, bool playAudio = false);
 
     public void SyncUnlockedWindows();
 
     public void SyncSkyboxRotation();
 
     public void SyncShutter();
+
+    public void PlayWesleyVoice(int index);
 }

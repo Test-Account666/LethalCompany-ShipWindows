@@ -1,6 +1,10 @@
 # Ship Windows **BETA**
 
-This version is currently *not* in a usable state.<br><br>
+This version currently does *not* include all mentioned features.
+Expect bugs and issues using this **BETA** version!
+
+The README will be updated at a later date.
+<br><br><br>
 
 Adds four glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
 

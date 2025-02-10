@@ -1,5 +1,8 @@
+using System.Collections;
 using ShipWindows.Api;
+using ShipWindows.Utilities;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace ShipWindows.Networking;
 
@@ -9,7 +12,8 @@ public class DummyNetworkManager : INetworkManager {
     public void SpawnWindow(WindowInfo windowInfo) {
     }
 
-    public void ToggleShutters(bool closeShutters, bool lockShutters = false) {
+    public void ToggleShutters(bool closeShutters, bool lockShutters = false, bool playAudio = false) {
+        if (playAudio) PlayWesleyVoice(closeShutters? 1 : 0);
         ToggleShutterOnLocalClient(closeShutters, lockShutters);
     }
 
@@ -26,5 +30,19 @@ public class DummyNetworkManager : INetworkManager {
     }
 
     public void SyncShutter() {
+    }
+
+    public void PlayWesleyVoice(int index) => StartOfRound.Instance.StartCoroutine(PlayWesleyVoiceCoroutine(index));
+
+    private static IEnumerator PlayWesleyVoiceCoroutine(int index) {
+        var speakerAudio = StartOfRound.Instance.speakerAudioSource;
+
+        if (speakerAudio.isPlaying) StartOfRound.Instance.DisableShipSpeakerLocalClient();
+        yield return new WaitUntil(() => !speakerAudio.isPlaying);
+
+        speakerAudio.PlayOneShot(SoundLoader.VoiceLines[index]);
+        yield return new WaitUntil(() => !speakerAudio.isPlaying);
+
+        speakerAudio.PlayOneShot(StartOfRound.Instance.disableSpeakerSFX);
     }
 }
