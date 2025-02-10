@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 2.1.0
+
+\+ Added left wall window<br>
+\+ Added wesley voice lines<br>
+\+ Added enemy attack fix<br>
+
 ## 2.0.0
 
 \# Start of the rewrite
