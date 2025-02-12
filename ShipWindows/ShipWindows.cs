@@ -8,6 +8,7 @@ using InteractiveTerminalAPI.UI;
 using ShipWindows.Api;
 using ShipWindows.Config;
 using ShipWindows.Networking;
+using ShipWindows.Patches.BuildManagerFix;
 using ShipWindows.Patches.EnemyFixes;
 using ShipWindows.Patches.Networking;
 using ShipWindows.Patches.SellAudios;
@@ -94,6 +95,7 @@ public class ShipWindows : BaseUnityPlugin {
         Harmony.PatchAll(typeof(HideMoonLandingPatch));
         Harmony.PatchAll(typeof(AddSellAudiosPatch));
         Harmony.PatchAll(typeof(FixEnemyAttackPatch));
+        Harmony.PatchAll(typeof(BuildManagerFixPatch));
 
         StartCoroutine(SoundLoader.LoadAudioClips());
 
