@@ -1,5 +1,13 @@
 # Ship Windows
 
+## 2.2.0
+
+\+ Added right wall window<br>
+\+ Added roof window<br>
+\* Fixed not being able to place furniture on floor window<br>
+\* Fixed unlocked windows not spawning on save load<br>
+\* Fixed floor window mesh
+
 ## 2.1.0
 
 \+ Added left wall window<br>
