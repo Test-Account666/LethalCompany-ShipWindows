@@ -1,5 +1,11 @@
 # Ship Windows
 
+## 2.2.1
+
+\* Fixed window spawning behavior<br>
+\# Tried to optimize window meshes<br>
+\# Now shows a message, if no unlockable windows could be found<br>
+
 ## 2.2.0
 
 \+ Added right wall window<br>
