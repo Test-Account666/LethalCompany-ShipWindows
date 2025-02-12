@@ -14,24 +14,22 @@ namespace ShipWindows.Utilities;
 public class WindowManager {
     public GameObject decapitatedShip = null!;
 
-    public List<AbstractWindow> spawnedWindows = [
+    public readonly List<AbstractWindow> spawnedWindows = [
     ];
-
-    //TODO: Call ShipColors
 
     public WindowManager() {
         SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(typeof(WindowUnlockData), nameof(WindowUnlockData.UnlockedWindows))!);
 
         CreateDecapitatedShip();
 
-        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: false);
+        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: true);
 
         // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         foreach (var windowName in WindowUnlockData.UnlockedWindows) {
             var windowInfo = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
             if (!windowInfo) continue;
 
-            CreateWindow(windowInfo!, addToList: false, check: true);
+            CreateWindow(windowInfo!, addToList: false, check: false);
         }
     }
 
