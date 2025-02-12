@@ -24,10 +24,10 @@ public static class WindowMaterialConverter {
         if (_MaterialDictionary.ContainsKey(windowMaterial)) return;
 
         var materialPath = windowMaterial switch {
-            WindowMaterial.NO_REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassNoRefraction.mat",
-            WindowMaterial.NO_REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassNoRefractionIridescence.mat",
-            WindowMaterial.REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassWithRefraction.mat",
-            WindowMaterial.REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Materials/GlassWithRefractionIridescence.mat",
+            WindowMaterial.NO_REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassNoRefraction.mat",
+            WindowMaterial.NO_REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassNoRefractionIridescence.mat",
+            WindowMaterial.REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassWithRefraction.mat",
+            WindowMaterial.REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassWithRefractionIridescence.mat",
             var _ => null,
         };
 
