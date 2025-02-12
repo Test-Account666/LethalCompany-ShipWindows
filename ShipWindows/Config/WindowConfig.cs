@@ -16,7 +16,7 @@ public static class WindowConfig {
     public static ConfigEntry<float> skyboxRotateSpeed = null!;
 
     public static ConfigEntry<bool> enableUnderLights = null!;
-    public static ConfigEntry<bool> dontMovePosters = null!;
+    public static ConfigEntry<bool> movePosters = null!;
 
     public static ConfigEntry<bool> playShutterVoiceLinesOnShutterToggle = null!;
     public static ConfigEntry<bool> playShutterVoiceLinesOnTransitions = null!;
@@ -85,7 +85,7 @@ public static class WindowConfig {
         enableWesleySellAudio = configFile.Bind("Misc", "Enable Wesley Sell Audio", true, "If set to true, will add the wesley sell audio to the audio list.");
 
 
-        enableEnemyFix = configFile.Bind("Fixes", "Enable Enemy Fix", true,
+        enableEnemyFix = configFile.Bind("Fixes", "Enable Enemy Fix", false,
                                          "If set to true, will add a check to enemy's ai to prevent them from killing you through the windows. "
                                        + "Enabling this might cause some issues though.");
     }

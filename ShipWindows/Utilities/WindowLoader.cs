@@ -25,10 +25,20 @@ internal static class WindowLoader {
 
     private static Action<ConfigFile, WindowInfo>[] GetAdditionalConfigActions() {
         List<Action<ConfigFile, WindowInfo>> additionalConfigActions = [
+            // Floor Window Config
             new((config, windowInfo) => {
                 if (!windowInfo.windowName.Equals("Floor Window")) return;
 
-                WindowConfig.enableUnderLights = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Spawn Underlights", true);
+                WindowConfig.enableUnderLights = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Spawn Underlights", true,
+                                                             "If set to true, will spawn additional floodlights underneath the ship");
+            }),
+
+            // Right Window Config
+            new((config, windowInfo) => {
+                if (!windowInfo.windowName.Equals("Right Window")) return;
+
+                WindowConfig.movePosters = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Move Posters", true,
+                                                       "If set to true, will move the poster that's obstructing the window");
             }),
         ];
 
