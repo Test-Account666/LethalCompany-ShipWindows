@@ -22,8 +22,6 @@ public class WindowManager {
 
         CreateDecapitatedShip();
 
-        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, check: true);
-
         // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         foreach (var windowName in WindowUnlockData.UnlockedWindows) {
             var windowInfo = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
@@ -31,6 +29,8 @@ public class WindowManager {
 
             CreateWindow(windowInfo!, addToList: false, check: false);
         }
+
+        foreach (var windowInfo in ShipWindows.windowRegistry.windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, addToList: false);
     }
 
     private void CreateDecapitatedShip() {
