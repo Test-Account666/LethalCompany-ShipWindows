@@ -13,10 +13,16 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
         List<CursorElement> cursorElements = [
         ];
         cursorElements.AddRange(from windowInfo in ShipWindows.windowRegistry.windows
+                                where !windowInfo.alwaysUnlocked
                                 let isUnlocked = WindowUnlockData.UnlockedWindows.Contains(windowInfo.windowName)
                                 let elementAction = !isUnlocked? WindowBuyAction(windowInfo) : WindowAlreadyUnlockedAction(windowInfo)
                                 select CursorElement.Create(windowInfo.windowName, $"{windowInfo.cost}'", elementAction, _ => !isUnlocked));
 
+        if (cursorElements.Count <= 0) {
+            ErrorMessage("Ship Windows", () => {
+            }, "No unlockable windows found");
+            return;
+        }
 
         var cursorMenu = CursorMenu.Create(elements: cursorElements.ToArray());
 
