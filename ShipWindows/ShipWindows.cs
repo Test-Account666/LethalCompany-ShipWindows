@@ -42,7 +42,7 @@ public class ShipWindows : BaseUnityPlugin {
 
     public static INetworkManager? networkManager;
 
-    public static ISkyBox? skyBox;
+    public static AbstractSkyBox? skyBox;
 
     public static ShipWindows Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;

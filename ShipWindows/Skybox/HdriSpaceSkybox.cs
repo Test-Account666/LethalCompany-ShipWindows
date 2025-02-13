@@ -6,7 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace ShipWindows.SkyBox;
 
-public class HdriSpaceSkybox : MonoBehaviour, ISkyBox {
+public class HdriSpaceSkybox : AbstractSkyBox {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public Volume skyVolume;
 
@@ -26,9 +26,9 @@ public class HdriSpaceSkybox : MonoBehaviour, ISkyBox {
 
     private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
 
-    public void SetSkyboxTexture(Texture? skybox) => _sky.hdriSky.value = skybox;
+    public override void SetSkyboxTexture(Texture? skybox) => _sky.hdriSky.value = skybox;
 
-    public float CurrentRotation {
+    public override float CurrentRotation {
         get {
             if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
 
@@ -43,5 +43,5 @@ public class HdriSpaceSkybox : MonoBehaviour, ISkyBox {
         }
     }
 
-    public void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
+    public override void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
 }
