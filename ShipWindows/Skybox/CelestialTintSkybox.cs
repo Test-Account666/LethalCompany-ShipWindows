@@ -13,15 +13,11 @@ public class CelestialTintSkybox : AbstractSkyBox {
     private PhysicallyBasedSky _sky = null!;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-    private SceneListener _sceneListener = null!;
-
     public static CelestialTintSkybox Instance { get; private set; } = null!;
 
     private void Awake() {
         Instance = this;
         ShipWindows.skyBox = this;
-
-        _sceneListener = new();
     }
 
     private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
