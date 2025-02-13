@@ -12,7 +12,9 @@ public class StarsSkybox : AbstractSkyBox {
 
     public static StarsSkybox Instance { get; private set; } = null!;
 
-    private void Awake() {
+    public override void Awake() {
+        base.Awake();
+
         Instance = this;
         ShipWindows.skyBox = this;
     }

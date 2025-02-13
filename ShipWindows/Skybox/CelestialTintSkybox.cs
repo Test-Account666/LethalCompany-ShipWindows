@@ -15,7 +15,9 @@ public class CelestialTintSkybox : AbstractSkyBox {
 
     public static CelestialTintSkybox Instance { get; private set; } = null!;
 
-    private void Awake() {
+    public override void Awake() {
+        base.Awake();
+
         Instance = this;
         ShipWindows.skyBox = this;
     }
@@ -40,5 +42,8 @@ public class CelestialTintSkybox : AbstractSkyBox {
         }
     }
 
-    public override void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
+    public override void ToggleSkyBox(bool enable) {
+        skyVolume.gameObject.SetActive(enable);
+        skyVolume.enabled = enable;
+    }
 }
