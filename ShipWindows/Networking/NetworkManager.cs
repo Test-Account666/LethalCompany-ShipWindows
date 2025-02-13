@@ -81,14 +81,14 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     }
 
     public void SyncSkyboxRotation() {
-        if (ShipWindows.skyBox == null) return;
+        if (!ShipWindows.skyBox) return;
 
         if (!IsHost && !IsServer) {
             SyncSkyboxRotationServerRpc();
             return;
         }
 
-        SyncSkyboxRotationClientRpc(ShipWindows.skyBox.CurrentRotation);
+        SyncSkyboxRotationClientRpc(ShipWindows.skyBox!.CurrentRotation);
     }
 
     public void SyncShutter() {
@@ -156,9 +156,9 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
 
     [ClientRpc]
     public void SyncSkyboxRotationClientRpc(float rotation) {
-        if (ShipWindows.skyBox == null) return;
+        if (!ShipWindows.skyBox) return;
 
-        ShipWindows.skyBox.CurrentRotation = rotation;
+        ShipWindows.skyBox!.CurrentRotation = rotation;
     }
 
     [ServerRpc(RequireOwnership = false)]

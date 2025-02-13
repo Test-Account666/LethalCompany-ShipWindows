@@ -27,14 +27,16 @@ public class SceneListener {
     }
 
     private static void CheckSceneState() {
+        if (!ShipWindows.skyBox) return;
+
         if (SceneManager.sceneCount is not 1 || SceneManager.GetActiveScene() is not {
                 name: "SampleSceneRelay",
             }) {
-            ShipWindows.skyBox?.ToggleSkyBox(false);
+            ShipWindows.skyBox!.ToggleSkyBox(false);
             return;
         }
 
-        ShipWindows.skyBox?.ToggleSkyBox(true);
+        ShipWindows.skyBox!.ToggleSkyBox(true);
 
         if (!WindowConfig.hideSpaceProps.Value) return;
         StartOfRound.Instance.currentPlanetPrefab.transform.parent.gameObject.SetActive(false);

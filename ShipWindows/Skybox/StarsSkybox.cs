@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShipWindows.SkyBox;
 
-public class StarsSkybox : MonoBehaviour, ISkyBox {
+public class StarsSkybox : AbstractSkyBox {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public Transform stars;
     public GameObject starsObject;
@@ -23,7 +23,7 @@ public class StarsSkybox : MonoBehaviour, ISkyBox {
 
     private void Update() => CurrentRotation += Time.deltaTime * WindowConfig.skyboxRotateSpeed.Value;
 
-    public float CurrentRotation {
+    public override float CurrentRotation {
         get => stars.rotation.eulerAngles.y;
         set {
             var rotation = stars.rotation.eulerAngles;
@@ -36,7 +36,7 @@ public class StarsSkybox : MonoBehaviour, ISkyBox {
         }
     }
 
-    public void ToggleSkyBox(bool enable) => starsObject.SetActive(enable);
+    public override void ToggleSkyBox(bool enable) => starsObject.SetActive(enable);
 
-    public void SetSkyboxTexture(Texture? skybox) => starsRenderer.material.mainTexture = skybox;
+    public override void SetSkyboxTexture(Texture? skybox) => starsRenderer.material.mainTexture = skybox;
 }
