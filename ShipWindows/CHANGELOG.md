@@ -3,6 +3,7 @@
 ## 2.2.1
 
 \* Fixed window spawning behavior<br>
+\* Fixed holes in ship<br>
 \# Tried to optimize window meshes<br>
 \# Now shows a message, if no unlockable windows could be found<br>
 
