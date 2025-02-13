@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 2.3.0
+
+\+ Added Skybox Events<br>
+\# Now avoiding `GameObject.Find` calls wherever possible<br>
+
 ## 2.2.1
 
 \* Fixed window spawning behavior<br>
