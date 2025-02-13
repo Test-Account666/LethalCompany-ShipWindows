@@ -1,4 +1,5 @@
 using System.Collections;
+using ShipWindows.Api.events;
 using ShipWindows.Config;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,11 @@ using UnityEngine.SceneManagement;
 namespace ShipWindows.SkyBox;
 
 public class SceneListener {
-    public SceneListener() {
+    private readonly AbstractSkyBox _skyBox;
+
+    public SceneListener(AbstractSkyBox skyBox) {
+        _skyBox = skyBox;
+
         SceneManager.sceneLoaded += (_, _) => {
             if (!StartOfRound.Instance) return;
 
@@ -20,23 +25,25 @@ public class SceneListener {
         };
     }
 
-    private static IEnumerator CheckSceneStateDelayed() {
+    private IEnumerator CheckSceneStateDelayed() {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         CheckSceneState();
     }
 
-    private static void CheckSceneState() {
+    private void CheckSceneState() {
         if (!ShipWindows.skyBox) return;
 
         if (SceneManager.sceneCount is not 1 || SceneManager.GetActiveScene() is not {
                 name: "SampleSceneRelay",
             }) {
             ShipWindows.skyBox!.ToggleSkyBox(false);
+            EventAPI.AfterSkyboxUnloaded(_skyBox);
             return;
         }
 
         ShipWindows.skyBox!.ToggleSkyBox(true);
+        EventAPI.AfterSkyboxLoaded(_skyBox);
 
         if (!WindowConfig.hideSpaceProps.Value) return;
         StartOfRound.Instance.currentPlanetPrefab.transform.parent.gameObject.SetActive(false);
