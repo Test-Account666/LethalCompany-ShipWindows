@@ -24,7 +24,7 @@ public class RightWindow : AbstractWindow {
     }
 
     public void UpdatePostersMesh(Mesh newMesh) {
-        var posters = GameObject.Find("Environment/HangarShip/Plane.001");
+        var posters = StartOfRound.Instance.shipAnimator.transform.Find("Plane.001");
 
         if (!posters) {
             ShipWindows.Logger.LogWarning("Could not find posters!");
