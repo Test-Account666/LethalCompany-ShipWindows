@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BepInEx;
 using LethalModDataLib.Features;
 using LethalModDataLib.Helpers;
 using ShipWindows.Api;
@@ -34,7 +35,7 @@ public class WindowManager {
     }
 
     private void CreateDecapitatedShip() {
-        var shipInside = GameObject.Find("Environment/HangarShip/ShipInside");
+        var shipInside = StartOfRound.Instance.shipAnimator.transform.Find("ShipInside");
 
         if (!shipInside) throw new NullReferenceException("Could not find ShipInside!");
 
@@ -63,7 +64,14 @@ public class WindowManager {
         window.Initialize();
 
         foreach (var objectToDisable in windowInfo.objectsToDisable) {
-            var foundObject = GameObject.Find(objectToDisable);
+            if (objectToDisable.IsNullOrWhiteSpace()) continue;
+
+            GameObject foundObject = null!;
+
+            const string hangarShipPath = "Environment/HangarShip/";
+            if (objectToDisable.StartsWith(hangarShipPath))
+                foundObject = StartOfRound.Instance.shipAnimator.transform.Find(objectToDisable[hangarShipPath.Length..]).gameObject;
+            else GameObject.Find(objectToDisable);
 
             if (!foundObject) {
                 ShipWindows.Logger.LogError($"Couldn't find object '{objectToDisable}'!");
