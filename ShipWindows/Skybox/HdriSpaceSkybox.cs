@@ -14,7 +14,9 @@ public class HdriSpaceSkybox : AbstractSkyBox {
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public static HdriSpaceSkybox Instance { get; private set; } = null!;
 
-    private void Awake() {
+    public override void Awake() {
+        base.Awake();
+
         Instance = this;
         ShipWindows.skyBox = this;
     }
@@ -38,5 +40,8 @@ public class HdriSpaceSkybox : AbstractSkyBox {
         }
     }
 
-    public override void ToggleSkyBox(bool enable) => skyVolume.enabled = enable;
+    public override void ToggleSkyBox(bool enable) {
+        skyVolume.gameObject.SetActive(enable);
+        skyVolume.enabled = enable;
+    }
 }
