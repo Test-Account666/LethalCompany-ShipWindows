@@ -1,5 +1,12 @@
 # Ship Windows
 
+## 2.3.2
+
+\* Fixed lobby load playing wesley voice<br>
+\* Fixed issues with Diversity<br>
+\- Removed debug messages<br>
+\# Now forcing `movePosters` to `false`, if other ship mods are present<br>
+
 ## 2.3.1
 
 \* Fixed skybox<br>
