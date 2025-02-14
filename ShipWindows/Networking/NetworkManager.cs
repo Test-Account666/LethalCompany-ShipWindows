@@ -119,7 +119,11 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     private static IEnumerator PlayWesleyVoiceCoroutine(int index) {
         var speakerAudio = StartOfRound.Instance.speakerAudioSource;
 
-        if (speakerAudio.isPlaying) StartOfRound.Instance.DisableShipSpeakerLocalClient();
+        if (speakerAudio.isPlaying) {
+            StartOfRound.Instance.speakerAudioSource.Stop();
+            StartOfRound.Instance.speakerAudioSource.PlayOneShot(StartOfRound.Instance.disableSpeakerSFX);
+        }
+
         yield return new WaitUntil(() => !speakerAudio.isPlaying);
 
         speakerAudio.PlayOneShot(SoundLoader.VoiceLines[index]);
