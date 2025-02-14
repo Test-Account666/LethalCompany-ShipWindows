@@ -127,9 +127,6 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
         yield return new WaitUntil(() => !speakerAudio.isPlaying);
 
         speakerAudio.PlayOneShot(SoundLoader.VoiceLines[index]);
-        yield return new WaitUntil(() => !speakerAudio.isPlaying);
-
-        speakerAudio.PlayOneShot(StartOfRound.Instance.disableSpeakerSFX);
     }
 
     [ServerRpc(RequireOwnership = false)]
