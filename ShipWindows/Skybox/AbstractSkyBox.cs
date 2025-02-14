@@ -9,12 +9,8 @@ public abstract class AbstractSkyBox : MonoBehaviour {
     private SceneListener _sceneListener = null!;
 
     public virtual void Awake() {
-        ShipWindows.Logger.LogFatal("Pre AbstractSkyBox Awake!");
-
         EventAPI.AfterSkyboxCreated(this);
         _sceneListener = new(this);
-
-        ShipWindows.Logger.LogFatal("Post AbstractSkyBox Awake!");
     }
 
     public abstract void ToggleSkyBox(bool enabled);
