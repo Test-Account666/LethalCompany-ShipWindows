@@ -19,6 +19,7 @@ public class WindowManager {
     ];
 
     public WindowManager() {
+        WindowUnlockData.UnlockedWindows.Clear();
         SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(typeof(WindowUnlockData), nameof(WindowUnlockData.UnlockedWindows))!);
 
         CreateDecapitatedShip();
