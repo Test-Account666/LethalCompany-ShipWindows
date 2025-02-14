@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 namespace ShipWindows.SkyBox;
 
 public class SceneListener {
+    public static SceneListener? Instance { get; private set; } = null;
     private readonly AbstractSkyBox _skyBox;
 
     public SceneListener(AbstractSkyBox skyBox) {
+        Instance = this;
         _skyBox = skyBox;
 
         SceneManager.sceneLoaded += (_, _) => {
