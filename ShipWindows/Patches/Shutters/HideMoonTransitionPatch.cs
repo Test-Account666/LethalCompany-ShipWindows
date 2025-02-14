@@ -7,11 +7,22 @@ namespace ShipWindows.Patches.Shutters;
 
 [HarmonyPatch(typeof(StartOfRound))]
 public static class HideMoonTransitionPatch {
+    public static bool skippedFirstAnnouncement;
+
+    [HarmonyPatch(nameof(StartOfRound.Awake))]
+    [HarmonyPostfix]
+    public static void ResetState() => skippedFirstAnnouncement = false;
+
     [HarmonyPatch(nameof(StartOfRound.ChangeLevel))]
     [HarmonyPostfix]
     public static void HideMoonTransition() {
         if (!StartOfRound.Instance.IsHost && !StartOfRound.Instance.IsServer) return;
         if (!WindowConfig.shuttersHideMoonTransitions.Value) return;
+
+        if (!skippedFirstAnnouncement) {
+            skippedFirstAnnouncement = true;
+            return;
+        }
 
         var currentLevel = StartOfRound.Instance.currentLevel;
         StartOfRound.Instance.StartCoroutine(ShutAndLockShuttersForTransition(currentLevel.timeToArrive));
