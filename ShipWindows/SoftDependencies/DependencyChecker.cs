@@ -16,7 +16,9 @@ public static class DependencyChecker {
 
     public static bool IsTwoStoryShipInstalled() => IsDependencyInstalled("MelanieMelicious.2StoryShip");
 
-    public static bool IsAnyShipModInstalled() => IsTwoStoryShipInstalled() || IsWiderShipInstalled() || thereIsAShipModInstalled;
+    public static bool IsShipBuilderInstalled() => IsDependencyInstalled("mborsh.ShipBuilder");
+
+    public static bool IsAnyShipModInstalled() => IsTwoStoryShipInstalled() || IsWiderShipInstalled() || IsShipBuilderInstalled() || thereIsAShipModInstalled;
 
     public static bool IsDependencyInstalled(string dependencyName) {
         var containsKey = _DependencyDictionary.TryGetValue(dependencyName, out var installed);
