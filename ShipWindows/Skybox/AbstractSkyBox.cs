@@ -10,6 +10,12 @@ public abstract class AbstractSkyBox : MonoBehaviour {
 
     public virtual void Awake() {
         EventAPI.AfterSkyboxCreated(this);
+
+        if (SceneListener.Instance != null) {
+            _sceneListener = SceneListener.Instance;
+            return;
+        }
+
         _sceneListener = new(this);
     }
 
