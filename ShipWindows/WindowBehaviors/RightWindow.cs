@@ -1,4 +1,5 @@
 using ShipWindows.Config;
+using ShipWindows.SoftDependencies;
 using ShipWindows.WindowDefinition;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class RightWindow : AbstractWindow {
     private Mesh _originalPostersMesh = null!;
 
     public override void Initialize() {
-        if (!WindowConfig.movePosters.Value) return;
+        if (!WindowConfig.movePosters.Value || DependencyChecker.IsAnyShipModInstalled()) return;
 
         UpdatePostersMesh(postersMesh);
     }
