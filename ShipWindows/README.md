@@ -1,22 +1,18 @@
-# Ship Windows **BETA**
+# Ship Windows Beta
 
-This version currently does *not* include all mentioned features.
-Expect bugs and issues using this **BETA** version!
-
-The README will be updated at a later date.
-<br><br><br>
-
-Adds four glass windows to the ship's store as permanent ship upgrades. Availability and price both configurable.
+Adds five buy-able glass windows.
+Availability and price both configurable.
 
 
 
 <details>
   <summary>Windows when landed</summary>
 
-![MoonLeft](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/a1a26160-897e-432d-afa2-915ee76d923b)
-![MoonRight](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/cd236e80-9457-457d-ba9a-ce9008c6ddf2)
-![MoonFloor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/8f930ad5-d289-4254-8e98-dc02e3c6a235)
-![MoonDoor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/9b29c45d-4418-47be-88c8-0fa84e21f776)
+![MoonLeft](https://github.com/user-attachments/assets/70547805-0908-4adb-83ee-b0de4130db4c)
+![MoonRight](https://github.com/user-attachments/assets/6303adac-0c10-4015-abbb-5f09a774e7a3)
+![MoonFloor](https://github.com/user-attachments/assets/9ad3355e-2ef9-427c-83cb-49d132854edf)
+![MoonDoor](https://github.com/user-attachments/assets/063b1143-9d82-487a-9c8d-80ebfebe4f3e)
+![MoonRoof](https://github.com/user-attachments/assets/63e52731-7add-4929-8ccf-e9010cd3fdca)
 
 </details>
 
@@ -24,19 +20,21 @@ Adds four glass windows to the ship's store as permanent ship upgrades. Availabi
 <details>
   <summary>Windows when in orbit</summary>
 
-![SpaceLeft](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/618be4f7-5a2c-4c05-a66a-e520205be4ef)
-![SpaceRight](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/4e36e8b0-d93b-41bd-8411-b8a78a95d3c1)
-![SpaceFloor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/eb06834b-fef3-4cbd-bd36-147b5daf4f87)
-![SpaceDoor](https://github.com/Test-Account666/LethalCompany-ShipWindows/assets/36412486/0abb5c90-331b-4e6e-94b4-0fb617682ea4)
-
+![SpaceLeft](https://github.com/user-attachments/assets/7a64a915-6616-4c5a-b707-7c18c5126508)
+![SpaceRight](https://github.com/user-attachments/assets/4039b90a-4def-4be3-9515-37c07c4f9119)
+![SpaceFloor](https://github.com/user-attachments/assets/3a6e0174-fe21-47eb-91d3-1e5469d644a4)
+![SpaceDoor](https://github.com/user-attachments/assets/e1a745db-25ed-42af-a629-98264efbf314)
+![SpaceRoof](https://github.com/user-attachments/assets/db3bcc93-0fa9-42e4-810e-b7b227926747)
 </details>
 
 ## Compatibility
 
 - Toggle "VanillaMode" in your configuration to make this mod client-side only and compatible with vanilla lobbies.
-- This mod is not compatible with other mods that change the ship's model.
+- This mod is compatible
+  with [2 Story Ship (Pending)](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/MelanieMelicious_2_sToRy_ShIp__works_w_Wider_Ship_Mod/)
+  and [Wider Ship](https://thunderstore.io/c/lethal-company/p/mborsh/Wider_Ship_Mod/)
 
-Please report any issues on GitHub in the Lethal Company Modding Discord.
+Please report any issues on GitHub or in the Lethal Company Modding Discord.
 
 Thunderstore Link: https://thunderstore.io/c/lethal-company/p/TestAccount666/ShipWindows/
 
@@ -45,43 +43,20 @@ Thunderstore Link: https://thunderstore.io/c/lethal-company/p/TestAccount666/Shi
 - **[Celestial Tint](https://thunderstore.io/c/lethal-company/p/sfDesat/Celestial_Tint/)** by **sfDesat** - For an
   amazing view of space outside the windows.
 
-- **[Ship Windows 4K Skybox](https://thunderstore.io/c/lethal-company/p/veri/ShipWindows_4K_Skybox/)** by **veri** - For
-  a higher definition space skybox. This **DOES** work with Celestial Tint. Ignore what the description says.
+## Credits
 
-## Other compatible Mods
+- Veri - Creating the original mod
+- Fumo - Helping with models
+- S1ckboy - Helping with models and Skybox
+- Wesley - Testing
 
-- **[Wider Ship Mod](https://thunderstore.io/c/lethal-company/p/mborsh/Wider_Ship_Mod/)** by **mborsh** - In case your
-  ship wasn't wide enough
-
-- **[Two Story Ship Mod](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/MelanieMelicious_2_sToRy_ShIp__works_w_Wider_Ship_Mod/)** by **MelanieMelicious** - For a second or third story on your ship.
-
-## Differences to the original
-
-As you may have noticed, this is a fork/continuation
-of [Veri's ShipWindows mod](https://thunderstore.io/c/lethal-company/p/veri/ShipWindows/).
-There are some differences between these mods.
-
-- Different shutter switch model + audio
-- You can actually trigger enemies through windows (For example, looking at
-  the [shy guy](https://thunderstore.io/c/lethal-company/p/jaspercreations/Scopophobia/) through the windows will now
-  cause him to be triggered)
-- Different sound from walking on the floor window
-- Option to change the light switch's tool tip to match the shutter switch's tool tip
-- Improved closing/opening on level transitions (For example, preventing the shutters from opening to early when
-  landing)
-- Shutters are synced to the shutter switch state instead of being relative
-- Shutters cannot be toggled while they are locked
-- DOOR WINDOWS
-- Iridescence material for windows
-- And a LOT more
-
-## Thanks to
+## Pre-Rewrite Credits:
 
 - Soup (@souper194) - Shutter texture used on versions >= 1.2.0
 - Veri - Creating the original mod
 
 ## Known Issues
 
-- Floor window shutter is slightly too small
+- None (For now)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P6ZWLCY)
