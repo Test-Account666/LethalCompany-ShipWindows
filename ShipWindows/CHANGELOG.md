@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 2.4.0
+
+\+ Added `WindowRegistry#Windows` to get a readonly list of all registered windows<br>
+
 ## 2.3.3
 
 \* Fixed self-intersecting in roof window<br>
