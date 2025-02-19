@@ -8,13 +8,15 @@ using BepInEx.Configuration;
 namespace ShipWindows.Api;
 
 public class WindowRegistry {
-    internal readonly HashSet<WindowInfo> windows = [
+    private readonly HashSet<WindowInfo> _windows = [
     ];
+
+    public IReadOnlyCollection<WindowInfo> Windows => _windows;
 
     public void UnregisterWindow(WindowInfo window) {
         var source = Assembly.GetCallingAssembly().GetName().Name;
 
-        windows.Remove(window);
+        _windows.Remove(window);
 
         ShipWindows.Logger.LogDebug($"Unregistering window {window.windowName} from {source}!");
     }
@@ -48,15 +50,15 @@ public class WindowRegistry {
 
         foreach (var action in configAction) action.Invoke(ShipWindows.Instance.Config, window);
 
-        var alreadyExists = windows.Any(info => info.windowName.Equals(windowName));
+        var alreadyExists = _windows.Any(info => info.windowName.Equals(windowName));
 
         if (alreadyExists) throw new DuplicateNameException($"There is already a window with name {windowName}! Source: {source}");
 
-        var typeAlreadyExists = windows.Any(info => info.windowType.Equals(window.windowType));
+        var typeAlreadyExists = _windows.Any(info => info.windowType.Equals(window.windowType));
 
         if (typeAlreadyExists) throw new DuplicateNameException($"Window {windowName} has duplicate window type {window.windowType}! Source: {source}");
 
-        windows.Add(window);
+        _windows.Add(window);
 
         ShipWindows.Logger.LogDebug($"Registering window {windowName} from {source}!");
     }

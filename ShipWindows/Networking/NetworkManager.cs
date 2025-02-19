@@ -169,7 +169,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
 
     [ServerRpc(RequireOwnership = false)]
     public void SpawnWindowServerRpc(string windowName) {
-        var window = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
+        var window = ShipWindows.windowRegistry.Windows.FirstOrDefault(info => info.windowName.Equals(windowName));
         if (!window) return;
 
         SpawnWindow(window!);
@@ -179,7 +179,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     public void SpawnWindowClientRpc(string windowName) {
         if (IsHost || IsServer) return;
 
-        var window = ShipWindows.windowRegistry.windows.FirstOrDefault(info => info.windowName.Equals(windowName));
+        var window = ShipWindows.windowRegistry.Windows.FirstOrDefault(info => info.windowName.Equals(windowName));
 
         if (!window) return;
 
