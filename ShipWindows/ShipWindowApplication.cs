@@ -12,7 +12,7 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
     public override void Initialization() {
         List<CursorElement> cursorElements = [
         ];
-        cursorElements.AddRange(from windowInfo in ShipWindows.windowRegistry.windows
+        cursorElements.AddRange(from windowInfo in ShipWindows.windowRegistry.Windows
                                 where !windowInfo.alwaysUnlocked
                                 let isUnlocked = WindowUnlockData.UnlockedWindows.Contains(windowInfo.windowName)
                                 let elementAction = !isUnlocked? WindowBuyAction(windowInfo) : WindowAlreadyUnlockedAction(windowInfo)
