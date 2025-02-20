@@ -113,18 +113,6 @@ public class ShipWindows : BaseUnityPlugin {
         return mainAssetBundle != null;
     }
 
-    /*private static void InitializeNetcode() {
-        var types = Assembly.GetExecutingAssembly().GetTypes();
-        foreach (var type in types) {
-            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-            foreach (var method in methods) {
-                var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
-                if (attributes.Length <= 0) continue;
-                method.Invoke(null, null);
-            }
-        }
-    }*/
-
     private GameObject _decapitatedShipPrefab = null!;
 
     public GameObject GetDecapitatedShipPrefab() {
