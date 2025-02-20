@@ -81,7 +81,9 @@ public class ShipWindows : BaseUnityPlugin {
         WindowLoader.LoadWindows();
 
         if (!WindowConfig.vanillaMode.Value) {
-            InteractiveTerminalManager.RegisterApplication<ShipWindowApplication>("windows", false);
+            InteractiveTerminalManager.RegisterApplication<ShipWindowApplication>([
+                "windows", "window",
+            ], false);
             Harmony.PatchAll(typeof(NetworkingStuffPatch));
         } else {
             networkManager = new DummyNetworkManager();
