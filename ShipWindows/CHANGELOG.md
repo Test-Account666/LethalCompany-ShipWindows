@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 2.5.0
+
+\# Final push to stable
+
 ## 2.4.0
 
 \+ Added `WindowRegistry#Windows` to get a readonly list of all registered windows<br>

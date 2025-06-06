@@ -33,7 +33,7 @@ namespace ShipWindows;
 [BepInDependency("CelestialTint", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
-    public const string ASSET_BUNDLE_PATH_PREFIX = "Assets/LethalCompany/Mods/plugins/ShipWindows/Beta";
+    public const string ASSET_BUNDLE_PATH_PREFIX = "Assets/LethalCompany/Mods/plugins/ShipWindows";
 
     public static AssetBundle mainAssetBundle = null!;
 

@@ -2,10 +2,10 @@
 
     <!-- BepInEx Properties -->
     <PropertyGroup>
-        <AssemblyName>TestAccount666.ShipWindowsBeta</AssemblyName>
-        <Product>ShipWindowsBeta</Product>
+        <AssemblyName>TestAccount666.ShipWindows</AssemblyName>
+        <Product>ShipWindows</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>2.4.0</Version>
+        <Version>2.5.0</Version>
         <Description>Adds glass windows to the ship so you can see what's going on outside.</Description>
         <Source>https://github.com/Test-Account666/LethalCompany-ShipWindows/tree/dev/2.0.0/</Source>
     </PropertyGroup>
@@ -53,10 +53,10 @@
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all"/>
-        <PackageReference Include="LethalCompany.GameLibs.Steam" Version="67.0.0-ngd.0"/>
+        <PackageReference Include="LethalCompany.GameLibs.Steam" Version="70.0.0-ngd.0" />
         <PackageReference Include="MaxWasUnavailable.LethalModDataLib" Version="1.2.2"/>
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all"/>
-        <PackageReference Include="TeamBMX.LobbyCompatibility" Version="1.4.0" PrivateAssets="all"/>
+        <PackageReference Include="TeamBMX.LobbyCompatibility" Version="1.5.1" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
