@@ -42,7 +42,7 @@ public abstract class AbstractWindow : MonoBehaviour {
     }
 
     public virtual void UpdateMaterial() {
-        foreach (var meshRenderer in meshRenderers) meshRenderer.material = WindowConfig.glassMaterial.Value.GetMaterial();
+        foreach (var meshRenderer in meshRenderers) meshRenderer.sharedMaterial = WindowConfig.glassMaterial.Value.GetMaterial();
     }
 
     public virtual void ToggleWindowShutter(bool closeShutter, bool lockShutter = false) {
