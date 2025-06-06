@@ -26,6 +26,7 @@ using Debug = System.Diagnostics.Debug;
 namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
+[BepInIncompatibility("TestAccount666.ShipWindowsBeta")]
 [BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.1.4")]
 [BepInDependency("MaxWasUnavailable.LethalModDataLib")]
 [BepInDependency("TestAccount666.TestAccountCore", "1.14.0")]
