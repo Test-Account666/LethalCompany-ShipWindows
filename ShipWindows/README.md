@@ -1,7 +1,9 @@
-# Ship Windows Beta
+# Ship Windows 
 
 Adds five buy-able glass windows.
 Availability and price both configurable.
+
+Enter `windows` into the terminal to buy them.
 
 
 
