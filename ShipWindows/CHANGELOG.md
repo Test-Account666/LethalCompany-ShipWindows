@@ -1,8 +1,12 @@
 # Ship Windows
 
+## 2.5.1
+
+\* Fixed layer + tag for window-less ship<br>
+
 ## 2.5.0
 
-\# Final push to stable
+\# Final push to stable<br>
 
 ## 2.4.0
 
