@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 2.6.0
+
+\* Fixed v73 compatibility<br>
+
 ## 2.5.1
 
 \* Fixed layer + tag for window-less ship<br>

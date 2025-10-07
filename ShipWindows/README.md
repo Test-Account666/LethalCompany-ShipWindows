@@ -33,7 +33,7 @@ Enter `windows` into the terminal to buy them.
 
 - Toggle "VanillaMode" in your configuration to make this mod client-side only and compatible with vanilla lobbies.
 - This mod is compatible
-  with [2 Story Ship (Pending)](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/MelanieMelicious_2_sToRy_ShIp__works_w_Wider_Ship_Mod/)
+  with [2 Story Ship](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/MelanieMelicious_2_sToRy_ShIp__works_w_Wider_Ship_Mod/)
   and [Wider Ship](https://thunderstore.io/c/lethal-company/p/mborsh/Wider_Ship_Mod/)
 
 Please report any issues on GitHub or in the Lethal Company Modding Discord.

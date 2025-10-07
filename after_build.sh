@@ -10,4 +10,4 @@ cp -f ship_window BuildOutput/ &&
 cp -f ship_windows_shutter BuildOutput/ &&
 ./generate_manifest.sh &&
 ./generate_zipfile.sh &&
-dolphin "./BuildOutput"
+xdg-open "./BuildOutput"
