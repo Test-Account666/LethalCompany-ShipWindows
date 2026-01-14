@@ -38,7 +38,8 @@ public abstract class AbstractWindow : MonoBehaviour {
     public virtual void UpdateLayer() {
         var allowEnemyTriggerThroughWindows = WindowConfig.allowEnemyTriggerThroughWindows.Value;
 
-        foreach (var collider in colliders) collider.gameObject.layer = LayerMask.NameToLayer(allowEnemyTriggerThroughWindows? "Railing" : "Room");
+        foreach (var collider in colliders)
+            collider.gameObject.layer = LayerMask.NameToLayer(allowEnemyTriggerThroughWindows? "Railing" : "Room");
     }
 
     public virtual void UpdateMaterial() {

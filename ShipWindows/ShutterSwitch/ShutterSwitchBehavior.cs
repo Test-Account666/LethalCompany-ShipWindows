@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace ShipWindows.ShutterSwitch;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(InteractTrigger))]
 public class ShutterSwitchBehavior : MonoBehaviour {
     public static readonly int EnabledAnimatorHash = Animator.StringToHash("Enabled");
     public static ShutterSwitchBehavior Instance { get; private set; } = null!;
@@ -37,7 +35,8 @@ public class ShutterSwitchBehavior : MonoBehaviour {
     public void ToggleSwitch() {
         ToggleSwitch(!animator.GetBool(EnabledAnimatorHash));
 
-        ShipWindows.networkManager?.ToggleShutters(animator.GetBool(EnabledAnimatorHash), playAudio: WindowConfig.playShutterVoiceLinesOnShutterToggle.Value);
+        ShipWindows.networkManager?.ToggleShutters(animator.GetBool(EnabledAnimatorHash),
+            playAudio: WindowConfig.playShutterVoiceLinesOnShutterToggle.Value);
     }
 
     public void ToggleSwitch(PlayerControllerB playerControllerB) => ToggleSwitch();

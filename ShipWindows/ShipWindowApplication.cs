@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InteractiveTerminalAPI.UI;
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
 using ShipWindows.Api;
+using Object = UnityEngine.Object;
 
 namespace ShipWindows;
 
-public class ShipWindowApplication : InteractiveTerminalApplication {
+public class ShipWindowApplication : InteractiveTerminalApplication<CursorElement> {
     public override void Initialization() {
         List<CursorElement> cursorElements = [
         ];
@@ -16,19 +18,17 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
                                 where !windowInfo.alwaysUnlocked
                                 let isUnlocked = WindowUnlockData.UnlockedWindows.Contains(windowInfo.windowName)
                                 let elementAction = !isUnlocked? WindowBuyAction(windowInfo) : WindowAlreadyUnlockedAction(windowInfo)
-                                select CursorElement.Create(windowInfo.windowName, $"{windowInfo.cost}'", elementAction, _ => !isUnlocked));
+                                let description = $"- Price: {windowInfo.cost}$"
+                                select CursorElement.Create(windowInfo.windowName, description, elementAction, _ => !isUnlocked));
 
         if (cursorElements.Count <= 0) {
-            ErrorMessage("Ship Windows", () => {
-            }, "No unlockable windows found");
+            ErrorMessage("Ship Windows", ExitApplication, "No unlockable windows found");
             return;
         }
 
-        var cursorMenu = CursorMenu.Create(elements: cursorElements.ToArray());
+        var cursorMenu = CursorMenu<CursorElement>.Create(elements: cursorElements.ToArray());
 
-        SwitchScreen(BoxedScreen.Create("Ship Windows", [
-            cursorMenu,
-        ]), cursorMenu, false);
+        SwitchScreen(BoxedScreen.Create("Ship Windows", [cursorMenu,]), cursorMenu, false);
     }
 
     public Action WindowAlreadyUnlockedAction(WindowInfo window) {
@@ -53,4 +53,6 @@ public class ShipWindowApplication : InteractiveTerminalApplication {
             }, Initialization);
         };
     }
+
+    public static void ExitApplication() => Object.Destroy(InteractiveTerminalManager.Instance.gameObject);
 }

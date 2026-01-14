@@ -9,8 +9,8 @@ namespace ShipWindows.Patches.EnemyFixes;
 public static class FixEnemyAttackPatch {
     [HarmonyPatch(nameof(EnemyAICollisionDetect.OnTriggerStay))]
     [HarmonyPrefix]
-    // ReSharper disable once InconsistentNaming
-    private static bool CanCollide(EnemyAI ___mainScript, ref Collider other) {
+    // ReSharper disable InconsistentNaming
+    private static bool CanCollide(EnemyAICollisionDetect __instance, EnemyAI ___mainScript, ref Collider other) {
         if (!WindowConfig.enableEnemyFix.Value) return true;
 
         var player = other.gameObject.GetComponent<PlayerControllerB>();
@@ -18,8 +18,12 @@ public static class FixEnemyAttackPatch {
 
         if (player != localPlayer) return true;
 
-        var canCollide = ___mainScript.isInsidePlayerShip == localPlayer.isInHangarShipRoom;
+        var shipBounds = StartOfRound.Instance.shipBounds.bounds;
 
+        var enemyInShip = shipBounds.Contains(___mainScript.transform.position);
+        var playerInShip = localPlayer.playerCollider.bounds.Intersects(shipBounds);
+
+        var canCollide = enemyInShip == playerInShip;
         if (!canCollide) other = new();
 
         return canCollide;
