@@ -27,10 +27,10 @@ namespace ShipWindows;
 
 [BepInIncompatibility("veri.lc.shipwindow")]
 [BepInIncompatibility("TestAccount666.ShipWindowsBeta")]
-[BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.1.4")]
+[BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.3.0")]
 [BepInDependency("MaxWasUnavailable.LethalModDataLib")]
 [BepInDependency("TestAccount666.TestAccountCore", "1.14.0")]
-[BepInDependency("evaisa.lethallib", "0.16.2")]
+[BepInDependency("com.github.teamxiaolan.dawnlib")]
 [BepInDependency("CelestialTint", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class ShipWindows : BaseUnityPlugin {
