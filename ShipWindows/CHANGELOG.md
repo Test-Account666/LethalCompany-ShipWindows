@@ -1,5 +1,18 @@
 # Ship Windows
 
+## 2.7.0
+
+\+ Added support for latest Interactive Terminal API<br>
+\* Fixed some shenanigans with Shutter Switch<br>
+
+Note:<br>
+
+- Shutter Switch may still cause issues like clients not triggering Wesley Voice<br>
+
+## 2.6.1
+
+\* Fixed Enemy Fix<br>
+
 ## 2.6.0
 
 \* Fixed v73 compatibility<br>
