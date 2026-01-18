@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 2.7.1
+
+\+ Added little easter egg<br>
+\* Fixed Shutter Switch again .-.<br>
+
 ## 2.7.0
 
 \+ Added support for latest Interactive Terminal API<br>
