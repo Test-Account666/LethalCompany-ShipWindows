@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 2.7.2
+
+\# Changed license to LPGLv3
+
 ## 2.7.1
 
 \+ Added little easter egg<br>
