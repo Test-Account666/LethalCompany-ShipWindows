@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System;
 using ShipWindows.Config;
 using UnityEngine;
@@ -36,9 +37,10 @@ public class HdriSpaceSkybox : AbstractSkyBox {
         set {
             if (!_sky && !skyVolume.profile.TryGet(out _sky)) throw new NullReferenceException("Could not find the skybox!");
 
-            _sky.rotation.value += value - _sky.rotation.value;
-            if (_sky.rotation.value >= 360) _sky.rotation.value = 0f;
-            if (_sky.rotation.value <= 0) _sky.rotation.value = 360f;
+            _sky.rotation.overrideState = true;
+            _sky.rotation.value = value;
+            if (_sky.rotation.value >= 360) _sky.rotation.value -= 360f;
+            if (_sky.rotation.value < 0) _sky.rotation.value += 360f;
         }
     }
 

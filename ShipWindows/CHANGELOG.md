@@ -1,8 +1,13 @@
 # Ship Windows
 
+## 2.8.0
+
+\+ Added per-window option to enable/disable enemy triggering<br>
+\* Fixed skybox rotation<br>
+
 ## 2.7.2
 
-\# Changed license to LPGLv3
+\# Changed license to LPGLv3<br>
 
 ## 2.7.1
 

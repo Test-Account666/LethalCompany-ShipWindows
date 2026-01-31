@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using HarmonyLib;
 using Unity.Netcode;
 using static UnityEngine.Object;

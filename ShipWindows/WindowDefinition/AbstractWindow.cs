@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System.Collections;
 using ShipWindows.Api;
 using ShipWindows.Config;
@@ -38,7 +39,7 @@ public abstract class AbstractWindow : MonoBehaviour {
     private void OnDestroy() => ShipWindows.windowManager.spawnedWindows.Remove(this);
 
     public virtual void UpdateLayer() {
-        var allowEnemyTriggerThroughWindows = WindowConfig.allowEnemyTriggerThroughWindows.Value;
+        var allowEnemyTriggerThroughWindows = windowInfo.allowEnemyTriggering && WindowConfig.allowEnemyTriggerThroughWindows.Value;
 
         foreach (var collider in colliders)
             collider.gameObject.layer = LayerMask.NameToLayer(allowEnemyTriggerThroughWindows? "Railing" : "Room");

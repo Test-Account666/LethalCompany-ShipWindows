@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class WindowInfo : ScriptableObject {
     public GameObject windowPrefab;
 
     public bool deactivatedByDefault;
+    public bool allowEnemyTriggering = true;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     [Header("Not part of the API and initial value will be ignored.")]

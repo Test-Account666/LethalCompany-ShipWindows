@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,10 +26,10 @@ public class WindowRegistry {
 
     public void RegisterWindow(WindowInfo window, Action<ConfigFile, WindowInfo>? configAction = null) {
         RegisterWindow(window, configAction != null
-                           ? [
-                               configAction,
-                           ]
-                           : null);
+            ? [
+                configAction,
+            ]
+            : null);
     }
 
     public void RegisterWindow(WindowInfo window, Action<ConfigFile, WindowInfo>[]? configAction = null) {
@@ -40,15 +41,25 @@ public class WindowRegistry {
         var windowName = window.windowName;
 
         var isEnabled = ShipWindows.Instance.Config
-                                   .Bind($"{windowName} ({window.windowType})", "1. Enabled", !window.deactivatedByDefault, $"If {windowName} is enabled").Value;
+                                   .Bind($"{windowName} ({window.windowType})", "1. Enabled", !window.deactivatedByDefault,
+                                       $"If {windowName} is enabled").Value;
         if (!isEnabled) return;
 
         var alwaysUnlocked = ShipWindows.Instance.Config
-                                        .Bind($"{windowName} ({window.windowType})", "2. Always unlocked", false, $"If {windowName} is always unlocked").Value;
+                                        .Bind($"{windowName} ({window.windowType})", "2. Always unlocked", false,
+                                            $"If {windowName} is always unlocked").Value;
         window.alwaysUnlocked = alwaysUnlocked;
 
-        var price = ShipWindows.Instance.Config.Bind($"{windowName} ({window.windowType})", "3. Unlock Cost", window.cost, $"Cost to unlock {windowName}").Value;
+        var price = ShipWindows.Instance.Config
+                               .Bind($"{windowName} ({window.windowType})", "3. Unlock Cost", window.cost, $"Cost to unlock {windowName}")
+                               .Value;
         window.cost = price;
+
+        var allowEnemyTrigger = ShipWindows.Instance.Config
+                                           .Bind($"{windowName} ({window.windowType})", "4. Allow Enemy Triggering",
+                                               window.allowEnemyTriggering,
+                                               "If set to true, will allow enemies to trigger through the window").Value;
+        window.allowEnemyTriggering = allowEnemyTrigger;
 
         foreach (var action in configAction) action.Invoke(ShipWindows.Instance.Config, window);
 
@@ -58,7 +69,8 @@ public class WindowRegistry {
 
         var typeAlreadyExists = _windows.Any(info => info.windowType.Equals(window.windowType));
 
-        if (typeAlreadyExists) throw new DuplicateNameException($"Window {windowName} has duplicate window type {window.windowType}! Source: {source}");
+        if (typeAlreadyExists)
+            throw new DuplicateNameException($"Window {windowName} has duplicate window type {window.windowType}! Source: {source}");
 
         _windows.Add(window);
 

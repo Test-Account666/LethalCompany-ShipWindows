@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System;
 using System.IO;
 using System.Reflection;
@@ -149,7 +150,8 @@ public class ShipWindows : BaseUnityPlugin {
     public GameObject GetCelestialTintOverlayPrefab() {
         if (_celestialTintOverlayPrefab) return _celestialTintOverlayPrefab;
 
-        _celestialTintOverlayPrefab = mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/SkyBox/HDRI/CelestialTintOverride.prefab");
+        _celestialTintOverlayPrefab =
+            mainAssetBundle.LoadAsset<GameObject>($"{ASSET_BUNDLE_PATH_PREFIX}/SkyBox/HDRI/CelestialTintOverride.prefab");
         return _celestialTintOverlayPrefab;
     }
 

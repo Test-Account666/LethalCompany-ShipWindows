@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System.Collections.Generic;
 using BepInEx;
 using UnityEngine;
@@ -27,9 +28,11 @@ public static class WindowMaterialConverter {
 
         var materialPath = windowMaterial switch {
             WindowMaterial.NO_REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassNoRefraction.mat",
-            WindowMaterial.NO_REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassNoRefractionIridescence.mat",
+            WindowMaterial.NO_REFRACTION_IRIDESCENCE =>
+                $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassNoRefractionIridescence.mat",
             WindowMaterial.REFRACTION => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassWithRefraction.mat",
-            WindowMaterial.REFRACTION_IRIDESCENCE => $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassWithRefractionIridescence.mat",
+            WindowMaterial.REFRACTION_IRIDESCENCE =>
+                $"{ShipWindows.ASSET_BUNDLE_PATH_PREFIX}/Windows/Shared/WindowMaterials/GlassWithRefractionIridescence.mat",
             var _ => null,
         };
 

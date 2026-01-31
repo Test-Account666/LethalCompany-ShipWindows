@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,8 @@ public class WindowManager {
             CreateWindow(windowInfo!, addToList: false, check: false);
         }
 
-        foreach (var windowInfo in ShipWindows.windowRegistry.Windows.Where(windowInfo => windowInfo.alwaysUnlocked)) CreateWindow(windowInfo, addToList: false);
+        foreach (var windowInfo in ShipWindows.windowRegistry.Windows.Where(windowInfo => windowInfo.alwaysUnlocked))
+            CreateWindow(windowInfo, addToList: false);
     }
 
     private void CreateDecapitatedShip() {

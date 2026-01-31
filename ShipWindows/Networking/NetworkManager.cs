@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System.Collections;
 using System.Linq;
 using ShipWindows.Api;
@@ -14,7 +15,7 @@ public class NetworkManager : NetworkBehaviour, INetworkManager {
     public override void OnNetworkSpawn() {
         ShipWindows.networkManager = this;
 
-        NetworkObject = ((NetworkBehaviour) this).NetworkObject;
+        NetworkObject = ((NetworkBehaviour)this).NetworkObject;
 
         SyncUnlockedWindows();
         SyncSkyboxRotation();

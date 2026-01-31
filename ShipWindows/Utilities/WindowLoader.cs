@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System;
 using System.Collections.Generic;
 using BepInEx.Configuration;
@@ -31,16 +32,17 @@ internal static class WindowLoader {
             new((config, windowInfo) => {
                 if (!windowInfo.windowName.Equals("Floor Window")) return;
 
-                WindowConfig.enableUnderLights = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Spawn Underlights", true,
-                                                             "If set to true, will spawn additional floodlights underneath the ship");
+                WindowConfig.enableUnderLights = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "5. Spawn Underlights",
+                    true,
+                    "If set to true, will spawn additional floodlights underneath the ship");
             }),
 
             // Right Window Config
             new((config, windowInfo) => {
                 if (!windowInfo.windowName.Equals("Right Window")) return;
 
-                WindowConfig.movePosters = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "4. Move Posters", true,
-                                                       "If set to true, will move the poster that's obstructing the window");
+                WindowConfig.movePosters = config.Bind($"{windowInfo.windowName} ({windowInfo.windowType})", "5. Move Posters", true,
+                    "If set to true, will move the poster that's obstructing the window");
             }),
         ];
 

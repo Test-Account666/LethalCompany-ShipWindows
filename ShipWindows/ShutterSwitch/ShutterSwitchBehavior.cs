@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using GameNetcodeStuff;
 using ShipWindows.Config;
 using UnityEngine;

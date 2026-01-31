@@ -1,5 +1,6 @@
 // Copyright (C) 2026 TestAccount666
 // SPDX-License-Identifier: LGPL-3.0-only
+
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Bootstrap;
@@ -10,7 +11,15 @@ public static class DependencyChecker {
     private static readonly Dictionary<string, bool> _DependencyDictionary = [
     ];
 
-    public static bool thereIsAShipModInstalled;
+    private static bool _ShipInstalled;
+
+    public static bool thereIsAShipModInstalled {
+        get => _ShipInstalled;
+        set {
+            if (_ShipInstalled) return;
+            _ShipInstalled = value;
+        }
+    }
 
     public static bool IsCelestialTintInstalled() => IsDependencyInstalled("CelestialTint");
 
@@ -20,7 +29,8 @@ public static class DependencyChecker {
 
     public static bool IsShipBuilderInstalled() => IsDependencyInstalled("mborsh.ShipBuilder");
 
-    public static bool IsAnyShipModInstalled() => IsTwoStoryShipInstalled() || IsWiderShipInstalled() || IsShipBuilderInstalled() || thereIsAShipModInstalled;
+    public static bool IsAnyShipModInstalled() =>
+        IsTwoStoryShipInstalled() || IsWiderShipInstalled() || IsShipBuilderInstalled() || _ShipInstalled;
 
     public static bool IsDependencyInstalled(string dependencyName) {
         var containsKey = _DependencyDictionary.TryGetValue(dependencyName, out var installed);
