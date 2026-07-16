@@ -4,6 +4,7 @@
 using System.Linq;
 using ShipWindows.WindowDefinition;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace ShipWindows.WindowBehaviors;
 
@@ -17,7 +18,13 @@ public class DoorWindow : AbstractWindow {
 
     public Mesh originalLeftDoorMesh;
     public Mesh originalRightDoorMesh;
+
+    public NavMeshObstacle[] obstacles;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
+    private void Update() {
+        foreach (var obstacle in obstacles) obstacle.enabled = StartOfRound.Instance.hangarDoorsClosed;
+    }
 
     public override void Initialize() {
         var shipDoor = StartOfRound.Instance.shipDoorsAnimator.gameObject;

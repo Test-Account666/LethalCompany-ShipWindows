@@ -1,5 +1,16 @@
 # Ship Windows
 
+## 2.10.0
+
+\+ Added LCVR support<br>
+\* Fixed vibrating ship<br>
+\* Fixed DawnLib being a hard dependency<br>
+
+## 2.9.0
+
+\+ Added v81 support<br>
+\+ Added NavMesh Obstacles to Door Windows (Hopefully fixes enemy clipping?)<br>
+
 ## 2.8.0
 
 \+ Added per-window option to enable/disable enemy triggering<br>
