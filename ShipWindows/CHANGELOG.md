@@ -1,5 +1,10 @@
 # Ship Windows
 
+## 2.11.0
+
+\* Fixed floor/wall textures being inverted<br>
+\# Switched from LethalModDataLib to DawnLib for saving/loading windows<br>
+
 ## 2.10.0
 
 \+ Added LCVR support<br>
@@ -226,8 +231,8 @@ And again...<br>
 
 \+ Added ship door window!<br>
 \+ Added ability for light sources to actually shine through all windows<br>
-\+ Added voice lines for opening/closing the window shutters (
-Thanks [Wesley](https://thunderstore.io/c/lethal-company/p/Magic_Wesley/) <3)<br>
+\+ Added voice lines for opening/closing the window shutters
+(Thanks [Wesley](https://thunderstore.io/c/lethal-company/p/Magic_Wesley/) <3)<br>
 \+ Added Scan Node for Shutter Switch<br>
 \+ Added option to change the Light Switch tool tip<br>
 \* Fixed being able to place furniture inside windows<br>
