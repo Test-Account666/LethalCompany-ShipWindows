@@ -1,5 +1,9 @@
 # Ship Windows
 
+## 2.11.1
+
+\* Fixed LethalModDataLib still being a dependency<br>
+
 ## 2.11.0
 
 \* Fixed floor/wall textures being inverted<br>
