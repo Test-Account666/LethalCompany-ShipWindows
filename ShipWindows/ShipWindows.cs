@@ -31,7 +31,6 @@ namespace ShipWindows;
 [BepInIncompatibility("veri.lc.shipwindow")]
 [BepInIncompatibility("TestAccount666.ShipWindowsBeta")]
 [BepInDependency("WhiteSpike.InteractiveTerminalAPI", "1.3.0")]
-[BepInDependency("MaxWasUnavailable.LethalModDataLib")]
 [BepInDependency("TestAccount666.TestAccountCore", "1.14.0")]
 [BepInDependency("com.github.teamxiaolan.dawnlib", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("CelestialTint", BepInDependency.DependencyFlags.SoftDependency)]
