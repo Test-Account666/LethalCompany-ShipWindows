@@ -2,13 +2,10 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
 using System.Collections.Generic;
-using LethalModDataLib.Attributes;
-using LethalModDataLib.Enums;
 
 namespace ShipWindows;
 
 public static class WindowUnlockData {
-    [ModData(SaveWhen.OnSave, LoadWhen.Manual, ResetWhen = ResetWhen.OnGameOver)]
-    public static readonly List<string> UnlockedWindows = [
+    public static IList<string> UnlockedWindows { get; internal set; } = [
     ];
 }

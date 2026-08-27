@@ -3,8 +3,6 @@
 
 using System.Collections;
 using HarmonyLib;
-using LethalModDataLib.Features;
-using LethalModDataLib.Helpers;
 using static UnityEngine.Object;
 
 namespace ShipWindows.Patches.ShipReset;
@@ -21,7 +19,6 @@ public static class ShipResetPatch {
         if (decapitatedShip) Destroy(decapitatedShip);
 
         WindowUnlockData.UnlockedWindows.Clear();
-        SaveLoadHandler.SaveData(ModDataHelper.GetModDataKey(typeof(WindowUnlockData), nameof(WindowUnlockData.UnlockedWindows))!);
 
         yield return null;
 

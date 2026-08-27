@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
-using LethalModDataLib.Features;
-using LethalModDataLib.Helpers;
 using ShipWindows.Api;
 using ShipWindows.Api.events;
 using ShipWindows.WindowDefinition;
+using TestAccountCore.Dependencies;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,8 +21,8 @@ public class WindowManager {
     ];
 
     public WindowManager() {
-        WindowUnlockData.UnlockedWindows.Clear();
-        SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(typeof(WindowUnlockData), nameof(WindowUnlockData.UnlockedWindows))!);
+        if (DependencyChecker.IsDawnLibInstalled()) WindowsUnlockDataLoader.Load();
+        else WindowUnlockData.UnlockedWindows = [];
 
         CreateDecapitatedShip();
 
