@@ -15,7 +15,7 @@ manifest=$(cat <<EOF
     "description": "$description",
     "dependencies": [
         "BepInEx-BepInExPack-5.4.2305",
-        "WhiteSpike-Interactive_Terminal_API-1.5.6",
+        "WhiteSpike-Interactive_Terminal_API-1.3.3",
         "TestAccount666-TestAccountCore-1.18.0",
         "TeamXiaolan-DawnLib-0.9.25"
     ]
